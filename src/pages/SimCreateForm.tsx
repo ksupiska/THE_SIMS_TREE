@@ -7,7 +7,6 @@ import '../css/simform.css';
 
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import Modal from 'react-bootstrap/Modal';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'C:/Users/kspiska/Desktop/DIPLOM/family-tree/node_modules/bootstrap-icons/font/bootstrap-icons.css';
@@ -15,7 +14,7 @@ import 'C:/Users/kspiska/Desktop/DIPLOM/family-tree/node_modules/bootstrap-icons
 import CharacterDetail from '../components/CharacterDetail';
 
 
-type CharacterDetailType = {
+interface Human {
     id: number;
     name: string;
     surname: string;
@@ -25,19 +24,7 @@ type CharacterDetailType = {
     state_of_life: string;
     cause_of_death?: string;
     kind: string;
-
-};
-
-type Human = {
-    id: number;
-    name: string;
-    surname: string;
-    sex: string;
-    avatar?: string;
-};
-
-
-
+}
 
 
 const SimCreateForm = () => {
@@ -54,9 +41,6 @@ const SimCreateForm = () => {
     const [avatar, setAvatar] = useState<File | null>(null);
     const [members, setMembers] = useState<Human[]>([]);
 
-    //для модального окна после удаления персонажа
-    const [showModal, setShowModal] = useState(false);
-    const [deletedCharacterName, setDeletedCharacterName] = useState<string | null>(null);
 
     const fetchPersonalities = async () => {
         try {
@@ -110,32 +94,17 @@ const SimCreateForm = () => {
 
     const handleDelete = async (id: number) => {
         try {
-            const deletedCharacter = members.find(m => m.id === id);
             await axios.delete(`http://localhost:3001/personalities/${id}`);
-
-            setDeletedCharacterName(`${deletedCharacter?.name} ${deletedCharacter?.surname}`);
-            setShowModal(true); // Показать модалку
-
-            fetchPersonalities(); // Обновить список
+            // Обновляем список после удаления
+            await fetchPersonalities();
+            setSelectedCharacterId(null); // если показывается detail — вернуться к списку
         } catch (error) {
             console.error('Ошибка при удалении персонажа:', error);
         }
     };
 
+
     return <div>
-        <Modal show={showModal} onHide={() => setShowModal(false)} centered>
-            <Modal.Header closeButton>
-                <Modal.Title>Удаление</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                Персонаж <strong>{deletedCharacterName}</strong> успешно удалён.
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="primary" onClick={() => setShowModal(false)}>
-                    ОК
-                </Button>
-            </Modal.Footer>
-        </Modal>
 
         <div className='sims-form-container'>
             <div className="sims-plumbob"></div>
@@ -289,7 +258,7 @@ const SimCreateForm = () => {
                     <div className="sims-traits-hint">Например: Добрый, Весёлый, Гений</div>
                 </Form.Group>
 
-                {state_of_life === "2" && (
+                {state_of_life === "Мертв" && (
                     <Form.Group className='mb-4 sims-form-group' controlId='formBasicDeath'>
                         <Form.Label className="sims-label">Причина смерти</Form.Label>
                         <Form.Control
@@ -301,6 +270,7 @@ const SimCreateForm = () => {
                         />
                     </Form.Group>
                 )}
+
 
                 <Button type="submit" className="sims-submit-btn">
                     <span className="sims-btn-icon">✓</span>
@@ -345,12 +315,13 @@ const SimCreateForm = () => {
                     <Button variant="secondary" className="mb-3" onClick={() => setSelectedCharacterId(null)}>
                         Назад к списку
                     </Button>
+
                     <CharacterDetail
-                        character={members.find((m) => m.id === selectedCharacterId) as CharacterDetailType}
+                        character={members.find((m) => m.id === selectedCharacterId)!}
                         onDelete={handleDelete}
                     />
-
                 </div>
+
             )}
 
         </div>

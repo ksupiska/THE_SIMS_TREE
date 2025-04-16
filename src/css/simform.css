@@ -1,0 +1,271 @@
+/* Основные цвета в стиле Sims 4 */
+:root {
+  --sims-green: #4caf50;
+  --sims-blue: #2196f3;
+  --sims-yellow: #ffeb3b;
+  --sims-orange: #ff9800;
+  --sims-dark: #2c3e50;
+  --sims-light: #ecf0f1;
+}
+
+.sims-form-container {
+  position: relative;
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  font-family: "The Sims Sans SC";
+}
+
+.sims-form-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: linear-gradient(
+    90deg,
+    var(--sims-green),
+    var(--sims-blue),
+    var(--sims-orange)
+  );
+}
+
+.sims-form-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-family: "The Sims Sans SC";
+  font-size: 2.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.sims-green {
+  color: var(--sims-green);
+}
+
+.sims-blue {
+  color: var(--sims-blue);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sims-form-group {
+  position: relative;
+}
+
+.sims-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  color: var(--sims-dark);
+  font-size: 0.95rem;
+}
+
+.sims-input,
+.sims-select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #f9f9f9;
+}
+
+.sims-input:focus,
+.sims-select:focus {
+  outline: none;
+  border-color: var(--sims-blue);
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
+  background-color: white;
+}
+
+.sims-file-input {
+  position: relative;
+}
+
+.sims-file-preview {
+  margin-top: 1rem;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 3px solid var(--sims-light);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sims-avatar-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sims-avatar-placeholder {
+  font-size: 3rem;
+  color: #aaa;
+}
+
+.sims-radio-group {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.sims-radio {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  padding-left: 28px;
+}
+
+.sims-radio input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.sims-radio-checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #eee;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+  transition: all 0.3s ease;
+}
+
+.sims-radio:hover .sims-radio-checkmark {
+  background-color: #ddd;
+}
+
+.sims-radio input:checked ~ .sims-radio-checkmark {
+  background-color: var(--sims-green);
+  border-color: var(--sims-green);
+}
+
+.sims-radio-checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+  top: 4px;
+  left: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+}
+
+.sims-radio input:checked ~ .sims-radio-checkmark:after {
+  display: block;
+}
+
+.sims-traits-hint {
+  font-size: 0.8rem;
+  color: #777;
+  margin-top: 0.3rem;
+  font-style: italic;
+}
+
+.sims-submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, var(--sims-green), var(--sims-blue));
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 1rem;
+}
+
+.sims-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #43a047, #1e88e5);
+}
+
+.sims-btn-icon {
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+/* Исправленный стиль пламбота */
+.sims-plumbob {
+  position: absolute;
+  top: 10px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background-color: var(--sims-green);
+  clip-path: polygon(50% 0%, 76% 50%, 50% 100%, 24% 50%);
+  transform: rotate(15deg);
+  opacity: 0.9;
+  filter: drop-shadow(0 0 5px rgba(76, 175, 80, 0.7));
+  animation: float 3s ease-in-out infinite;
+  z-index: 10;
+}
+
+/* Улучшенная анимация плавания */
+@keyframes float {
+  0%,
+  100% {
+    transform: rotate(15deg) translateY(0) translateX(0);
+  }
+  50% {
+    transform: rotate(20deg) translateY(-8px) translateX(3px);
+  }
+}
+
+/* Анимация при фокусе */
+@keyframes sims-pulse {
+  0% {
+    text-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4);
+  }
+  70% {
+    text-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+  }
+  100% {
+    text-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+  }
+}
+
+.sims-form-group:focus-within .sims-label {
+  animation: sims-text-glow 2s ease-in-out infinite;
+  background: linear-gradient(45deg, #4caf50, #2196f3);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+  padding: 2px 0;
+}

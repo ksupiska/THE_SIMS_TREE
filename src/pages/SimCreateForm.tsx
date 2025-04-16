@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 
 import axios from 'axios';
 
+import '../css/simform.css';
+
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
@@ -135,82 +137,175 @@ const SimCreateForm = () => {
             </Modal.Footer>
         </Modal>
 
-        <div className='form-wrapper'>
-            <Form onSubmit={handleSubmit} style={{ marginBottom: '2rem' }}>
-                <h2 className='d-flex justify-content-center'>Создание персонажа</h2>
-                <Form.Group className='mb-3'>
-                    <Form.Label>Выберите аватар</Form.Label>
+        <div className='sims-form-container'>
+            <div className="sims-plumbob"></div>
+
+            <Form onSubmit={handleSubmit} className="sims-form">
+                <h2 className="sims-form-title">
+                    <span className="sims-green">Создание</span> <span className="sims-blue">персонажа</span>
+                </h2>
+
+                <div className="form-grid">
+                    {/* Левая колонка */}
+                    <div className="form-column">
+                        <Form.Group className='mb-4 sims-form-group'>
+                            <Form.Label className="sims-label">Выберите аватар</Form.Label>
+                            <div className="sims-file-input">
+                                <Form.Control
+                                    type='file'
+                                    onChange={(e) => {
+                                        const file = (e.target as HTMLInputElement).files?.[0] || null;
+                                        setAvatar(file);
+                                    }}
+                                    className="sims-input"
+                                />
+                                <div className="sims-file-preview">
+                                    {avatar ? (
+                                        <img src={URL.createObjectURL(avatar)} alt="Avatar preview" className="sims-avatar-preview" />
+                                    ) : (
+                                        <div className="sims-avatar-placeholder">👤</div>
+                                    )}
+                                </div>
+                            </div>
+                        </Form.Group>
+
+                        <Form.Group className='mb-4 sims-form-group' controlId='formBasicName'>
+                            <Form.Label className="sims-label">Имя</Form.Label>
+                            <Form.Control
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                type='text'
+                                placeholder='Введите имя'
+                                required
+                                className="sims-input"
+                            />
+                        </Form.Group>
+
+                        <Form.Group className='mb-4 sims-form-group' controlId='formBasicSurname'>
+                            <Form.Label className="sims-label">Фамилия</Form.Label>
+                            <Form.Control
+                                value={surname}
+                                onChange={(e) => setSurname(e.target.value)}
+                                type='text'
+                                placeholder='Введите фамилию'
+                                required
+                                className="sims-input"
+                            />
+                        </Form.Group>
+                    </div>
+
+                    {/* Правая колонка */}
+                    <div className="form-column">
+                        <Form.Group className='mb-4 sims-form-group' controlId='formBasicSex'>
+                            <Form.Label className="sims-label">Пол</Form.Label>
+                            <div className="sims-radio-group">
+                                <label className="sims-radio">
+                                    <input
+                                        type="radio"
+                                        value="Мужской"
+                                        checked={sex === "Мужской"}
+                                        onChange={(e) => setSex(e.target.value)}
+                                    />
+                                    <span className="sims-radio-checkmark"></span>
+                                    Мужской
+                                </label>
+                                <label className="sims-radio">
+                                    <input
+                                        type="radio"
+                                        value="Женский"
+                                        checked={sex === "Женский"}
+                                        onChange={(e) => setSex(e.target.value)}
+                                    />
+                                    <span className="sims-radio-checkmark"></span>
+                                    Женский
+                                </label>
+                            </div>
+                        </Form.Group>
+
+                        <Form.Group className='mb-4 sims-form-group' controlId='formBasicCity'>
+                            <Form.Label className="sims-label">Город проживания</Form.Label>
+                            <Form.Select
+                                value={city_living}
+                                onChange={(e) => setCity(e.target.value)}
+                                className="sims-select"
+                            >
+                                <option value="Виллоу Крик">Виллоу Крик</option>
+                                <option value="Оазис Спрингс">Оазис Спрингс</option>
+                                <option value="Ньюкрест">Ньюкрест</option>
+                                <option value="Магнолия променейд">Магнолия променейд</option>
+                                <option value="Винденбург">Винденбург</option>
+                                <option value="Сан Мишуно">Сан Мишуно</option>
+                                <option value="Форготн Холлоу">Форготн Холлоу</option>
+                                <option value="Бриндлтон-Бей">Бриндлтон-Бей</option>
+                                <option value="Дель-Соль-Вэлли">Дель-Соль-Вэлли</option>
+                                <option value="Стрейнджервилль">Стрейнджервилль</option>
+                                <option value="Сулани">Сулани</option>
+                                <option value="Глиммербрук">Глиммербрук</option>
+                                <option value="Бритчестер">Бритчестер</option>
+                                <option value="Эвергрин-Харбор">Эвергрин-Харбор</option>
+                                <option value="Вранбург">Вранбург</option>
+                                <option value="Нордхавен">Нордхавен</option>
+                                <option value="Сиусад-Энаморада">Сиусад-Энаморада</option>
+                                <option value="Томаранг">Томаранг</option>
+                                <option value="Сан-Секвойя">Сан-Секвойя</option>
+                                <option value="Батуу">Батуу</option>
+                                <option value="Сельвадорада">Сельвадорада</option>
+                                <option value="Гора Комореби">Гора Комореби</option>
+                                <option value="Гранит-Фоллз">Гранит-Фоллз</option>
+                                <option value="Тартоза">Тартоза</option>
+                                <option value="Коппердейл">Коппердейл</option>
+                                <option value="Хэнфорд-он-Бэгли">Хэнфорд-он-Бэгли</option>
+                                <option value="Мунвуд Милл">Мунвуд Милл</option>
+                                <option value="Честнад Ридж">Честнад Ридж</option>
+                                <option value="Эвергрин Харбор">Эвергрин Харбор</option>
+                            </Form.Select>
+                        </Form.Group>
+
+                        <Form.Group className='mb-4 sims-form-group' controlId='formBasicState'>
+                            <Form.Label className="sims-label">Состояние персонажа</Form.Label>
+                            <Form.Select
+                                value={state_of_life}
+                                onChange={(e) => setStateOfLife(e.target.value)}
+                                required
+                                className="sims-select"
+                            >
+                                <option value="Жив">Жив</option>
+                                <option value="Мертв">Мертв</option>
+                            </Form.Select>
+                        </Form.Group>
+                    </div>
+                </div>
+
+                <Form.Group className='mb-4 sims-form-group' controlId='formBasicKind'>
+                    <Form.Label className="sims-label">Черты характера</Form.Label>
                     <Form.Control
-                        type='file'
-                        onChange={(e) => {
-                            const file = (e.target as HTMLInputElement).files?.[0] || null;
-                            setAvatar(file);
-                        }}
+                        value={kind}
+                        onChange={(e) => setKind(e.target.value)}
+                        type='text'
+                        placeholder='Введите черты характера'
+                        required
+                        className="sims-input"
                     />
+                    <div className="sims-traits-hint">Например: Добрый, Весёлый, Гений</div>
                 </Form.Group>
 
-                <Form.Group className='mb-3' controlId='formBasicName'>
-                    <Form.Label>Введите имя</Form.Label>
-                    <Form.Control value={name} onChange={(e) => setName(e.target.value)} type='name' placeholder='Введите имя' required />
-                </Form.Group>
-                <Form.Group className='mb-3' controlId='formBasicSurname'>
-                    <Form.Label>Введите фамилию</Form.Label>
-                    <Form.Control value={surname} onChange={(e) => setSurname(e.target.value)} type='surname' placeholder='Введите фамилию' required />
-                </Form.Group>
-                <Form.Group className='mb-3' controlId='formBasicSex'>
-                    <Form.Label>Введите пол</Form.Label>
-                    <Form.Control value={sex} onChange={(e) => setSex(e.target.value)} type='sex' placeholder='Введите пол' required />
-                </Form.Group>
-                <Form.Group className='mb-3' controlId='formBasicCity'>
-                    <Form.Label>Выберите город проживания</Form.Label>
-                    <Form.Select value={city_living} onChange={(e) => setCity(e.target.value)}>
-                        <option value="Виллоу Крик">Виллоу Крик</option>
-                        <option value="Оазис Спрингс">Оазис Спрингс</option>
-                        <option value="Ньюкрест">Ньюкрест</option>
-                        <option value="Магнолия променейд">Магнолия променейд</option>
-                        <option value="Винденбург">Винденбург</option>
-                        <option value="Сан Мишуно">Сан Мишуно</option>
-                        <option value="Форготн Холлоу">Форготн Холлоу</option>
-                        <option value="Бриндлтон-Бей">Бриндлтон-Бей</option>
-                        <option value="Дель-Соль-Вэлли">Дель-Соль-Вэлли</option>
-                        <option value="Стрейнджервилль">Стрейнджервилль</option>
-                        <option value="Сулани">Сулани</option>
-                        <option value="Глиммербрук">Глиммербрук</option>
-                        <option value="Бритчестер">Бритчестер</option>
-                        <option value="Эвергрин-Харбор">Эвергрин-Харбор</option>
-                        <option value="Вранбург">Вранбург</option>
-                        <option value="Нордхавен">Нордхавен</option>
-                        <option value="Сиусад-Энаморада">Сиусад-Энаморада</option>
-                        <option value="Томаранг">Томаранг</option>
-                        <option value="Сан-Секвойя">Сан-Секвойя</option>
-                        <option value="Батуу">Батуу</option>
-                        <option value="Сельвадорада">Сельвадорада</option>
-                        <option value="Гора Комореби">Гора Комореби</option>
-                        <option value="Гранит-Фоллз">Гранит-Фоллз</option>
-                        <option value="Тартоза">Тартоза</option>
-                        <option value="Коппердейл">Коппердейл</option>
-                        <option value="Хэнфорд-он-Бэгли">Хэнфорд-он-Бэгли</option>
-                        <option value="Мунвуд Милл">Мунвуд Милл</option>
-                        <option value="Честнад Ридж">Честнад Ридж</option>
-                        <option value="Эвергрин Харбор">Эвергрин Харбор</option>
-                    </Form.Select>
-                </Form.Group>
-                <Form.Group className='mb-3' controlId='formBasicCity'>
-                    <Form.Label>Выберите состояние персонажа</Form.Label>
-                    <Form.Select value={state_of_life} onChange={(e) => setStateOfLife(e.target.value)} required>
-                        <option value="Жив">Жив</option>
-                        <option value="Мертв">Мертв</option>
-                    </Form.Select>
-                </Form.Group>
-                <Form.Group className='mb-3' controlId='formBasicKind'>
-                    <Form.Label>Введите черты характера</Form.Label>
-                    <Form.Control value={kind} onChange={(e) => setKind(e.target.value)} type='kind' placeholder='Введите черты характера' required />
-                </Form.Group>
-                <Form.Group className='mb-3' controlId='formBasicKind'>
-                    <Form.Label>Введите причину смерти</Form.Label>
-                    <Form.Control value={cause_of_death} onChange={(e) => setCauseOfDeath(e.target.value)} type='cause_of_death' placeholder='Введите причину смерти' />
-                </Form.Group>
-                <Button type="submit">Сохранить</Button>
+                {state_of_life === "2" && (
+                    <Form.Group className='mb-4 sims-form-group' controlId='formBasicDeath'>
+                        <Form.Label className="sims-label">Причина смерти</Form.Label>
+                        <Form.Control
+                            value={cause_of_death}
+                            onChange={(e) => setCauseOfDeath(e.target.value)}
+                            type='text'
+                            placeholder='Введите причину смерти'
+                            className="sims-input"
+                        />
+                    </Form.Group>
+                )}
+
+                <Button type="submit" className="sims-submit-btn">
+                    <span className="sims-btn-icon">✓</span>
+                    <span className="sims-btn-text">Сохранить персонажа</span>
+                </Button>
             </Form>
         </div>
         <div className='mt-4'>
@@ -263,3 +358,6 @@ const SimCreateForm = () => {
 };
 
 export default SimCreateForm;
+
+
+{/*  */ }

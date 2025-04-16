@@ -50,6 +50,7 @@ app.post("/personalities", upload.single("avatar"), async (req, res) => {
     state_of_life,
     cause_of_death,
     kind,
+    type,
   } = req.body;
 
   const avatarPath = req.file ? `/uploads/${req.file.filename}` : null;
@@ -59,7 +60,7 @@ app.post("/personalities", upload.single("avatar"), async (req, res) => {
 
   try {
     await pool.query(
-      "INSERT INTO human (name, surname, sex, city_living, state_of_life, cause_of_death, kind, avatar) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+      "INSERT INTO human (name, surname, sex, city_living, state_of_life, cause_of_death, kind, type, avatar) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
       [
         name,
         surname,
@@ -68,6 +69,7 @@ app.post("/personalities", upload.single("avatar"), async (req, res) => {
         state_of_life,
         cause_of_death,
         kind,
+        type,
         avatarPath,
       ]
     );

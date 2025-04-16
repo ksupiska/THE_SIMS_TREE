@@ -24,6 +24,7 @@ interface Human {
     state_of_life: string;
     cause_of_death?: string;
     kind: string;
+    type: string;
 }
 
 
@@ -38,6 +39,7 @@ const SimCreateForm = () => {
     const [state_of_life, setStateOfLife] = useState('');
     const [cause_of_death, setCauseOfDeath] = useState('');
     const [kind, setKind] = useState('');
+    const [type, setType] = useState('');
     const [avatar, setAvatar] = useState<File | null>(null);
     const [members, setMembers] = useState<Human[]>([]);
 
@@ -69,6 +71,7 @@ const SimCreateForm = () => {
             formData.append('state_of_life', state_of_life);
             formData.append('cause_of_death', cause_of_death);
             formData.append('kind', kind);
+            formData.append('type', type);
             if (avatar) {
                 formData.append('avatar', avatar);
             }
@@ -84,6 +87,7 @@ const SimCreateForm = () => {
             setStateOfLife('');
             setCauseOfDeath('');
             setKind('');
+            setType('');
             setAvatar(null);
 
             fetchPersonalities();
@@ -191,6 +195,82 @@ const SimCreateForm = () => {
                             </div>
                         </Form.Group>
 
+                        <Form.Group className='mb-4 sims-form-group' controlId='formBasicType'>
+                            <Form.Label className="sims-label">Форма жизни</Form.Label>
+                            <div className="sims-radio-group2">
+                                <label className="sims-radio2">
+                                    <input
+                                        type="radio"
+                                        value="Человек"
+                                        checked={type === "Человек"}
+                                        onChange={(e) => setType(e.target.value)}
+                                    />
+                                    <span className="sims-radio-checkmark2"></span>
+                                    Человек
+                                </label>
+                                <label className="sims-radio2">
+                                    <input
+                                        type="radio"
+                                        value="Вампир"
+                                        checked={type === "Вампир"}
+                                        onChange={(e) => setType(e.target.value)}
+                                    />
+                                    <span className="sims-radio-checkmark2"></span>
+                                    Вампир
+                                </label>
+                                <label className="sims-radio2">
+                                    <input
+                                        type="radio"
+                                        value="Русалка"
+                                        checked={type === "Русалка"}
+                                        onChange={(e) => setType(e.target.value)}
+                                    />
+                                    <span className="sims-radio-checkmark2"></span>
+                                    Русалка
+                                </label>
+                                <label className="sims-radio2">
+                                    <input
+                                        type="radio"
+                                        value="Чародей"
+                                        checked={type === "Чародей"}
+                                        onChange={(e) => setType(e.target.value)}
+                                    />
+                                    <span className="sims-radio-checkmark2"></span>
+                                    Чародей
+                                </label>
+                                <label className="sims-radio2">
+                                    <input
+                                        type="radio"
+                                        value="Пришелец"
+                                        checked={type === "Пришелец"}
+                                        onChange={(e) => setType(e.target.value)}
+                                    />
+                                    <span className="sims-radio-checkmark2"></span>
+                                    Пришелец
+                                </label>
+                                <label className="sims-radio2">
+                                    <input
+                                        type="radio"
+                                        value="Призрак"
+                                        checked={type === "Призрак"}
+                                        onChange={(e) => setType(e.target.value)}
+                                    />
+                                    <span className="sims-radio-checkmark2"></span>
+                                    Призрак
+                                </label>
+                                <label className="sims-radio2">
+                                    <input
+                                        type="radio"
+                                        value="Оборотень"
+                                        checked={type === "Оборотень"}
+                                        onChange={(e) => setType(e.target.value)}
+                                    />
+                                    <span className="sims-radio-checkmark2"></span>
+                                    Оборотень
+                                </label>
+                            </div>
+                        </Form.Group>
+
                         <Form.Group className='mb-4 sims-form-group' controlId='formBasicCity'>
                             <Form.Label className="sims-label">Город проживания</Form.Label>
                             <Form.Select
@@ -278,34 +358,32 @@ const SimCreateForm = () => {
                 </Button>
             </Form>
         </div>
-        <div className='mt-4'>
-            <h3>Персонажи:</h3>
+        <div className='mt-4 text'>
+            <h3 className='mb-4 text-center'>Персонажи</h3>
             {!selectedCharacterId ? (
-                <div className='d-flex flex-wrap gap-3 mt-4'>
+                <div className='d-flex flex-wrap justify-content-center gap-4'>
                     {members.map((member) => (
                         <div
                             key={member.id}
-                            className='card p-2 text-center'
-                            style={{
-                                width: '10rem',
-                                cursor: 'pointer',
-                                border: '1px solid #ccc',
-                                borderRadius: '1rem',
-                                backgroundColor: '#fff',
-                            }}
+                            className='d-flex flex-column align-items-center'
+                            style={{ width: '120px', cursor: 'pointer' }}
                             onClick={() => setSelectedCharacterId(member.id)}
                         >
-                            {member.avatar && (
-                                <img
-                                    src={`http://localhost:3001${member.avatar}`}
-                                    alt='avatar'
-                                    width={80}
-                                    height={80}
-                                    style={{ borderRadius: '50%', objectFit: 'cover', marginBottom: '0.5rem' }}
-                                />
-                            )}
-                            <div style={{ fontWeight: 'bold' }}>
-                                {member.name} {member.surname}
+                            <div className='position-relative'>
+                                {member.avatar && (
+                                    <img
+                                        src={`http://localhost:3001${member.avatar}`}
+                                        alt='avatar'
+                                        className='rounded-circle object-fit-cover shadow'
+                                        width={100}
+                                        height={100}
+                                    />
+                                )}
+                                <div className='position-absolute bottom-0 end-0 bg-primary rounded-circle p-1 border border-2 border-white'></div>
+                            </div>
+                            <div className='mt-2 text-center'>
+                                <div className='fw-semibold'>{member.name}</div>
+                                <div className='text-muted small'>{member.surname}</div>
                             </div>
                         </div>
                     ))}

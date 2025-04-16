@@ -125,62 +125,34 @@
   color: #aaa;
 }
 
-.sims-radio-group {
+.sex-toggle {
   display: flex;
-  gap: 1.5rem;
-  margin-top: 0.5rem;
+  border: 1px solid var(--sims-green);
+  border-radius: 999px;
+  overflow: hidden;
+  width: fit-content;
 }
 
-.sims-radio {
-  display: flex;
-  align-items: center;
+.sex-toggle-button {
+  flex: 1;
+  padding: 0.5rem 1.2rem;
+  background-color: white;
+  color: var(--sims-green);
+  border: none;
+  font-weight: 700;
   cursor: pointer;
-  position: relative;
-  padding-left: 28px;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.1s ease;
 }
 
-.sims-radio input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-}
-
-.sims-radio-checkmark {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 20px;
-  width: 20px;
-  background-color: #eee;
-  border-radius: 50%;
-  border: 2px solid #ddd;
-  transition: all 0.3s ease;
-}
-
-.sims-radio:hover .sims-radio-checkmark {
-  background-color: #ddd;
-}
-
-.sims-radio input:checked ~ .sims-radio-checkmark {
+.sex-toggle-button.active {
   background-color: var(--sims-green);
-  border-color: var(--sims-green);
+  color: white;
 }
 
-.sims-radio-checkmark:after {
-  content: "";
-  position: absolute;
-  display: none;
-  top: 4px;
-  left: 4px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: white;
+.sex-toggle-button:active{
+  transform: scale(0.97); /* эффект нажатия */
 }
 
-.sims-radio input:checked ~ .sims-radio-checkmark:after {
-  display: block;
-}
 
 .sims-traits-hint {
   font-size: 0.8rem;
@@ -274,96 +246,30 @@
   font-family: "The Sims Sans SC";
 }
 
-/* Стиль для контейнера радиокнопок */
-/* Группа радиокнопок (в две колонки) */
-.sims-radio-group2 {
-  display: grid; /* Используем grid для выравнивания радиокнопок */
-  grid-template-columns: 1fr 1fr; /* Две колонки */
-  gap: 1.5rem;
+.lifeform-toggle-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
   margin-top: 0.5rem;
 }
 
-/* Радиокнопка */
-.sims-radio2 {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  position: relative;
-  padding-left: 58px;
-}
-
-/* Скрытый input */
-.sims-radio2 input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-}
-
-/* Стиль для радиокнопки (кружок) */
-.sims-radio-checkmark2 {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 20px;
-  width: 20px;
-  background-color: #eee;
-  border-radius: 50%;
-  border: 2px solid #ddd;
-  transition: all 0.3s ease;
-}
-
-/* Эффект при наведении */
-.sims-radio2:hover .sims-radio-checkmark2 {
-  background-color: #ddd;
-}
-
-/* Когда радиокнопка выбрана */
-.sims-radio2 input:checked ~ .sims-radio-checkmark2 {
-  background-color: var(--sims-green); /* Цвет при выборе */
-  border-color: var(--sims-green);
-}
-
-/* Галочка внутри радиокнопки */
-.sims-radio-checkmark2:after {
-  content: "";
-  position: absolute;
-  display: none;
-  top: 4px;
-  left: 4px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+.lifeform-toggle-button {
+  padding: 0.5rem 1.2rem;
+  border: 2px solid var(--sims-green);
+  border-radius: 999px;
   background-color: white;
+  color: var(--sims-green);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.1s ease;
 }
 
-/* Галочка появляется при выборе радиокнопки */
-.sims-radio2 input:checked ~ .sims-radio-checkmark2:after {
-  display: block;
+.lifeform-toggle-button.active {
+  background-color: var(--sims-green);
+  color: white;
 }
 
-/* Стиль текста рядом с радиокнопкой */
-.sims-radio2 span {
-  margin-left: 30px; /* Отступ для текста */
-  font-size: 1rem;
-  color: var(--sims-dark); /* Цвет текста */
-  transition: color 0.3s ease;
+.lifeform-toggle-button:active {
+  transform: scale(0.97); /* эффект нажатия */
 }
 
-/* Эффект при наведении на текст */
-.sims-radio2:hover span {
-  color: var(--sims-blue); /* Цвет текста при наведении */
-}
-
-/* Для мобильных экранов (одна колонка) */
-@media (max-width: 768px) {
-  .sims-radio-group2 {
-    grid-template-columns: 1fr; /* Все радиокнопки в одну колонку */
-  }
-}
-
-/* Для очень маленьких экранов (если нужно еще меньше радиокнопок) */
-@media (max-width: 480px) {
-  .sims-radio2 {
-    font-size: 0.9rem; /* Меньше шрифт для маленьких экранов */
-  }
-}

@@ -7,6 +7,9 @@ import '../css/simform.css';
 
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
+
+import { motion, AnimatePresence } from "framer-motion";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'C:/Users/kspiska/Desktop/DIPLOM/family-tree/node_modules/bootstrap-icons/font/bootstrap-icons.css';
@@ -170,106 +173,44 @@ const SimCreateForm = () => {
                     {/* Правая колонка */}
                     <div className="form-column">
                         <Form.Group className='mb-4 sims-form-group' controlId='formBasicSex'>
-                            <Form.Label className="sims-label">Пол</Form.Label>
-                            <div className="sims-radio-group">
-                                <label className="sims-radio">
-                                    <input
-                                        type="radio"
-                                        value="Мужской"
-                                        checked={sex === "Мужской"}
-                                        onChange={(e) => setSex(e.target.value)}
-                                    />
-                                    <span className="sims-radio-checkmark"></span>
-                                    Мужской
-                                </label>
-                                <label className="sims-radio">
-                                    <input
-                                        type="radio"
-                                        value="Женский"
-                                        checked={sex === "Женский"}
-                                        onChange={(e) => setSex(e.target.value)}
-                                    />
-                                    <span className="sims-radio-checkmark"></span>
-                                    Женский
-                                </label>
+                            <div className="sex-toggle-wrapper">
+                                <Form.Label className="sims-label">Пол</Form.Label>
+                                <div className="sex-toggle">
+                                    <button
+                                        type="button"
+                                        className={`sex-toggle-button ${sex === "Мужской" ? "active" : ""}`}
+                                        onClick={() => setSex("Мужской")}
+                                    >
+                                        Мужской
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className={`sex-toggle-button ${sex === "Женский" ? "active" : ""}`}
+                                        onClick={() => setSex("Женский")}
+                                    >
+                                        Женский
+                                    </button>
+                                </div>
                             </div>
+
                         </Form.Group>
 
                         <Form.Group className='mb-4 sims-form-group' controlId='formBasicType'>
                             <Form.Label className="sims-label">Форма жизни</Form.Label>
-                            <div className="sims-radio-group2">
-                                <label className="sims-radio2">
-                                    <input
-                                        type="radio"
-                                        value="Человек"
-                                        checked={type === "Человек"}
-                                        onChange={(e) => setType(e.target.value)}
-                                    />
-                                    <span className="sims-radio-checkmark2"></span>
-                                    Человек
-                                </label>
-                                <label className="sims-radio2">
-                                    <input
-                                        type="radio"
-                                        value="Вампир"
-                                        checked={type === "Вампир"}
-                                        onChange={(e) => setType(e.target.value)}
-                                    />
-                                    <span className="sims-radio-checkmark2"></span>
-                                    Вампир
-                                </label>
-                                <label className="sims-radio2">
-                                    <input
-                                        type="radio"
-                                        value="Русалка"
-                                        checked={type === "Русалка"}
-                                        onChange={(e) => setType(e.target.value)}
-                                    />
-                                    <span className="sims-radio-checkmark2"></span>
-                                    Русалка
-                                </label>
-                                <label className="sims-radio2">
-                                    <input
-                                        type="radio"
-                                        value="Чародей"
-                                        checked={type === "Чародей"}
-                                        onChange={(e) => setType(e.target.value)}
-                                    />
-                                    <span className="sims-radio-checkmark2"></span>
-                                    Чародей
-                                </label>
-                                <label className="sims-radio2">
-                                    <input
-                                        type="radio"
-                                        value="Пришелец"
-                                        checked={type === "Пришелец"}
-                                        onChange={(e) => setType(e.target.value)}
-                                    />
-                                    <span className="sims-radio-checkmark2"></span>
-                                    Пришелец
-                                </label>
-                                <label className="sims-radio2">
-                                    <input
-                                        type="radio"
-                                        value="Призрак"
-                                        checked={type === "Призрак"}
-                                        onChange={(e) => setType(e.target.value)}
-                                    />
-                                    <span className="sims-radio-checkmark2"></span>
-                                    Призрак
-                                </label>
-                                <label className="sims-radio2">
-                                    <input
-                                        type="radio"
-                                        value="Оборотень"
-                                        checked={type === "Оборотень"}
-                                        onChange={(e) => setType(e.target.value)}
-                                    />
-                                    <span className="sims-radio-checkmark2"></span>
-                                    Оборотень
-                                </label>
+                            <div className="lifeform-toggle-group">
+                                {["Человек", "Вампир", "Русалка", "Чародей", "Пришелец", "Призрак", "Оборотень"].map((option) => (
+                                    <button
+                                        key={option}
+                                        type="button"
+                                        className={`lifeform-toggle-button ${type === option ? "active" : ""}`}
+                                        onClick={() => setType(option)}
+                                    >
+                                        {option}
+                                    </button>
+                                ))}
                             </div>
                         </Form.Group>
+
 
                         <Form.Group className='mb-4 sims-form-group' controlId='formBasicCity'>
                             <Form.Label className="sims-label">Город проживания</Form.Label>
@@ -338,18 +279,28 @@ const SimCreateForm = () => {
                     <div className="sims-traits-hint">Например: Добрый, Весёлый, Гений</div>
                 </Form.Group>
 
-                {state_of_life === "Мертв" && (
-                    <Form.Group className='mb-4 sims-form-group' controlId='formBasicDeath'>
-                        <Form.Label className="sims-label">Причина смерти</Form.Label>
-                        <Form.Control
-                            value={cause_of_death}
-                            onChange={(e) => setCauseOfDeath(e.target.value)}
-                            type='text'
-                            placeholder='Введите причину смерти'
-                            className="sims-input"
-                        />
-                    </Form.Group>
-                )}
+                <AnimatePresence>
+                    {state_of_life === "Мертв" && (
+                        <motion.div
+                            key="death-cause"
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.3 }}
+                        >
+                            <Form.Group className='mb-4 sims-form-group' controlId='formBasicDeath'>
+                                <Form.Label className="sims-label">Причина смерти</Form.Label>
+                                <Form.Control
+                                    value={cause_of_death}
+                                    onChange={(e) => setCauseOfDeath(e.target.value)}
+                                    type='text'
+                                    placeholder='Введите причину смерти'
+                                    className="sims-input"
+                                />
+                            </Form.Group>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
 
                 <Button type="submit" className="sims-submit-btn">

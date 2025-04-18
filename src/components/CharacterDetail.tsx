@@ -15,6 +15,7 @@ interface Props {
         cause_of_death?: string;
         kind: string;
         type: string;
+        biography: string;
     };
     onDelete: (id: number) => void; // функция удаления
 }
@@ -55,6 +56,7 @@ const CharacterDetail: React.FC<Props> = ({ character, onDelete }) => {
                         {character.cause_of_death && (
                             <ListGroup.Item><strong>Причина смерти:</strong> {character.cause_of_death}</ListGroup.Item>
                         )}
+                        <ListGroup.Item><strong>Биография:</strong> {character.biography}</ListGroup.Item>
                     </ListGroup>
                     <Button
                         variant="danger"

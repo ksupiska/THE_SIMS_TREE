@@ -149,10 +149,9 @@
   color: white;
 }
 
-.sex-toggle-button:active{
+.sex-toggle-button:active {
   transform: scale(0.97); /* эффект нажатия */
 }
-
 
 .sims-traits-hint {
   font-size: 0.8rem;
@@ -273,3 +272,13 @@
   transform: scale(0.97); /* эффект нажатия */
 }
 
+.auto-resize-textarea {
+  overflow: hidden;
+  resize: none;
+}
+
+/* Автоматическое изменение высоты */
+.auto-resize-textarea:focus,
+.auto-resize-textarea {
+  min-height: 100px;
+}

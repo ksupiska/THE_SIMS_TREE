@@ -28,6 +28,7 @@ interface Human {
     cause_of_death?: string;
     kind: string;
     type: string;
+    biography: string;
 }
 
 
@@ -43,6 +44,7 @@ const SimCreateForm = () => {
     const [cause_of_death, setCauseOfDeath] = useState('');
     const [kind, setKind] = useState('');
     const [type, setType] = useState('');
+    const [biography, setBiography] = useState('');
     const [avatar, setAvatar] = useState<File | null>(null);
     const [members, setMembers] = useState<Human[]>([]);
 
@@ -75,6 +77,7 @@ const SimCreateForm = () => {
             formData.append('cause_of_death', cause_of_death);
             formData.append('kind', kind);
             formData.append('type', type);
+            formData.append('biography', biography);
             if (avatar) {
                 formData.append('avatar', avatar);
             }
@@ -91,6 +94,7 @@ const SimCreateForm = () => {
             setCauseOfDeath('');
             setKind('');
             setType('');
+            setBiography('');
             setAvatar(null);
 
             fetchPersonalities();
@@ -277,6 +281,18 @@ const SimCreateForm = () => {
                         className="sims-input"
                     />
                     <div className="sims-traits-hint">Например: Добрый, Весёлый, Гений</div>
+                </Form.Group>
+
+                <Form.Group className='mb-4 sims-form-group' controlId='formBasicBiography'>
+                    <Form.Label className="sims-label">Биография</Form.Label>
+                    <Form.Control
+                        value={biography}
+                        onChange={(e) => setBiography(e.target.value)}
+                        as='textarea'
+                        rows={3}
+                        placeholder='Введите биографию персонажа, или его историю'
+                        className="sims-input auto-resize-textarea"
+                    />
                 </Form.Group>
 
                 <AnimatePresence>

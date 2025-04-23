@@ -1,9 +1,11 @@
 @font-face {
   font-family: 'The Sims Sans SC';
-  src: url('/fonts/The_Sims_Sans-Bold-SC.ttf') format('truetype');  /* Убедись, что путь правильный */
+  src: url('/fonts/The_Sims_Sans-Bold-SC.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
+
 .home{
   font-family: "The Sims Sans SC";
 }

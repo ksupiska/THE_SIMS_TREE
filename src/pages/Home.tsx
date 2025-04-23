@@ -1,6 +1,4 @@
 // src/pages/Home.tsx
-import React from 'react';
-
 import { Carousel, Container, Col, Row } from "react-bootstrap";
 
 import firstSlide from "../photo/first-slide.png";

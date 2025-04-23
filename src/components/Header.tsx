@@ -1,7 +1,7 @@
 //Header.tsx
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'C:/Users/kspiska/Desktop/DIPLOM/family-tree/node_modules/bootstrap-icons/font/bootstrap-icons.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Nav, Container, Navbar } from 'react-bootstrap';
 import { FaUserCircle } from "react-icons/fa";
 

@@ -50,7 +50,7 @@ const SimCreateForm = () => {
 
     const fetchPersonalities = async () => {
         try {
-            const response = await axios.get('http://localhost:3001/personalities');
+            const response = await axios.get("/api/index");
             setMembers(response.data);
 
         } catch (error) {
@@ -81,7 +81,7 @@ const SimCreateForm = () => {
                 formData.append('avatar', avatar);
             }
 
-            await axios.post('http://localhost:3001/personalities', formData, {
+            await axios.post("/api/index", formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 
@@ -181,14 +181,14 @@ const SimCreateForm = () => {
                                 <div className="sex-toggle">
                                     <button
                                         type="button"
-                                        className={`sex-toggle-button ${sex === "Мужской" ? "active" : ""}`}
+                                        className={`sex-toggle-button ${gender === "Мужской" ? "active" : ""}`}
                                         onClick={() => setSex("Мужской")}
                                     >
                                         Мужской
                                     </button>
                                     <button
                                         type="button"
-                                        className={`sex-toggle-button ${sex === "Женский" ? "active" : ""}`}
+                                        className={`sex-toggle-button ${gender === "Женский" ? "active" : ""}`}
                                         onClick={() => setSex("Женский")}
                                     >
                                         Женский
@@ -218,7 +218,7 @@ const SimCreateForm = () => {
                         <Form.Group className='mb-4 sims-form-group' controlId='formBasicCity'>
                             <Form.Label className="sims-label">Город проживания</Form.Label>
                             <Form.Select
-                                value={city_living}
+                                value={city}
                                 onChange={(e) => setCity(e.target.value)}
                                 className="sims-select"
                             >
@@ -257,7 +257,7 @@ const SimCreateForm = () => {
                         <Form.Group className='mb-4 sims-form-group' controlId='formBasicState'>
                             <Form.Label className="sims-label">Состояние персонажа</Form.Label>
                             <Form.Select
-                                value={state_of_life}
+                                value={state}
                                 onChange={(e) => setStateOfLife(e.target.value)}
                                 required
                                 className="sims-select"
@@ -295,7 +295,7 @@ const SimCreateForm = () => {
                 </Form.Group>
 
                 <AnimatePresence>
-                    {state_of_life === "Мертв" && (
+                    {state === "Мертв" && (
                         <motion.div
                             key="death-cause"
                             initial={{ opacity: 0, height: 0 }}
@@ -306,7 +306,7 @@ const SimCreateForm = () => {
                             <Form.Group className='mb-4 sims-form-group' controlId='formBasicDeath'>
                                 <Form.Label className="sims-label">Причина смерти</Form.Label>
                                 <Form.Control
-                                    value={cause_of_death}
+                                    value={death}
                                     onChange={(e) => setCauseOfDeath(e.target.value)}
                                     type='text'
                                     placeholder='Введите причину смерти'

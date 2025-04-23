@@ -37,10 +37,10 @@ const SimCreateForm = () => {
 
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
-    const [sex, setSex] = useState('');
-    const [city_living, setCity] = useState('');
-    const [state_of_life, setStateOfLife] = useState('');
-    const [cause_of_death, setCauseOfDeath] = useState('');
+    const [gender, setSex] = useState('');
+    const [city, setCity] = useState('');
+    const [state, setStateOfLife] = useState('');
+    const [death, setCauseOfDeath] = useState('');
     const [kind, setKind] = useState('');
     const [type, setType] = useState('');
     const [biography, setBiography] = useState('');
@@ -70,10 +70,10 @@ const SimCreateForm = () => {
             const formData = new FormData();
             formData.append('name', name);
             formData.append('surname', surname);
-            formData.append('sex', sex);
-            formData.append('city_living', city_living);
-            formData.append('state_of_life', state_of_life);
-            formData.append('cause_of_death', cause_of_death);
+            formData.append('gender', gender);
+            formData.append('city', city);
+            formData.append('state', state);
+            formData.append('death', death);
             formData.append('kind', kind);
             formData.append('type', type);
             formData.append('biography', biography);

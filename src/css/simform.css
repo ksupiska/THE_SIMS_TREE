@@ -1,3 +1,9 @@
+@font-face {
+  font-family: 'The Sims Sans SC';
+  src: url('/fonts/The_Sims_Sans-Bold-SC.ttf') format('truetype');  /* Убедись, что путь правильный */
+  font-weight: normal;
+  font-style: normal;
+}
 /* Основные цвета в стиле Sims 4 */
 :root {
   --sims-green: #4caf50;

@@ -10,9 +10,9 @@ interface Props {
         name: string;
         surname: string;
         sex: string;
-        city_living: string;
-        state_of_life: string;
-        cause_of_death?: string;
+        city: string;
+        state: string;
+        death?: string;
         kind: string;
         type: string;
         biography: string;
@@ -49,12 +49,12 @@ const CharacterDetail: React.FC<Props> = ({ character, onDelete }) => {
                     </Card.Title>
                     <ListGroup variant="flush" className="character-list mb-3">
                         <ListGroup.Item><strong>Пол:</strong> {character.sex}</ListGroup.Item>
-                        <ListGroup.Item><strong>Город:</strong> {character.city_living}</ListGroup.Item>
-                        <ListGroup.Item><strong>Состояние:</strong> {character.state_of_life}</ListGroup.Item>
+                        <ListGroup.Item><strong>Город:</strong> {character.city}</ListGroup.Item>
+                        <ListGroup.Item><strong>Состояние:</strong> {character.state}</ListGroup.Item>
                         <ListGroup.Item><strong>Черты:</strong> {character.kind}</ListGroup.Item>
                         <ListGroup.Item><strong>Форма жизни:</strong> {character.type}</ListGroup.Item>
-                        {character.cause_of_death && (
-                            <ListGroup.Item><strong>Причина смерти:</strong> {character.cause_of_death}</ListGroup.Item>
+                        {character.death && (
+                            <ListGroup.Item><strong>Причина смерти:</strong> {character.death}</ListGroup.Item>
                         )}
                         <ListGroup.Item><strong>Биография:</strong> {character.biography}</ListGroup.Item>
                     </ListGroup>

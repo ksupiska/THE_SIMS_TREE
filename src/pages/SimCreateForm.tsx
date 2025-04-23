@@ -13,7 +13,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-import CharacterDetail from '../components/CharacterDetail';
+// import CharacterDetail from '../components/CharacterDetail';
 
 
 interface Human {
@@ -102,16 +102,16 @@ const SimCreateForm = () => {
         }
     };
 
-    const handleDelete = async (id: number) => {
-        try {
-            await axios.delete(`http://localhost:3001/personalities/${id}`);
-            // Обновляем список после удаления
-            await fetchPersonalities();
-            setSelectedCharacterId(null); // если показывается detail — вернуться к списку
-        } catch (error) {
-            console.error('Ошибка при удалении персонажа:', error);
-        }
-    };
+    // const handleDelete = async (id: number) => {
+    //     try {
+    //         await axios.delete(`http://localhost:3001/personalities/${id}`);
+    //         // Обновляем список после удаления
+    //         await fetchPersonalities();
+    //         setSelectedCharacterId(null); // если показывается detail — вернуться к списку
+    //     } catch (error) {
+    //         console.error('Ошибка при удалении персонажа:', error);
+    //     }
+    // };
 
 
     return <div>
@@ -360,10 +360,10 @@ const SimCreateForm = () => {
                         Назад к списку
                     </Button>
 
-                    <CharacterDetail
+                    {/* <CharacterDetail
                         character={members.find((m) => m.id === selectedCharacterId)!}
                         onDelete={handleDelete}
-                    />
+                    /> */}
                 </div>
 
             )}

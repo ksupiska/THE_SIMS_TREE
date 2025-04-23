@@ -7,12 +7,11 @@ import '../css/simform.css';
 
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
 
 import { motion, AnimatePresence } from "framer-motion";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'C:/Users/kspiska/Desktop/DIPLOM/family-tree/node_modules/bootstrap-icons/font/bootstrap-icons.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 import CharacterDetail from '../components/CharacterDetail';
 

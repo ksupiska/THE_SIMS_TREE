@@ -1,5 +1,4 @@
 //Header.tsx
-import React from 'react';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'C:/Users/kspiska/Desktop/DIPLOM/family-tree/node_modules/bootstrap-icons/font/bootstrap-icons.css';

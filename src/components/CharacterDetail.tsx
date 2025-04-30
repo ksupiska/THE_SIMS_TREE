@@ -9,7 +9,7 @@ interface Props {
         avatar?: string;
         name: string;
         surname: string;
-        sex: string;
+        gender: string;
         city: string;
         state: string;
         death?: string;
@@ -39,7 +39,7 @@ const CharacterDetail: React.FC<Props> = ({ character, onDelete }) => {
                 {character.avatar && (
                     <Card.Img
                         variant="top"
-                        src={`http://localhost:3001${character.avatar}`}
+                        src={`http://localhost:5000/api/characters${character.avatar}`}
                         className="character-img"
                     />
                 )}
@@ -48,7 +48,7 @@ const CharacterDetail: React.FC<Props> = ({ character, onDelete }) => {
                         {character.name} {character.surname}
                     </Card.Title>
                     <ListGroup variant="flush" className="character-list mb-3">
-                        <ListGroup.Item><strong>Пол:</strong> {character.sex}</ListGroup.Item>
+                        <ListGroup.Item><strong>Пол:</strong> {character.gender}</ListGroup.Item>
                         <ListGroup.Item><strong>Город:</strong> {character.city}</ListGroup.Item>
                         <ListGroup.Item><strong>Состояние:</strong> {character.state}</ListGroup.Item>
                         <ListGroup.Item><strong>Черты:</strong> {character.kind}</ListGroup.Item>

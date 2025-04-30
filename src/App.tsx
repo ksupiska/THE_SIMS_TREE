@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import SimCreateForm from './pages/SimCreateForm';
 
 import Header from './components/Header';
+import CharacterList from './components/CharacterList';
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/simcreateform" element={<SimCreateForm />} />
+        <Route path="/list" element={<CharacterList />} />
       </Routes>
     </Router>
   );

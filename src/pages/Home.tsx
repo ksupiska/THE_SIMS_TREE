@@ -58,41 +58,41 @@ const Home = () => {
           <section className='d-flex justify-content-center'>
             <svg width="106" height="72" viewBox="0 0 106 72" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g filter="url(#filter0_d_40_51)">
-                <circle cx="54.5" cy="42.5" r="15.5" stroke="black" stroke-width="2" />
-                <circle cx="54.5" cy="38.5" r="6.5" stroke="black" stroke-width="2" />
+                <circle cx="54.5" cy="42.5" r="15.5" stroke="black" strokeWidth="2" />
+                <circle cx="54.5" cy="38.5" r="6.5" stroke="black" strokeWidth="2" />
                 <mask id="path-3-inside-1_40_51" fill="white">
                   <path d="M65 54.5C65 51.7152 63.8938 49.0445 61.9246 47.0754C59.9555 45.1062 57.2848 44 54.5 44C51.7152 44 49.0445 45.1062 47.0754 47.0754C45.1062 49.0445 44 51.7152 44 54.5L45.9191 54.5C45.9191 52.2242 46.8232 50.0416 48.4324 48.4324C50.0416 46.8232 52.2242 45.9191 54.5 45.9191C56.7758 45.9191 58.9584 46.8232 60.5676 48.4324C62.1768 50.0416 63.0809 52.2242 63.0809 54.5H65Z" />
                 </mask>
-                <path d="M65 54.5C65 51.7152 63.8938 49.0445 61.9246 47.0754C59.9555 45.1062 57.2848 44 54.5 44C51.7152 44 49.0445 45.1062 47.0754 47.0754C45.1062 49.0445 44 51.7152 44 54.5L45.9191 54.5C45.9191 52.2242 46.8232 50.0416 48.4324 48.4324C50.0416 46.8232 52.2242 45.9191 54.5 45.9191C56.7758 45.9191 58.9584 46.8232 60.5676 48.4324C62.1768 50.0416 63.0809 52.2242 63.0809 54.5H65Z" fill="#D9D9D9" stroke="black" stroke-width="2" mask="url(#path-3-inside-1_40_51)" />
-                <circle cx="27.5" cy="20.5" r="15.5" stroke="black" stroke-width="2" />
-                <circle cx="27.5" cy="16.5" r="6.5" stroke="black" stroke-width="2" />
+                <path d="M65 54.5C65 51.7152 63.8938 49.0445 61.9246 47.0754C59.9555 45.1062 57.2848 44 54.5 44C51.7152 44 49.0445 45.1062 47.0754 47.0754C45.1062 49.0445 44 51.7152 44 54.5L45.9191 54.5C45.9191 52.2242 46.8232 50.0416 48.4324 48.4324C50.0416 46.8232 52.2242 45.9191 54.5 45.9191C56.7758 45.9191 58.9584 46.8232 60.5676 48.4324C62.1768 50.0416 63.0809 52.2242 63.0809 54.5H65Z" fill="#D9D9D9" stroke="black" strokeWidth="2" mask="url(#path-3-inside-1_40_51)" />
+                <circle cx="27.5" cy="20.5" r="15.5" stroke="black" strokeWidth="2" />
+                <circle cx="27.5" cy="16.5" r="6.5" stroke="black" strokeWidth="2" />
                 <mask id="path-6-inside-2_40_51" fill="white">
                   <path d="M38 32.5C38 29.7152 36.8938 27.0445 34.9246 25.0754C32.9555 23.1062 30.2848 22 27.5 22C24.7152 22 22.0445 23.1062 20.0754 25.0754C18.1062 27.0445 17 29.7152 17 32.5L18.9191 32.5C18.9191 30.2242 19.8232 28.0416 21.4324 26.4324C23.0416 24.8232 25.2242 23.9191 27.5 23.9191C29.7758 23.9191 31.9584 24.8232 33.5676 26.4324C35.1768 28.0416 36.0809 30.2242 36.0809 32.5H38Z" />
                 </mask>
-                <path d="M38 32.5C38 29.7152 36.8938 27.0445 34.9246 25.0754C32.9555 23.1062 30.2848 22 27.5 22C24.7152 22 22.0445 23.1062 20.0754 25.0754C18.1062 27.0445 17 29.7152 17 32.5L18.9191 32.5C18.9191 30.2242 19.8232 28.0416 21.4324 26.4324C23.0416 24.8232 25.2242 23.9191 27.5 23.9191C29.7758 23.9191 31.9584 24.8232 33.5676 26.4324C35.1768 28.0416 36.0809 30.2242 36.0809 32.5H38Z" fill="#D9D9D9" stroke="black" stroke-width="2" mask="url(#path-6-inside-2_40_51)" />
-                <circle cx="80.5" cy="20.5" r="15.5" stroke="black" stroke-width="2" />
-                <circle cx="80.5" cy="16.5" r="6.5" stroke="black" stroke-width="2" />
+                <path d="M38 32.5C38 29.7152 36.8938 27.0445 34.9246 25.0754C32.9555 23.1062 30.2848 22 27.5 22C24.7152 22 22.0445 23.1062 20.0754 25.0754C18.1062 27.0445 17 29.7152 17 32.5L18.9191 32.5C18.9191 30.2242 19.8232 28.0416 21.4324 26.4324C23.0416 24.8232 25.2242 23.9191 27.5 23.9191C29.7758 23.9191 31.9584 24.8232 33.5676 26.4324C35.1768 28.0416 36.0809 30.2242 36.0809 32.5H38Z" fill="#D9D9D9" stroke="black" strokeWidth="2" mask="url(#path-6-inside-2_40_51)" />
+                <circle cx="80.5" cy="20.5" r="15.5" stroke="black" strokeWidth="2" />
+                <circle cx="80.5" cy="16.5" r="6.5" stroke="black" strokeWidth="2" />
                 <mask id="path-9-inside-3_40_51" fill="white">
                   <path d="M91 32.5C91 29.7152 89.8938 27.0445 87.9246 25.0754C85.9555 23.1062 83.2848 22 80.5 22C77.7152 22 75.0445 23.1062 73.0754 25.0754C71.1062 27.0445 70 29.7152 70 32.5L71.9191 32.5C71.9191 30.2242 72.8232 28.0416 74.4324 26.4324C76.0416 24.8232 78.2242 23.9191 80.5 23.9191C82.7758 23.9191 84.9584 24.8232 86.5676 26.4324C88.1768 28.0416 89.0809 30.2242 89.0809 32.5H91Z" />
                 </mask>
-                <path d="M91 32.5C91 29.7152 89.8938 27.0445 87.9246 25.0754C85.9555 23.1062 83.2848 22 80.5 22C77.7152 22 75.0445 23.1062 73.0754 25.0754C71.1062 27.0445 70 29.7152 70 32.5L71.9191 32.5C71.9191 30.2242 72.8232 28.0416 74.4324 26.4324C76.0416 24.8232 78.2242 23.9191 80.5 23.9191C82.7758 23.9191 84.9584 24.8232 86.5676 26.4324C88.1768 28.0416 89.0809 30.2242 89.0809 32.5H91Z" fill="#D9D9D9" stroke="black" stroke-width="2" mask="url(#path-9-inside-3_40_51)" />
-                <line x1="43" y1="19" x2="65" y2="19" stroke="black" stroke-width="2" />
-                <line x1="33.7614" y1="35.3517" x2="38.9477" y2="41.4429" stroke="black" stroke-width="2" />
-                <line x1="74.8521" y1="35.6349" x2="69.7725" y2="41.8154" stroke="black" stroke-width="2" />
-                <circle cx="98" cy="4" r="3" stroke="black" stroke-width="2" />
-                <circle cx="8" cy="7" r="3" stroke="black" stroke-width="2" />
-                <circle cx="90.8486" cy="42.0015" r="3" transform="rotate(-166.005 90.8486 42.0015)" stroke="black" stroke-width="2" />
-                <circle cx="70.8486" cy="60.0015" r="3" transform="rotate(-166.005 70.8486 60.0015)" stroke="black" stroke-width="2" />
-                <circle cx="31.8486" cy="44.0015" r="3" transform="rotate(-166.005 31.8486 44.0015)" stroke="black" stroke-width="2" />
-                <line x1="95.8" y1="6.6" x2="92.8" y2="10.6" stroke="black" stroke-width="2" />
-                <line x1="10.8" y1="9.4" x2="13.8" y2="13.4" stroke="black" stroke-width="2" />
-                <line x1="88.7121" y1="38.9955" x2="86.7685" y2="34.3888" stroke="black" stroke-width="2" />
-                <line x1="68.7121" y1="56.9955" x2="66.7685" y2="52.3888" stroke="black" stroke-width="2" />
-                <line x1="29.7121" y1="40.9955" x2="27.7685" y2="36.3888" stroke="black" stroke-width="2" />
+                <path d="M91 32.5C91 29.7152 89.8938 27.0445 87.9246 25.0754C85.9555 23.1062 83.2848 22 80.5 22C77.7152 22 75.0445 23.1062 73.0754 25.0754C71.1062 27.0445 70 29.7152 70 32.5L71.9191 32.5C71.9191 30.2242 72.8232 28.0416 74.4324 26.4324C76.0416 24.8232 78.2242 23.9191 80.5 23.9191C82.7758 23.9191 84.9584 24.8232 86.5676 26.4324C88.1768 28.0416 89.0809 30.2242 89.0809 32.5H91Z" fill="#D9D9D9" stroke="black" strokeWidth="2" mask="url(#path-9-inside-3_40_51)" />
+                <line x1="43" y1="19" x2="65" y2="19" stroke="black" strokeWidth="2" />
+                <line x1="33.7614" y1="35.3517" x2="38.9477" y2="41.4429" stroke="black" strokeWidth="2" />
+                <line x1="74.8521" y1="35.6349" x2="69.7725" y2="41.8154" stroke="black" strokeWidth="2" />
+                <circle cx="98" cy="4" r="3" stroke="black" strokeWidth="2" />
+                <circle cx="8" cy="7" r="3" stroke="black" strokeWidth="2" />
+                <circle cx="90.8486" cy="42.0015" r="3" transform="rotate(-166.005 90.8486 42.0015)" stroke="black" strokeWidth="2" />
+                <circle cx="70.8486" cy="60.0015" r="3" transform="rotate(-166.005 70.8486 60.0015)" stroke="black" strokeWidth="2" />
+                <circle cx="31.8486" cy="44.0015" r="3" transform="rotate(-166.005 31.8486 44.0015)" stroke="black" strokeWidth="2" />
+                <line x1="95.8" y1="6.6" x2="92.8" y2="10.6" stroke="black" strokeWidth="2" />
+                <line x1="10.8" y1="9.4" x2="13.8" y2="13.4" stroke="black" strokeWidth="2" />
+                <line x1="88.7121" y1="38.9955" x2="86.7685" y2="34.3888" stroke="black" strokeWidth="2" />
+                <line x1="68.7121" y1="56.9955" x2="66.7685" y2="52.3888" stroke="black" strokeWidth="2" />
+                <line x1="29.7121" y1="40.9955" x2="27.7685" y2="36.3888" stroke="black" strokeWidth="2" />
               </g>
               <defs>
-                <filter id="filter0_d_40_51" x="0" y="0" width="106" height="72.0024" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                  <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                <filter id="filter0_d_40_51" x="0" y="0" width="106" height="72.0024" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                  <feFlood floodOpacity="0" result="BackgroundImageFix" />
                   <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
                   <feOffset dy="4" />
                   <feGaussianBlur stdDeviation="2" />

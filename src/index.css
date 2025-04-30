@@ -1,32 +1,38 @@
-/* styles.css */
+/* src/components/LoadingComponent.css */
+
 .loading-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* полупрозрачный фон */
-    z-index: 9999; /* поверх всех других элементов */
+    width: 100%;
+    height: 100%;
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
   }
   
-  .loading-spinner {
-    border: 8px solid rgba(255, 255, 255, 0.3);
-    border-top: 8px solid #69d45b; /* цвет верхней части */
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
+  .diamond-loader {
+    width: 80px;
+    height: 80px;
+    background-color: #69d45b;
+    clip-path: polygon(50% 0%, 70% 50%, 50% 100%, 30% 50%);
+    animation: pulse 1s infinite ease-in-out;
   }
   
-  @keyframes spin {
+  @keyframes pulse {
     0% {
-      transform: rotate(0deg);
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0.8;
     }
     100% {
-      transform: rotate(360deg);
+      transform: scale(1);
+      opacity: 1;
     }
   }
   

@@ -3,9 +3,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Nav, Container, Navbar, Button } from 'react-bootstrap';
-import { FaUserCircle } from "react-icons/fa";
-
-
 
 const Header = () => {
     return <div className='header'>

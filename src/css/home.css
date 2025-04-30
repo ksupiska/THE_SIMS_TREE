@@ -9,3 +9,14 @@
 .home{
   font-family: "The Sims Sans SC";
 }
+
+.bi-tree {
+  display: flex;
+  
+  font-size: 24px;
+  object-fit: contain; /* сохраняет пропорции иконки */
+}
+.rounded-circle {
+  width: 3rem; /* размер контейнера */
+  height: 3rem; /* размер контейнера */
+}

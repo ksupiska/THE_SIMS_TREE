@@ -17,10 +17,11 @@ const Header = () => {
                                 <div className="position-relative" style={{ width: "32px", height: "32px" }}>
                                     <div
                                         style={{
-                                            width: "32px",
-                                            height: "32px",
-                                            transform: "rotate(45deg)",
+                                            width: "40px",  // ширина
+                                            height: "40px",  // высота
                                             backgroundColor: "#69d45b",
+                                            opacity: 0.8,
+                                            clipPath: "polygon(50% 0%, 70% 50%, 50% 100%, 30% 50%)", // создаёт ромб
                                         }}
                                     ></div>
                                 </div>
@@ -34,15 +35,15 @@ const Header = () => {
                         </div>
                         <div className="d-flex gap-2 mb-4">
                             <Button variant="light" className="p-2 rounded-circle" style={{ color: "#4a8d56" }}>
-                                {/* <Facebook size={20} /> */}
+                                <i className="bi bi-github"></i>
                                 <span className="visually-hidden">Facebook</span>
                             </Button>
                             <Button variant="light" className="p-2 rounded-circle" style={{ color: "#4a8d56" }}>
-                                {/* <Twitter size={20} /> */}
+                                <i className="bi bi-telegram"></i>
                                 <span className="visually-hidden">Twitter</span>
                             </Button>
                             <Button variant="light" className="p-2 rounded-circle" style={{ color: "#4a8d56" }}>
-                                {/* <Instagram size={20} /> */}
+                                <i className="bi bi-instagram"></i>
                                 <span className="visually-hidden">Instagram</span>
                             </Button>
                         </div>

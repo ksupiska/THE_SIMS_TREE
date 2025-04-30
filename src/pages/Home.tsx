@@ -82,8 +82,11 @@ const Home = () => {
               onMouseOut={(e) => (e.currentTarget.style.borderColor = "#e4f2ff")}
             >
               <Card.Body className="p-4 text-center d-flex flex-column align-items-center">
-                <div className="rounded-circle p-3 mb-3" style={{ backgroundColor: "#e4f2ff" }}>
-                  {/* <Tree size={24} style={{ color: "#4a8d56" }} /> */}
+                <div
+                  className="rounded-circle d-flex justify-content-center align-items-center mb-3"
+                  style={{ backgroundColor: "#e4f2ff", width: "64px", height: "64px" }}
+                >
+                  <i className="bi bi-tree" style={{ fontSize: "32px", color: "#4a8d56" }}></i>
                 </div>
                 <Card.Title className="fs-4 fw-bold" style={{ color: "#4a8d56" }}>
                   Генеалогические древа
@@ -103,8 +106,11 @@ const Home = () => {
               onMouseOut={(e) => (e.currentTarget.style.borderColor = "#e4f2ff")}
             >
               <Card.Body className="p-4 text-center d-flex flex-column align-items-center">
-                <div className="rounded-circle p-3 mb-3" style={{ backgroundColor: "#e4f2ff" }}>
-                  {/* <People size={24} style={{ color: "#4a8d56" }} /> */}
+                <div
+                  className="rounded-circle d-flex justify-content-center align-items-center mb-3"
+                  style={{ backgroundColor: "#e4f2ff", width: "64px", height: "64px" }}
+                >
+                  <i className="bi bi-people" style={{ fontSize: "32px", color: "#4a8d56" }}></i>
                 </div>
                 <Card.Title className="fs-4 fw-bold" style={{ color: "#4a8d56" }}>
                   Профили персонажей
@@ -124,8 +130,11 @@ const Home = () => {
               onMouseOut={(e) => (e.currentTarget.style.borderColor = "#e4f2ff")}
             >
               <Card.Body className="p-4 text-center d-flex flex-column align-items-center">
-                <div className="rounded-circle p-3 mb-3" style={{ backgroundColor: "#e4f2ff" }}>
-                  {/* <HouseDoor size={24} style={{ color: "#4a8d56" }} /> */}
+              <div
+                  className="rounded-circle d-flex justify-content-center align-items-center mb-3"
+                  style={{ backgroundColor: "#e4f2ff", width: "64px", height: "64px" }}
+                >
+                  <i className="bi bi-houses" style={{ fontSize: "32px", color: "#4a8d56" }}></i>
                 </div>
                 <Card.Title className="fs-4 fw-bold" style={{ color: "#4a8d56" }}>
                   Дома и участки
@@ -226,7 +235,7 @@ const Home = () => {
                 </div>
                 <Card.Body className="p-4">
                   <div className="d-flex align-items-center gap-2 text-secondary mb-2">
-                    {/* <Calendar3 size={16} /> */}
+                    <i className="bi bi-calendar-event"></i>
                     <small>30 апреля 2025</small>
                   </div>
                   <Card.Title className="fs-4 fw-bold" style={{ color: "#4a8d56" }}>

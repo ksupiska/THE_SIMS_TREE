@@ -13,10 +13,11 @@ const Header = () => {
                         <div className="position-absolute" style={{ width: "40px", height: "40px" }}>
                             <div
                                 style={{
-                                    width: "40px",
-                                    height: "40px",
-                                    transform: "rotate(45deg)",
+                                    width: "40px",  // ширина
+                                    height: "40px",  // высота
                                     backgroundColor: "#69d45b",
+                                    opacity: 0.8,
+                                    clipPath: "polygon(50% 0%, 70% 50%, 50% 100%, 30% 50%)", // создаёт ромб
                                 }}
                             ></div>
                         </div>

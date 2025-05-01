@@ -8,35 +8,35 @@ import type { User } from '@supabase/supabase-js';
 
 const AuthWrapper = () => {
     const [user, setUser] = useState<User | null>(null);
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user)
-    })
+    useEffect(() => {
+        supabase.auth.getUser().then(({ data: { user } }) => {
+            setUser(user)
+        })
 
-    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user || null)
-    })
+        const { data: listener } = supabase.auth.onAuthStateChange((_, session) => {
+            setUser(session?.user || null)
+        })
 
-    return () => {
-      listener.subscription.unsubscribe()
+        return () => {
+            listener.subscription.unsubscribe()
+        }
+    }, [])
+
+    if (!user) {
+        return (
+            <div>
+                <SignupForm />
+                <LoginForm />
+            </div>
+        )
     }
-  }, [])
 
-  if (!user) {
     return (
-      <div>
-        <SignupForm />
-        <LoginForm />
-      </div>
+        <div>
+            <p>Привет, {user.email}</p>
+            <button onClick={() => supabase.auth.signOut()}>Выйти</button>
+        </div>
     )
-  }
-
-  return (
-    <div>
-      <p>Привет, {user.email}</p>
-      <button onClick={() => supabase.auth.signOut()}>Выйти</button>
-    </div>
-  )
 }
 
 export default AuthWrapper

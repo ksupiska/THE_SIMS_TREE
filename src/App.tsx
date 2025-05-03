@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import Home from './pages/Home';
 import SimCreateForm from './pages/SimCreateForm';
 import Auth from './pages/Auth';
+import AuthWrapper from './pages/AuthWrapper';
 import SignupForm from './components/auth/SignupForm';
 import LoginForm from './components/auth/LoginForm';
 
@@ -37,6 +38,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/login" element={<LoginForm />} />
+        <Route path="/profile" element={<AuthWrapper />} />
         <Route
           path="/simcreateform"
           element={

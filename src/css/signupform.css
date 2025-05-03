@@ -25,3 +25,31 @@
   color: #4a8d56;
   font-weight: 500;
 }
+
+.signup-link {
+  font-size: 14px;
+  color: #555;
+}
+
+.signup-link a {
+  color: #259400;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.signup-link a:hover {
+  color: #196400;
+  text-decoration: underline;
+}
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.7s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}

@@ -1,11 +1,15 @@
 import { useState } from 'react'
 import { supabase } from '../../../src/SupabaseClient'
+import { useNavigate } from 'react-router-dom'
+import '../../css/loginform.css'
 
-import '../../css/loginform.css';
 const LoginForm = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
+  const [loggedIn, setLoggedIn] = useState(false)
+
+  const navigate = useNavigate()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -17,9 +21,15 @@ const LoginForm = () => {
 
     if (error) {
       setMessage('Ошибка: ' + error.message)
+      setLoggedIn(false)
     } else {
       setMessage('Вход выполнен!')
+      setLoggedIn(true)
     }
+  }
+
+  const goToProfile = () => {
+    navigate('/profile')
   }
 
   return (
@@ -44,11 +54,22 @@ const LoginForm = () => {
       <button type="submit" className="btn btn-success w-100">
         Войти
       </button>
+
       {message && <p className="mt-3 text-center message-text">{message}</p>}
-      <p className="text-center mt-3">
+
+      {loggedIn && (
+        <button
+          type="button"
+          className="btn btn-outline-success w-100 mt-3 fade-in"
+          onClick={goToProfile}
+        >
+          Перейти в профиль
+        </button>
+      )}
+
+      <p className="text-center mt-3 login-link">
         Нет аккаунта? <a href="/signup">Зарегистрируйся</a>
       </p>
-
     </form>
   )
 }

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { supabase } from '../../../src/SupabaseClient';
+import '../../css/signupform.css';
 
 const SignupForm = () => {
   const [email, setEmail] = useState('')
@@ -22,14 +23,15 @@ const SignupForm = () => {
   }
 
   return (
-    <form onSubmit={handleSignup}>
-      <h2>Регистрация</h2>
+    <form className="signup-form" onSubmit={handleSignup}>
+      <h2 className="text-center mb-4">Регистрация</h2>
       <input
         type="email"
         placeholder="Email"
         value={email}
         onChange={e => setEmail(e.target.value)}
         required
+        className="form-control mb-3"
       />
       <input
         type="password"
@@ -37,9 +39,16 @@ const SignupForm = () => {
         value={password}
         onChange={e => setPassword(e.target.value)}
         required
+        className="form-control mb-3"
       />
-      <button type="submit">Зарегистрироваться</button>
-      <p>{message}</p>
+      <button type="submit" className="btn btn-success w-100">
+        Зарегистрироваться
+      </button>
+      {message && <p className="mt-3 text-center message-text">{message}</p>}
+      <p className="text-center mt-3">
+        Есть аккаунт? <a href="/login">Войди</a>
+      </p>
+
     </form>
   )
 }

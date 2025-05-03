@@ -8,9 +8,6 @@
 
 .header {
   font-family: "The Sims Sans SC";
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   padding: 20px 40px;
   background-color: #fff;
   border-bottom: 1px solid #ddd;

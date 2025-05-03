@@ -1,0 +1,27 @@
+@font-face {
+  font-family: "The Sims Sans SC";
+  src: url("/fonts/THE_SIMS_SANS-BOLD-SC.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.signup-form {
+  max-width: 400px;
+  margin: 50px auto;
+  background-color: #ffffff;
+  border: 1px solid #dcdcdc;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: "The Sims Sans SC";
+}
+
+.signup-form input::placeholder {
+  color: #a1a1a1;
+}
+
+.message-text {
+  color: #4a8d56;
+  font-weight: 500;
+}

@@ -5,6 +5,8 @@ import { useState, useEffect } from 'react';
 import Home from './pages/Home';
 import SimCreateForm from './pages/SimCreateForm';
 import Auth from './pages/Auth';
+import SignupForm from './components/auth/SignupForm';
+import LoginForm from './components/auth/LoginForm';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -33,6 +35,8 @@ const App = () => {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/signup" element={<SignupForm />} />
+        <Route path="/login" element={<LoginForm />} />
         <Route
           path="/simcreateform"
           element={

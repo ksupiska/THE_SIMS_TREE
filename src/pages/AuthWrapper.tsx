@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../SupabaseClient'
 import SignupForm from '../components/auth/SignupForm'
-import LoginForm from '../components/auth/LoginForm'
 
 import type { User } from '@supabase/supabase-js';
 
@@ -26,7 +25,6 @@ const AuthWrapper = () => {
         return (
             <div>
                 <SignupForm />
-                <LoginForm />
             </div>
         )
     }
@@ -34,7 +32,8 @@ const AuthWrapper = () => {
     return (
         <div>
             <p>Привет, {user.email}</p>
-            <button onClick={() => supabase.auth.signOut()}>Выйти</button>
+            <button className="rounded-pill"
+                style={{ backgroundColor: "#4a8d56", borderColor: "#4a8d56" }} onClick={() => supabase.auth.signOut()}>Выйти</button>
         </div>
     )
 }

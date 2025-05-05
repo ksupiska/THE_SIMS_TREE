@@ -1,14 +1,5 @@
-@font-face {
-  font-family: "The Sims Sans SC";
-  src: url("/fonts/THE_SIMS_SANS-BOLD-SC.woff2") format("woff2");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 /* Общие стили */
 .character-list-container {
-  font-family: "The Sims Sans SC";
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -80,7 +71,6 @@ button:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2; /* И это */
 }
 
 .modal-content {

@@ -31,7 +31,7 @@ const upload = multer({ storage });
 
 // Маршрут для создания персонажа (POST)
 app.post("/api/characters", upload.single("avatar"), async (req, res) => {
-  const { name, surname, gender } = req.body;
+  const { name, surname, gender, city, kind, state, type, biography, death } = req.body;
   const file = req.file;
 
   if (!name || !surname || !gender) {
@@ -60,7 +60,7 @@ app.post("/api/characters", upload.single("avatar"), async (req, res) => {
   try {
     const { data, error } = await supabase
       .from("characters")
-      .insert([{ name, surname, gender, avatar }])
+      .insert([{ name, surname, gender, avatar, city, kind, state, type, biography, death }])
       .single();
 
     if (error) throw error;

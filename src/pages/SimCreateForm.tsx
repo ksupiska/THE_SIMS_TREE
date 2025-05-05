@@ -30,6 +30,13 @@ export default function SimCreateForm() {
     formData.append('name', name);
     formData.append('surname', surname);
     formData.append('gender', gender);
+    formData.append('city', city);
+    formData.append('kind', kind);
+    formData.append('state', state);
+    formData.append('type', type);
+    formData.append('biography', biography);
+    formData.append('death', death);
+
     if (avatar) formData.append('avatar', avatar);
 
     try {

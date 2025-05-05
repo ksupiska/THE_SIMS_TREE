@@ -1,5 +1,5 @@
 // SimCreateForm.tsx
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 
 import '../css/simform.css'
@@ -10,7 +10,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import { div } from 'framer-motion/client';
 
 export default function SimCreateForm() {
   const [name, setName] = useState('');

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../css/charaterlist.css'; // Подключим стили
-
+import { supabase } from '../SupabaseClient';
 interface Character {
   id: string;
   name: string;
@@ -24,9 +24,27 @@ export default function CharacterList() {
 
   useEffect(() => {
     const fetchCharacters = async () => {
+      const { data, error } = await supabase.auth.getUser(); // Получаем текущего пользователя
+
+      if (error || !data.user) {
+        console.error('Пользователь не авторизован');
+        return;
+      }
+
+      const userId = data.user.id; // Получаем user_id текущего пользователя
+
       try {
-        const response = await axios.get('http://localhost:5000/api/characters');
-        setCharacters(response.data);
+        // Логирование запроса
+        console.log("Запрос к серверу с userId:", userId);
+        const response = await axios.get(`http://localhost:5000/api/characters?userId=${userId}`);
+        console.log("Ответ от сервера:", response.data); // Логируем ответ от сервера
+
+        // Проверка структуры данных
+        if (Array.isArray(response.data)) {
+          setCharacters(response.data);
+        } else {
+          console.error("Данные не являются массивом:", response.data);
+        }
       } catch (error) {
         console.error('Ошибка при получении персонажей:', error);
       }

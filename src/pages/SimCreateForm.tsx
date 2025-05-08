@@ -1,6 +1,8 @@
 // SimCreateForm.tsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
+
+import { supabase } from '../SupabaseClient';
 
 import '../css/simform.css'
 
@@ -22,9 +24,34 @@ export default function SimCreateForm() {
   const [biography, setBiography] = useState('');
   const [avatar, setAvatar] = useState<File | null>(null);
 
+  const [userId, setUserId] = useState<string | null>(null);//юз пользователя
+
+  //получаем пользователя из бд
+  useEffect(() => {
+    const fetchUser = async () => {
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+
+      if (user) {
+        setUserId(user.id);
+      } else {
+        console.error("Ошибка получения пользователя:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   const [state, setState] = useState('');
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!userId) {
+      alert("Вы должны быть авторизованы, чтобы создать персонажа.");
+      return;
+    }
 
     const formData = new FormData();
     formData.append('name', name);
@@ -36,6 +63,8 @@ export default function SimCreateForm() {
     formData.append('type', type);
     formData.append('biography', biography);
     formData.append('death', death);
+
+    formData.append('user_id', userId);
 
     if (avatar) formData.append('avatar', avatar);
 

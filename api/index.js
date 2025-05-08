@@ -1,17 +1,15 @@
 // server/index.ts (или app.ts)
 import express from "express";
 import cors from "cors";
-
 import { createClient } from "@supabase/supabase-js";
-import dotenv from "dotenv"; // Импортируем dotenv для загрузки переменных окружения
-
+import dotenv from "dotenv";
 import multer from "multer";
 import path from "path";
 
-dotenv.config({ path: "../.env" }); // Загружаем переменные из .env файла
+dotenv.config({ path: "../.env" });
 
 const app = express();
-const port = process.env.PORT || 5000; // Убедись, что порт правильно настроен
+const port = process.env.PORT || 5000;
 
 console.log("Supabase URL:", process.env.VITE_SUPABASE_URL);
 console.log("Supabase Key:", process.env.VITE_SUPABASE_KEY);
@@ -25,20 +23,32 @@ const supabase = createClient(
 app.use(cors());
 app.use(express.json());
 
-// Настройка Multer для обработки multipart/form-data
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// Маршрут для создания персонажа (POST)
+//создание персонажа
 app.post("/api/characters", upload.single("avatar"), async (req, res) => {
-  const { name, surname, gender, city, kind, state, type, biography, death } = req.body;
+  const {
+    name,
+    surname,
+    gender,
+    city,
+    kind,
+    state,
+    type,
+    biography,
+    death,
+    user_id, //получаем user_id из клиента
+  } = req.body;
+
   const file = req.file;
 
-  if (!name || !surname || !gender) {
+  if (!name || !surname || !gender || !user_id) {
     return res.status(400).json({ error: "Все поля обязательны" });
   }
 
   let avatar = null;
+
   if (file) {
     const fileExt = path.extname(file.originalname);
     const fileName = `${Date.now()}${fileExt}`;
@@ -60,7 +70,21 @@ app.post("/api/characters", upload.single("avatar"), async (req, res) => {
   try {
     const { data, error } = await supabase
       .from("characters")
-      .insert([{ name, surname, gender, avatar, city, kind, state, type, biography, death }])
+      .insert([
+        {
+          name,
+          surname,
+          gender,
+          avatar,
+          city,
+          kind,
+          state,
+          type,
+          biography,
+          death,
+          user_id, //user_id в базу
+        },
+      ])
       .single();
 
     if (error) throw error;
@@ -75,34 +99,36 @@ app.post("/api/characters", upload.single("avatar"), async (req, res) => {
   }
 });
 
-// Маршрут для получения списка персонажей (GET)
+//получение только своих персонажей
 app.get("/api/characters", async (req, res) => {
+  const userId = req.query.userId;
+
+  if (!userId) {
+    return res.status(400).json({ error: "userId обязателен" });
+  }
+
+  console.log("Получен userId:", userId); //логирование userId
+
   try {
-    const { data, error } = await supabase.from("characters").select("*");
+    const { data, error } = await supabase
+      .from("characters")
+      .select("*")
+      .eq("user_id", userId);
 
     if (error) {
+      console.error("Ошибка при запросе из Supabase:", error); //лог ошибки при запросе
       throw error;
     }
 
-    res.json(data); // Отправляем список персонажей
+    console.log("Данные из базы:", data); //логирование данных из базы
+    res.json(data);
   } catch (error) {
-    console.error("Ошибка при получении списка персонажей:", error);
-    res
-      .status(500)
-      .json({ error: "Ошибка при получении данных из базы данных" });
+    console.error("Ошибка при получении персонажей:", error);
+    res.status(500).json({ error: "Ошибка при получении данных" });
   }
 });
 
-// Главная страница
-app.get("/", (req, res) => {
-  res.send("Сервер работает!");
-});
-
-app.listen(port, () => {
-  console.log(`Сервер работает на http://localhost:${port}`);
-});
-
-// Маршрут для удаления персонажа (DELETE)
+//удаление персонажа
 app.delete("/api/characters/:id", async (req, res) => {
   const { id } = req.params;
 
@@ -110,7 +136,7 @@ app.delete("/api/characters/:id", async (req, res) => {
     const { data, error } = await supabase
       .from("characters")
       .delete()
-      .eq("id", id); // Удаляем персонажа по id
+      .eq("id", id);
 
     if (error) {
       throw error;
@@ -120,8 +146,15 @@ app.delete("/api/characters/:id", async (req, res) => {
     res.status(200).json({ message: "Персонаж удален" });
   } catch (error) {
     console.error("Ошибка при удалении персонажа:", error);
-    res
-      .status(500)
-      .json({ error: "Ошибка при удалении персонажа из базы данных" });
+    res.status(500).json({ error: "Ошибка при удалении персонажа" });
   }
+});
+
+// Главная
+app.get("/", (req, res) => {
+  res.send("Сервер работает!");
+});
+
+app.listen(port, () => {
+  console.log(`Сервер работает на http://localhost:${port}`);
 });

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../css/charaterlist.css'; // Подключим стили
 import { supabase } from '../SupabaseClient';
+import { Form, Container, Col, Row } from 'react-bootstrap'
 interface Character {
   id: string;
   name: string;
@@ -16,11 +17,15 @@ interface Character {
   biography: string;
   death: string;
 }
-
 export default function CharacterList() {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
   const navigate = useNavigate();
+
+  //для фильтрации
+  const [searchTerm, setSearchTerm] = useState('');
+  const [genderFilter, setGenderFilter] = useState('');
+  const [typeFilter, setTypeFilter] = useState('');
 
   useEffect(() => {
     const fetchCharacters = async () => {
@@ -70,52 +75,164 @@ export default function CharacterList() {
     <div className="character-list-container">
       <h2>Список персонажей</h2>
 
+      <Container className='p-1 justify-content-center'>
+        <Row>
+          <Col>
+          <h4 className='d-flex justify-content-center p-4'>Поиск</h4>
+            <div className="search-container">
+              <span className="search-icon">
+                <i className="bi bi-search"></i> {/* Иконка лупы */}
+              </span>
+              <Form.Group className='mb-4'>
+                <Form.Control
+                  className="search-input"
+                  type="text"
+                  placeholder="Поиск по имени или фамилии"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                ></Form.Control>
+              </Form.Group>
+            </div>
+          </Col>
+          <Col>
+          <h4 className='d-flex justify-content-center p-3'>Фильтр</h4>
+            <div className="filters-container">
+              <Form.Group className="mb-4 filter-group">
+                <Form.Select
+                  value={genderFilter}
+                  onChange={(e) => setGenderFilter(e.target.value)}
+                  className="filter-select"
+                >
+                  <option value="">Выберите пол</option>
+                  <option value="мужской">Мужской</option>
+                  <option value="женский">Женский</option>
+                </Form.Select>
+              </Form.Group>
+
+              <Form.Group className="mb-4 filter-group">
+                <Form.Select
+                  value={typeFilter}
+                  onChange={(e) => setTypeFilter(e.target.value)}
+                  className="filter-select"
+                >
+                  <option value="">Выберите тип</option>
+                  <option value="Человек">Человек</option>
+                  <option value="Вампир">Вампир</option>
+                  <option value="Русалка">Русалка</option>
+                  <option value="Чародей">Чародей</option>
+                  <option value="Пришелец">Пришелец</option>
+                  <option value="Призрак">Призрак</option>
+                  <option value="Оборотень">Оборотень</option>
+                </Form.Select>
+              </Form.Group>
+            </div>
+          </Col>
+          <Col className='p-5'>
+            <button className="create-button" onClick={handleCreateNew}>
+              Создать нового персонажа
+            </button></Col>
+        </Row>
+      </Container>
+
+
+
+
       {characters.length === 0 ? (
         <div className="no-characters">
           <p>Персонажи не найдены</p>
-          <button onClick={handleCreateNew}>Создать нового персонажа</button>
         </div>
       ) : (
         <div className="character-list">
-          {characters.map((character) => (
-            <div
-              key={character.id}
-              className="character-card"
-              onClick={() => setSelectedCharacter(character)}
-            >
-              <img
-                src={character.avatar || '/default-avatar.png'}
-                alt="Аватар"
-                className="avatar"
-              />
-              <h3>{character.name} {character.surname}</h3>
-              <p>Пол: {character.gender}</p>
-              <button onClick={(e) => {
-                e.stopPropagation();
-                handleDelete(character.id);
-              }}>Удалить</button>
-            </div>
-          ))}
+          {characters
+            .filter((character) => {
+              // Объединяем имя и фамилию для поиска
+              const fullName = (character.name + " " + character.surname).toLowerCase();
+              // Убираем пробелы и приводим к нижнему регистру для корректного сравнения
+              const gender = character.gender.toLowerCase().trim();
+              const filterGender = genderFilter.toLowerCase().trim();
+
+              return (
+                // Проверяем поиск по имени или фамилии
+                (!searchTerm || fullName.includes(searchTerm.toLowerCase())) &&
+                // Проверяем фильтр по полу
+                (!genderFilter || gender === filterGender) &&
+                // Проверяем фильтр по типу
+                (!typeFilter || character.type === typeFilter)
+              );
+            })
+            .map((character) => (
+              <div
+                key={character.id}
+                className="character-card"
+                onClick={() => setSelectedCharacter(character)}
+              >
+                <img
+                  src={character.avatar || '/default-avatar.png'}
+                  alt="Аватар"
+                  className="avatar"
+                />
+                <h3>{character.name} {character.surname}</h3>
+                <p>Пол: {character.gender}</p>
+                <p>Тип: {character.type}</p>
+              </div>
+            ))}
+
+
         </div>
       )}
 
       {selectedCharacter && (
         <div className="modal-overlay" onClick={() => setSelectedCharacter(null)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <img
-              src={selectedCharacter.avatar || '/default-avatar.png'}
-              alt="Аватар"
-              className="modal-avatar"
-            />
-            <h3>{selectedCharacter.name} {selectedCharacter.surname}</h3>
-            <p><strong>Пол:</strong> {selectedCharacter.gender}</p>
-            <p><strong>Город:</strong> {selectedCharacter.city}</p>
-            <p><strong>Тип:</strong> {selectedCharacter.type}</p>
-            <p><strong>Состояние:</strong> {selectedCharacter.state}</p>
-            <p><strong>Вид:</strong> {selectedCharacter.kind}</p>
-            <p><strong>Биография:</strong> {selectedCharacter.biography}</p>
-            <p><strong>Смерть:</strong> {selectedCharacter.death}</p>
-            <button onClick={() => setSelectedCharacter(null)}>Закрыть</button>
+            <div className="modal-header">
+              <img
+                src={selectedCharacter.avatar || '/default-avatar.png'}
+                alt="Аватар"
+                className="modal-avatar"
+              />
+              <h2>{selectedCharacter.name} {selectedCharacter.surname}</h2>
+            </div>
+
+            <div className="modal-body">
+              <div className="info-section">
+                <h4>Основная информация</h4>
+                <p><strong>Пол:</strong> {selectedCharacter.gender}</p>
+                <p><strong>Город:</strong> {selectedCharacter.city}</p>
+              </div>
+
+              <div className="info-section">
+                <h4>Дополнительно</h4>
+                <p><strong>Тип:</strong> {selectedCharacter.type}</p>
+                <p><strong>Состояние:</strong> {selectedCharacter.state}</p>
+                <p><strong>Черты характера:</strong> {selectedCharacter.kind}</p>
+              </div>
+
+              <div className="info-section">
+                <h4>Биография</h4>
+                <p>{selectedCharacter.biography}</p>
+              </div>
+
+              {selectedCharacter.state.toLowerCase() === 'мертв' && selectedCharacter.death && (
+                <div className="info-section">
+                  <h4>Причина смерти</h4>
+                  <p>{selectedCharacter.death}</p>
+                </div>
+              )}
+
+              <div className="modal-footer">
+                <button onClick={() => setSelectedCharacter(null)}>Закрыть</button>
+                <button
+                  className="delete-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(selectedCharacter.id);
+                    setSelectedCharacter(null);
+                  }}
+                >
+                  Удалить
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

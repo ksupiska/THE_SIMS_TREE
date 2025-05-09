@@ -217,6 +217,7 @@ export default function SimCreateForm() {
                 required
                 className="sims-select"
               >
+                <option value="" disabled hidden>Выберите состояние</option>
                 <option value="Жив">Жив</option>
                 <option value="Мертв">Мертв</option>
               </Form.Select>

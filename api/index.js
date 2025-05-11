@@ -150,6 +150,61 @@ app.delete("/api/characters/:id", async (req, res) => {
   }
 });
 
+//добавить узел в дерево
+app.post("/api/tree_nodes", async (req, res) => {
+  const { tree_id, character_id, parent_id, position_x, position_y } = req.body;
+
+  if (!tree_id || !character_id) {
+    return res.status(400).json({ error: "tree_id и character_id обязательны" });
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from("tree_nodes")
+      .insert([
+        {
+          tree_id,
+          character_id,
+          parent_id: parent_id || null,
+          position_x: position_x || 0,
+          position_y: position_y || 0,
+        },
+      ])
+      .single();
+
+    if (error) throw error;
+
+    res.status(201).json({ message: "Узел добавлен", node: data });
+  } catch (error) {
+    console.error("Ошибка при добавлении узла:", error);
+    res.status(500).json({ error: "Ошибка при добавлении узла" });
+  }
+});
+
+//получить все узлы дерева
+app.get("/api/tree_nodes", async (req, res) => {
+  const { treeId } = req.query;
+
+  if (!treeId) {
+    return res.status(400).json({ error: "treeId обязателен" });
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from("tree_nodes")
+      .select("*, characters(*)") // получаем узлы + связанных персонажей
+      .eq("tree_id", treeId);
+
+    if (error) throw error;
+
+    res.json(data);
+  } catch (error) {
+    console.error("Ошибка при получении узлов дерева:", error);
+    res.status(500).json({ error: "Ошибка при получении узлов" });
+  }
+});
+
+
 // Главная
 app.get("/", (req, res) => {
   res.send("Сервер работает!");

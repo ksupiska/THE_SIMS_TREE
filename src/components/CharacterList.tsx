@@ -78,7 +78,7 @@ export default function CharacterList() {
       <Container className='p-1 justify-content-center'>
         <Row>
           <Col>
-          <h4 className='d-flex justify-content-center p-4'>Поиск</h4>
+            <h4 className='d-flex justify-content-center p-4'>Поиск</h4>
             <div className="search-container">
               <span className="search-icon">
                 <i className="bi bi-search"></i> {/* Иконка лупы */}
@@ -95,7 +95,7 @@ export default function CharacterList() {
             </div>
           </Col>
           <Col>
-          <h4 className='d-flex justify-content-center p-3'>Фильтр</h4>
+            <h4 className='d-flex justify-content-center p-3'>Фильтр</h4>
             <div className="filters-container">
               <Form.Group className="mb-4 filter-group">
                 <Form.Select

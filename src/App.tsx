@@ -8,6 +8,7 @@ import Auth from './pages/Auth';
 import AuthWrapper from './pages/AuthWrapper';
 import SignupForm from './components/auth/SignupForm';
 import LoginForm from './components/auth/LoginForm';
+import TreePage from './pages/TreePage';
 
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -38,7 +39,16 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/login" element={<LoginForm />} />
-        <Route path="/profile" element={<AuthWrapper />} />
+        <Route path="/tree" element={
+          <ProtectedRoute>
+            <TreePage />
+          </ProtectedRoute>
+        } />
+        <Route path="/profile" element={
+          <ProtectedRoute>
+            <AuthWrapper />
+          </ProtectedRoute>
+        } />
         <Route
           path="/simcreateform"
           element={
@@ -47,7 +57,14 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/list" element={<CharacterList />} />
+        <Route
+          path="/list"
+          element={
+            <ProtectedRoute>
+              <CharacterList />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/auth" element={<Auth />} />
       </Routes>
       <Footer />

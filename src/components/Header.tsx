@@ -47,7 +47,7 @@ const Header = () => {
                             <Nav.Link href="/" className="fw-medium text-secondary">
                                 Дома
                             </Nav.Link>
-                            <Nav.Link href="/simcreateform" className="fw-medium text-secondary">
+                            <Nav.Link href="/" className="fw-medium text-secondary">
                                 Сообщество
                             </Nav.Link>
                         </Nav>

@@ -140,6 +140,7 @@ const styles = {
         overflow: "hidden",
         position: "relative",
         cursor: "grab",
+        touchAction: "none",
     } as React.CSSProperties,
 
     inner: {

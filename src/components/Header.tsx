@@ -9,9 +9,9 @@ const Header = () => {
     return (
         <div className="header">
             <Navbar expand="lg" className="sticky-top bg-white border-bottom py-2" style={{ backdropFilter: "blur(8px)" }}>
-                <Container className="d-flex justify-content-between align-items-center">
-                    {/* Логотип */}
+                <Container>
                     <Navbar.Brand href="/" className="d-flex align-items-center me-4">
+                        {/* Логотип */}
                         <div className="position-relative" style={{ width: "40px", height: "40px" }}>
                             <div className="position-absolute" style={{ width: "40px", height: "40px" }}>
                                 <div
@@ -32,8 +32,7 @@ const Header = () => {
 
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
-                    <Navbar.Collapse id="basic-navbar-nav" className="d-flex justify-content-between align-items-center w-100">
-                        {/* Центр — навигация */}
+                    <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mx-auto gap-3">
                             <Nav.Link href="/" className="fw-medium" style={{ color: "#4a8d56" }}>
                                 Главная
@@ -52,22 +51,23 @@ const Header = () => {
                             </Nav.Link>
                         </Nav>
 
-                        {/* Справа — иконки/кнопки */}
-                        <div className="d-flex align-items-center gap-3">
+                        <div className="d-flex align-items-center gap-3 mt-3 mt-lg-0">
                             <Button variant="link" className="p-1" style={{ color: "#4a8d56" }}>
                                 <i className="bi bi-search"></i>
                                 <span className="visually-hidden">Поиск</span>
                             </Button>
                             <Button
-                                className="rounded-pill" 
+                                className="rounded-pill"
                                 style={{ backgroundColor: "#4a8d56", borderColor: "#4a8d56" }}
-                                onClick={() => navigate('/auth')}>
+                                onClick={() => navigate('/auth')}
+                            >
                                 Войти
                             </Button>
                         </div>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
+
         </div>
     );
 };

@@ -40,8 +40,8 @@ const Header = () => {
                             <Nav.Link href="/list" className="fw-medium text-secondary">
                                 Персонажи
                             </Nav.Link>
-                            <Nav.Link href="/list" className="fw-medium text-secondary">
-                                Семьи
+                            <Nav.Link href="/tree" className="fw-medium text-secondary">
+                                Древо
                             </Nav.Link>
                             <Nav.Link href="/" className="fw-medium text-secondary">
                                 Дома

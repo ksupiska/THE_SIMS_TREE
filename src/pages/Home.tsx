@@ -1,9 +1,19 @@
 // src/pages/Home.tsx
 import { Button, Container, Col, Row, Card } from "react-bootstrap";
-
+import { useNavigate } from 'react-router-dom';
 import '../css/home.css';
 
 const Home = () => {
+
+  const navigate = useNavigate();
+
+  const handleStart = () =>{
+    navigate('/profile');
+  };
+  const handleRegister = () => {
+    navigate('/signup');
+  };
+
   return <div className='home'>
     <section className="py-5 py-md-7" style={{ background: "linear-gradient(to bottom, #e4f2ff, #ffffff)" }}>
       <Container>
@@ -21,6 +31,7 @@ const Home = () => {
               <Button
                 className="d-inline-flex align-items-center"
                 style={{ backgroundColor: "#4a8d56", borderColor: "#4a8d56" }}
+                onClick={handleStart}
               >
                 Начать
               </Button>
@@ -263,7 +274,7 @@ const Home = () => {
             Присоединяйтесь к тысячам игроков, которые уже создают свои уникальные истории в The Sims Tree.
           </p>
           <div className="d-flex flex-column flex-sm-row gap-2 justify-content-center">
-            <Button variant="light" className="fw-medium" style={{ color: "#4a8d56" }}>
+            <Button variant="light" className="fw-medium" style={{ color: "#4a8d56" }} onClick={handleRegister}>
               Зарегистрироваться
             </Button>
             <Button variant="outline-light" className="fw-medium">

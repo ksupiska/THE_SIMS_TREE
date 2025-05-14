@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Pencil } from "lucide-react";
+import { Button } from 'react-bootstrap';
 
 type NodeType = {
     id: number;
@@ -21,6 +22,76 @@ const Tree: React.FC = () => {
     const [showModal, setShowModal] = useState(false);
     const [selectedNodeId, setSelectedNodeId] = useState<number | null>(null);
     const lastTouchDistanceRef = useRef<number | null>(null);
+    //храним активный узел
+    const [hoveredNodeId, setHoveredNodeId] = useState<number | null>(null);
+    //отслеживание наведения
+
+    const [isHoveredLeft, setIsHoveredLeft] = useState(false);
+    const [isHoveredRight, setIsHoveredRight] = useState(false);
+    const [isHoveredTop, setIsHoveredTop] = useState(false);
+    const [isHoveredBottom, setIsHoveredBottom] = useState(false);
+    const handleMouseEnter = (side: string) => {
+        if (side === "left") setIsHoveredLeft(true);
+        if (side === "right") setIsHoveredRight(true);
+        if (side === "top") setIsHoveredTop(true);
+        if (side === "bottom") setIsHoveredBottom(true);
+    };
+
+    const handleMouseLeave = (side: string) => {
+        if (side === "left") setIsHoveredLeft(false);
+        if (side === "right") setIsHoveredRight(false);
+        if (side === "top") setIsHoveredTop(false);
+        if (side === "bottom") setIsHoveredBottom(false);
+    };
+
+    const menuButtonTop: React.CSSProperties = {
+        backgroundColor: isHoveredTop ? "#ff6666" : "#e3e3e3", // меняем цвет при наведении
+        transition: "background-color 0.3s ease", // плавное изменение цвета
+        position: "absolute",
+        border: "1px solid #ccc",
+        borderRadius: "100px",
+        boxShadow: "0 2px 6px rgba(0, 0, 0, 0.15)",
+        top: -30,
+        left: "50%",
+        transform: "translateX(-50%)",
+        zIndex: 10,
+    };
+    const menuButtonLeft: React.CSSProperties = {
+        backgroundColor: isHoveredLeft ? "#259400" : "#e3e3e3", // меняем цвет при наведении
+        transition: "background-color 0.3s ease", // плавное изменение цвета
+        position: "absolute",
+        border: "1px solid #ccc",
+        borderRadius: "100px",
+        boxShadow: "0 2px 6px rgba(0, 0, 0, 0.15)",
+        left: -30,
+        top: "50%",
+        transform: "translateY(-50%)",
+        zIndex: 10,
+    };
+    const menuButtonRight: React.CSSProperties = {
+        backgroundColor: isHoveredRight ? "#ff66c2" : "#e3e3e3", // меняем цвет при наведении
+        transition: "background-color 0.3s ease", // плавное изменение цвета
+        position: "absolute",
+        border: "1px solid #ccc",
+        borderRadius: "100px",
+        boxShadow: "0 2px 6px rgba(0, 0, 0, 0.15)",
+        right: -30,
+        top: "50%",
+        transform: "translateY(-50%)",
+        zIndex: 10,
+    };
+    const menuButtonBottom: React.CSSProperties = {
+        backgroundColor: isHoveredBottom ? "#a3a3a3" : "#e3e3e3", // меняем цвет при наведении
+        transition: "background-color 0.3s ease", // плавное изменение цвета
+        position: "absolute",
+        border: "1px solid #ccc",
+        borderRadius: "100px",
+        boxShadow: "0 2px 6px rgba(0, 0, 0, 0.15)",
+        bottom: -30,
+        left: "50%",
+        transform: "translateX(-50%)",
+        zIndex: 10,
+    };
 
     useEffect(() => {
         const disableZoom = (event: WheelEvent) => {
@@ -89,6 +160,7 @@ const Tree: React.FC = () => {
         lastTouchDistanceRef.current = null;
     };
 
+    //открываем модальное окно по нажатию на кружок
     const handleNodeClick = (nodeId: number) => {
         if (!editMode) return;
         setSelectedNodeId(nodeId);
@@ -144,33 +216,81 @@ const Tree: React.FC = () => {
                         transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,
                     }}
                 >
+
                     {nodes.map((node) => (
                         <div
                             key={node.id}
-                            onClick={() => handleNodeClick(node.id)}
-                            style={{
-                                ...styles.node,
-                                left: node.x,
-                                top: node.y,
-                                border: editMode ? "2px dashed #333" : "none",
-                            }}
+                            onMouseEnter={() => setHoveredNodeId(node.id)}
+                            onMouseLeave={() => setHoveredNodeId(null)}
+
+                            style={{ position: "absolute", left: node.x, top: node.y }}
                         >
-                            {node.label || "+"}
+                            <div style={{ position: "relative", width: 100, height: 100 }}>
+                                {/* Контекстное меню */}
+                                {editMode && hoveredNodeId === node.id && (
+                                    <>
+                                        <Button
+                                            style={menuButtonLeft}
+                                            onClick={() => handleNodeClick(node.id)}
+                                            onMouseEnter={() => handleMouseEnter("left")}
+                                            onMouseLeave={() => handleMouseLeave("left")}
+                                        >
+                                            <i className="bi bi-gear-fill"></i>
+                                        </Button>
+                                        <Button
+                                            style={menuButtonRight}
+                                            onMouseEnter={() => handleMouseEnter("right")}
+                                            onMouseLeave={() => handleMouseLeave("right")}
+                                        ><i className="bi bi-suit-heart-fill"></i></Button>
+                                        <Button
+                                            style={menuButtonTop}
+                                            onMouseEnter={() => handleMouseEnter("top")}
+                                            onMouseLeave={() => handleMouseLeave("top")}
+                                        ><i className="bi bi-trash-fill"></i></Button>
+                                        <Button
+                                            style={menuButtonBottom}
+                                            onMouseEnter={() => handleMouseEnter("bottom")}
+                                            onMouseLeave={() => handleMouseLeave("bottom")}
+                                        ><i className="bi bi-plus-circle-fill"></i></Button>
+                                    </>
+                                )}
+
+                                {/* Сам кружок */}
+                                <div
+                                    style={{
+                                        ...styles.node,
+                                        border: editMode ? "2px dashed #333" : "none",
+                                        width: 100,
+                                        height: 100,
+                                        borderRadius: "50%",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                    }}
+                                >
+                                    {node.label || "+"}
+                                </div>
+                            </div>
                         </div>
                     ))}
+
+
+
+
+
                 </div>
             </div>
 
-            {showModal && (
+            {showModal && ( //то что в модалке показывается
                 <div style={styles.modalOverlay}>
                     <div style={styles.modal}>
                         <h3>Выберите персонажа</h3>
-                        <button onClick={() => handleSelectCharacter("Новый персонаж")} style={{ marginTop: "10px" }}>
+                        <Button onClick={() => handleSelectCharacter("Новый персонаж")} style={{ marginTop: "10px" }}>
                             Добавить нового
-                        </button>
-                        <button onClick={() => setShowModal(false)} style={{ marginTop: "5px" }}>
+                        </Button>
+                        <Button onClick={() => setShowModal(false)} style={{ marginTop: "5px" }}>
                             Отмена
-                        </button>
+                        </Button>
 
                     </div>
                 </div>
@@ -178,6 +298,7 @@ const Tree: React.FC = () => {
         </>
     );
 };
+
 
 const styles = {
 
@@ -213,6 +334,7 @@ const styles = {
         fontWeight: "bold",
         userSelect: "none",
         cursor: "pointer",
+        zIndex: 1,
     } as React.CSSProperties,
 
     modalOverlay: {
@@ -237,6 +359,13 @@ const styles = {
         maxHeight: "80vh",
         overflowY: "auto",
     } as React.CSSProperties,
+
+    menu: {
+        marginTop: "5px",
+        display: "flex",
+        justifyContent: "center",
+        gap: "6px",
+    },
 };
 
 export default Tree;

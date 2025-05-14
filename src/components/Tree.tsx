@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Pencil } from "lucide-react";
-import { supabase } from '../SupabaseClient';
-import axios from 'axios';
 
 type NodeType = {
     id: number;
@@ -10,17 +8,7 @@ type NodeType = {
     label: string;
     characterId?: number;
 };
-
-type CharacterType = {
-    id: number;
-    name: string;
-    surname: string;
-    avatar?: string;
-};
-
-
 const Tree: React.FC = () => {
-    const [characters, setCharacters] = useState<CharacterType[]>([]);
 
     const [nodes, setNodes] = useState<NodeType[]>([
         { id: 1, x: 400, y: 300, label: "" }, // Пустой кружочек
@@ -35,35 +23,6 @@ const Tree: React.FC = () => {
     const lastTouchDistanceRef = useRef<number | null>(null);
 
     useEffect(() => {
-        const fetchCharacters = async () => {
-            const { data, error } = await supabase.auth.getUser(); // Получаем текущего пользователя
-
-            if (error || !data.user) {
-                console.error('Пользователь не авторизован');
-                return;
-            }
-
-            const userId = data.user.id; // Получаем user_id текущего пользователя
-
-            try {
-                // Логирование запроса
-                console.log("Запрос к серверу с userId:", userId);
-                const response = await axios.get(`http://localhost:5000/api/characters?userId=${userId}`);
-                console.log("Ответ от сервера:", response.data); // Логируем ответ от сервера
-
-                // Проверка структуры данных
-                if (Array.isArray(response.data)) {
-                    setCharacters(response.data);
-                } else {
-                    console.error("Данные не являются массивом:", response.data);
-                }
-            } catch (error) {
-                console.error('Ошибка при получении персонажей:', error);
-            }
-        };
-
-        fetchCharacters();
-
         const disableZoom = (event: WheelEvent) => {
             if (event.ctrlKey) event.preventDefault();
         };
@@ -206,33 +165,6 @@ const Tree: React.FC = () => {
                 <div style={styles.modalOverlay}>
                     <div style={styles.modal}>
                         <h3>Выберите персонажа</h3>
-                        {characters.length > 0 ? (
-                            <ul style={{ listStyle: "none", padding: 0 }}>
-                                {characters.map((char) => (
-                                    <li key={char.id} style={{ marginBottom: "10px" }}>
-                                        <button
-                                            style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }}
-                                            onClick={() =>
-                                                handleSelectCharacter(`${char.name} ${char.surname}`)
-                                            }
-                                        >
-                                            {char.avatar && (
-                                                <img
-                                                    src={char.avatar}
-                                                    alt={`${char.name} ${char.surname}`}
-                                                    width={40}
-                                                    height={40}
-                                                    style={{ borderRadius: "50%" }}
-                                                />
-                                            )}
-                                            <span>{char.name} {char.surname}</span>
-                                        </button>
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <p>Персонажи не найдены</p>
-                        )}
                         <button onClick={() => handleSelectCharacter("Новый персонаж")} style={{ marginTop: "10px" }}>
                             Добавить нового
                         </button>

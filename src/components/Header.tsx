@@ -52,10 +52,6 @@ const Header = () => {
                         </Nav>
 
                         <div className="d-flex align-items-center gap-3 mt-3 mt-lg-0">
-                            <Button variant="link" className="p-1" style={{ color: "#4a8d56" }}>
-                                <i className="bi bi-search"></i>
-                                <span className="visually-hidden">Поиск</span>
-                            </Button>
                             <Button
                                 className="rounded-pill"
                                 style={{ backgroundColor: "#4a8d56", borderColor: "#4a8d56" }}

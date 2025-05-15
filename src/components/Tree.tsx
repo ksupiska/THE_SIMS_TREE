@@ -8,7 +8,14 @@ type NodeType = {
     y: number;
     label: string;
     characterId?: number;
+    parentId?: number | null; //связь родителя
+    partnerId?: number | null; //связь партнера
 };
+const NODE_WIDTH = 100;
+const NODE_HEIGHT = 100;
+const HORIZONTAL_GAP = 150;
+const VERTICAL_GAP = 120;
+
 const Tree: React.FC = () => {
 
     const [nodes, setNodes] = useState<NodeType[]>([
@@ -91,6 +98,101 @@ const Tree: React.FC = () => {
         left: "50%",
         transform: "translateX(-50%)",
         zIndex: 10,
+    };
+
+    //удаление узлов древа
+    const handleDeleteNode = (id: number) => {
+        // Проверяем, можно ли удалять этот узел
+        if (id === 1) {
+            alert("Первый узел не может быть удален.");
+            return;
+        }
+
+        setNodes(prevNodes => {
+            // Находим удаляемый узел
+            const nodeToDelete = prevNodes.find(node => node.id === id);
+            if (!nodeToDelete) return prevNodes;
+
+            // Удаляем узел
+            const newNodes = prevNodes.filter(node => node.id !== id);
+
+            // Если у узла нет родителя (или это корневой), просто возвращаем новый массив
+            if (!nodeToDelete.parentId) return newNodes;
+
+            // Находим всех детей этого же родителя (братьев/сестер удаленного узла)
+            const siblings = newNodes.filter(node => node.parentId === nodeToDelete.parentId);
+
+            // Если детей не осталось, ничего не перераспределяем
+            if (siblings.length === 0) return newNodes;
+
+            // Находим родительский узел
+            const parentNode = newNodes.find(node => node.id === nodeToDelete.parentId);
+            if (!parentNode) return newNodes;
+
+            // Функция для перерасчета позиций
+            const repositionNodes = (nodes: NodeType[]) => {
+                const parentCenterX = parentNode.x + NODE_WIDTH / 2;
+                const childY = parentNode.y + NODE_HEIGHT + VERTICAL_GAP;
+
+                // Если остался только один ребенок - центрируем его
+                if (siblings.length === 1) {
+                    return nodes.map(node =>
+                        node.id === siblings[0].id
+                            ? { ...node, x: parentCenterX - NODE_WIDTH / 2, y: childY }
+                            : node
+                    );
+                }
+
+                // Рассчитываем новые позиции для нескольких детей
+                const totalWidth = siblings.length * NODE_WIDTH + (siblings.length - 1) * HORIZONTAL_GAP;
+                const startX = parentCenterX - totalWidth / 2;
+
+                return nodes.map(node => {
+                    const siblingIndex = siblings.findIndex(s => s.id === node.id);
+                    if (siblingIndex === -1) return node;
+
+                    return {
+                        ...node,
+                        x: startX + siblingIndex * (NODE_WIDTH + HORIZONTAL_GAP),
+                        y: childY
+                    };
+                });
+            };
+
+            return repositionNodes(newNodes);
+        });
+    };
+    //добавление дочерних узлов
+    const handleAddChildNode = (parentId: number) => {
+        const children = nodes.filter((n) => n.parentId === parentId);
+        const parentNode = nodes.find((n) => n.id === parentId);
+        if (!parentNode) return;
+
+        const parentCenterX = parentNode.x + NODE_WIDTH / 2;
+        const childY = parentNode.y + NODE_HEIGHT + VERTICAL_GAP;
+        const totalChildren = children.length + 1;
+
+        // Пересчитываем позиции всех детей
+        const totalWidth = totalChildren * NODE_WIDTH + (totalChildren - 1) * HORIZONTAL_GAP;
+        const startX = parentCenterX - totalWidth / 2;
+
+        // Создаем новый узел
+        const newNode: NodeType = {
+            id: Date.now(),
+            x: startX + children.length * (NODE_WIDTH + HORIZONTAL_GAP),
+            y: childY,
+            parentId: parentId,
+            label: "",
+        };
+
+        // Обновляем позиции существующих детей
+        const updatedChildren = children.map((child, index) => ({
+            ...child,
+            x: startX + index * (NODE_WIDTH + HORIZONTAL_GAP),
+            y: childY
+        }));
+
+        setNodes([...nodes.filter(n => n.parentId !== parentId), ...updatedChildren, newNode]);
     };
 
     useEffect(() => {
@@ -242,13 +344,17 @@ const Tree: React.FC = () => {
                                             onMouseEnter={() => handleMouseEnter("right")}
                                             onMouseLeave={() => handleMouseLeave("right")}
                                         ><i className="bi bi-suit-heart-fill"></i></Button>
-                                        <Button
-                                            style={menuButtonTop}
-                                            onMouseEnter={() => handleMouseEnter("top")}
-                                            onMouseLeave={() => handleMouseLeave("top")}
-                                        ><i className="bi bi-trash-fill"></i></Button>
+                                        {node.id !== 1 && (
+                                            <Button
+                                                style={menuButtonTop}
+                                                onClick={() => handleDeleteNode(node.id)}
+                                                onMouseEnter={() => handleMouseEnter("top")}
+                                                onMouseLeave={() => handleMouseLeave("top")}
+                                            ><i className="bi bi-trash-fill"></i></Button>
+                                        )}
                                         <Button
                                             style={menuButtonBottom}
+                                            onClick={() => handleAddChildNode(node.id)}
                                             onMouseEnter={() => handleMouseEnter("bottom")}
                                             onMouseLeave={() => handleMouseLeave("bottom")}
                                         ><i className="bi bi-plus-circle-fill"></i></Button>
@@ -273,11 +379,42 @@ const Tree: React.FC = () => {
                             </div>
                         </div>
                     ))}
+                    <svg width="100000" height="100000">
+                        {nodes.map((node) => {
+                            const children = nodes.filter(child => child.parentId === node.id);
+                            if (children.length === 0) return null;
 
+                            const parentX = node.x + NODE_WIDTH / 2;
+                            const parentY = node.y + NODE_HEIGHT;
+                            const connectorY = parentY + VERTICAL_GAP / 2;
 
+                            // Рассчитываем крайние точки для горизонтальной линии
+                            const firstChildX = children[0].x + NODE_WIDTH / 2;
+                            const lastChildX = children[children.length - 1].x + NODE_WIDTH / 2;
 
+                            return (
+                                <g key={`connector-${node.id}`}>
+                                    {/* Линия от родителя к центру горизонтальной линии */}
+                                    <line x1={parentX} y1={parentY} x2={parentX} y2={connectorY} stroke="black" />
 
+                                    {/* Горизонтальная линия, покрывающая всех детей */}
+                                    <line x1={firstChildX} y1={connectorY} x2={lastChildX} y2={connectorY} stroke="black" />
 
+                                    {/* Линии к каждому ребенку */}
+                                    {children.map(child => (
+                                        <line
+                                            key={`child-line-${child.id}`}
+                                            x1={child.x + NODE_WIDTH / 2}
+                                            y1={connectorY}
+                                            x2={child.x + NODE_WIDTH / 2}
+                                            y2={child.y}
+                                            stroke="black"
+                                        />
+                                    ))}
+                                </g>
+                            );
+                        })}
+                    </svg>
                 </div>
             </div>
 

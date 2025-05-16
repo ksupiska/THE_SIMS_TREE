@@ -13,14 +13,16 @@ type NodeType = {
 };
 const NODE_WIDTH = 100;
 const NODE_HEIGHT = 100;
-const HORIZONTAL_GAP = 150;
-const VERTICAL_GAP = 120;
+const HORIZONTAL_GAP = 120;
+const VERTICAL_GAP = 100;
 
 const Tree: React.FC = () => {
 
     const [nodes, setNodes] = useState<NodeType[]>([
-        { id: 1, x: 400, y: 300, label: "" }, // Пустой кружочек
+        { id: 1, x: 0, y: 0, label: "" }, // Пустой кружочек
     ]);
+    const containerRef = useRef<HTMLDivElement>(null);
+
     const [offset, setOffset] = useState({ x: 0, y: 0 });
     const [isDragging, setIsDragging] = useState(false);
     const [startPos, setStartPos] = useState({ x: 0, y: 0 });
@@ -101,50 +103,70 @@ const Tree: React.FC = () => {
     };
 
     // Функция для рекурсивного расчета позиций всех узлов в поддереве
-    const calculateSubtreeLayout = (nodes: NodeType[], parentId: number, startX: number, startY: number) => {
-        const children = nodes.filter(node => node.parentId === parentId);
-        if (children.length === 0) return { nodes: [], width: 0 };
+    const calculateTreePositions = (
+        nodes: NodeType[],
+        nodeId: number,
+        startX: number,
+        startY: number
+    ): { nodes: NodeType[]; width: number } => {
+        // Получаем детей текущего узла
+        const children = nodes.filter(node => node.parentId === nodeId);
+
+        if (children.length === 0) {
+            // Если детей нет — просто ставим узел в указанную позицию
+            const node = nodes.find(n => n.id === nodeId);
+            if (!node) return { nodes: [], width: 0 };
+            return { nodes: [{ ...node, x: startX, y: startY }], width: NODE_WIDTH };
+        }
 
         let currentX = startX;
         const updatedNodes: NodeType[] = [];
 
+        // Рекурсивно рассчитываем положение каждого ребенка
         for (const child of children) {
-            const subtree = calculateSubtreeLayout(nodes, child.id, currentX, startY + NODE_HEIGHT + VERTICAL_GAP);
-            const childWidth = Math.max(NODE_WIDTH, subtree.width);
-
-            updatedNodes.push({
-                ...child,
-                x: currentX + (childWidth - NODE_WIDTH) / 2,
-                y: startY
-            });
+            const subtree = calculateTreePositions(nodes, child.id, currentX, startY + NODE_HEIGHT + VERTICAL_GAP);
+            const childWidth = subtree.width;
 
             updatedNodes.push(...subtree.nodes);
             currentX += childWidth + HORIZONTAL_GAP;
         }
 
+        // Общая ширина всех детей (с учетом отступов)
         const totalWidth = currentX - startX - HORIZONTAL_GAP;
+
+        // Позиция родителя — по центру над детьми
+        const nodeX = startX + totalWidth / 2 - NODE_WIDTH / 2;
+
+        const node = nodes.find(n => n.id === nodeId);
+        if (!node) return { nodes: updatedNodes, width: totalWidth };
+
+        // Добавляем текущий узел в список с рассчитанной позицией
+        updatedNodes.push({
+            ...node,
+            x: nodeX,
+            y: startY,
+        });
+
         return { nodes: updatedNodes, width: totalWidth };
     };
     //добавление дочерних узлов
     const handleAddChildNode = (parentId: number) => {
-        const parentNode = nodes.find(n => n.id === parentId);
-        if (!parentNode) return;
-
         const newNode: NodeType = {
             id: Date.now(),
-            x: 0, // Временное значение, будет пересчитано
-            y: 0, // Временное значение, будет пересчитано
-            parentId: parentId,
+            parentId,
+            x: 0,
+            y: 0,
             label: "",
         };
 
-        // Добавляем новый узел
         const newNodes = [...nodes, newNode];
 
-        // Пересчитываем позиции для всего дерева
-        const { nodes: updatedNodes } = calculateSubtreeLayout(newNodes, 1, 0, 0);
+        // Фиксируем позицию корня в 0,0 — чтобы он не прыгал
+        const { nodes: updatedNodes } = calculateTreePositions(newNodes, 1, 0, 0);
+
         setNodes(updatedNodes);
     };
+
     //удаление узлов древа
     const handleDeleteNode = (id: number) => {
         // Проверяем, можно ли удалять этот узел
@@ -209,6 +231,12 @@ const Tree: React.FC = () => {
     };
 
     useEffect(() => {
+        const canvas = containerRef.current;
+        if (canvas) {
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            setOffset({ x: centerX, y: centerY });
+        }
         const disableZoom = (event: WheelEvent) => {
             if (event.ctrlKey) event.preventDefault();
         };
@@ -325,7 +353,7 @@ const Tree: React.FC = () => {
                 onTouchMove={handleTouchMove}
                 onTouchEnd={handleTouchEnd}
             >
-                <div
+                <div ref={containerRef}
                     style={{
                         ...styles.inner,
                         transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,

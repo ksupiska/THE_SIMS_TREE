@@ -100,6 +100,51 @@ const Tree: React.FC = () => {
         zIndex: 10,
     };
 
+    // Функция для рекурсивного расчета позиций всех узлов в поддереве
+    const calculateSubtreeLayout = (nodes: NodeType[], parentId: number, startX: number, startY: number) => {
+        const children = nodes.filter(node => node.parentId === parentId);
+        if (children.length === 0) return { nodes: [], width: 0 };
+
+        let currentX = startX;
+        const updatedNodes: NodeType[] = [];
+
+        for (const child of children) {
+            const subtree = calculateSubtreeLayout(nodes, child.id, currentX, startY + NODE_HEIGHT + VERTICAL_GAP);
+            const childWidth = Math.max(NODE_WIDTH, subtree.width);
+
+            updatedNodes.push({
+                ...child,
+                x: currentX + (childWidth - NODE_WIDTH) / 2,
+                y: startY
+            });
+
+            updatedNodes.push(...subtree.nodes);
+            currentX += childWidth + HORIZONTAL_GAP;
+        }
+
+        const totalWidth = currentX - startX - HORIZONTAL_GAP;
+        return { nodes: updatedNodes, width: totalWidth };
+    };
+    //добавление дочерних узлов
+    const handleAddChildNode = (parentId: number) => {
+        const parentNode = nodes.find(n => n.id === parentId);
+        if (!parentNode) return;
+
+        const newNode: NodeType = {
+            id: Date.now(),
+            x: 0, // Временное значение, будет пересчитано
+            y: 0, // Временное значение, будет пересчитано
+            parentId: parentId,
+            label: "",
+        };
+
+        // Добавляем новый узел
+        const newNodes = [...nodes, newNode];
+
+        // Пересчитываем позиции для всего дерева
+        const { nodes: updatedNodes } = calculateSubtreeLayout(newNodes, 1, 0, 0);
+        setNodes(updatedNodes);
+    };
     //удаление узлов древа
     const handleDeleteNode = (id: number) => {
         // Проверяем, можно ли удалять этот узел
@@ -161,38 +206,6 @@ const Tree: React.FC = () => {
 
             return repositionNodes(newNodes);
         });
-    };
-    //добавление дочерних узлов
-    const handleAddChildNode = (parentId: number) => {
-        const children = nodes.filter((n) => n.parentId === parentId);
-        const parentNode = nodes.find((n) => n.id === parentId);
-        if (!parentNode) return;
-
-        const parentCenterX = parentNode.x + NODE_WIDTH / 2;
-        const childY = parentNode.y + NODE_HEIGHT + VERTICAL_GAP;
-        const totalChildren = children.length + 1;
-
-        // Пересчитываем позиции всех детей
-        const totalWidth = totalChildren * NODE_WIDTH + (totalChildren - 1) * HORIZONTAL_GAP;
-        const startX = parentCenterX - totalWidth / 2;
-
-        // Создаем новый узел
-        const newNode: NodeType = {
-            id: Date.now(),
-            x: startX + children.length * (NODE_WIDTH + HORIZONTAL_GAP),
-            y: childY,
-            parentId: parentId,
-            label: "",
-        };
-
-        // Обновляем позиции существующих детей
-        const updatedChildren = children.map((child, index) => ({
-            ...child,
-            x: startX + index * (NODE_WIDTH + HORIZONTAL_GAP),
-            y: childY
-        }));
-
-        setNodes([...nodes.filter(n => n.parentId !== parentId), ...updatedChildren, newNode]);
     };
 
     useEffect(() => {

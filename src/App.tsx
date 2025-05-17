@@ -4,10 +4,14 @@ import { useState, useEffect } from 'react';
 
 import Home from './pages/Home';
 import SimCreateForm from './pages/SimCreateForm';
+
 import Auth from './pages/Auth';
 import AuthWrapper from './pages/AuthWrapper';
 import SignupForm from './components/auth/SignupForm';
 import LoginForm from './components/auth/LoginForm';
+import UpdatePassword from './components/auth/UpdatePassword';
+import ResetPassword from './components/auth/ResetPassword';
+
 import TreePage from './pages/TreePage';
 
 import Header from './components/Header';
@@ -39,6 +43,8 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignupForm />} />
         <Route path="/login" element={<LoginForm />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/update-password" element={<UpdatePassword />} />
         <Route path="/tree" element={
           <ProtectedRoute>
             <TreePage />

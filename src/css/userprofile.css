@@ -1,0 +1,167 @@
+@font-face {
+  font-family: "The Sims Sans SC";
+  src: url("/fonts/THE_SIMS_SANS-BOLD-SC.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.sims-profile-container {
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  font-family: "The Sims Sans SC", sans-serif;
+}
+
+.sims-header {
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.sims-avatar-container {
+  position: relative;
+}
+
+.sims-avatar-border {
+  border: 3px solid #4a8d56;
+  border-radius: 50%;
+  padding: 3px;
+  display: inline-block;
+}
+
+.sims-avatar {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.sims-username {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.sims-panel {
+  border: none;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.sims-panel-header {
+  background-color: #259400;
+  color: white;
+  padding: 12px 16px;
+  border-bottom: none;
+}
+
+.sims-button {
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.sims-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logout-button {
+  background-color: #e74c3c;
+  border-color: #e74c3c;
+}
+
+.sims-nav-item {
+  border-radius: 0;
+  padding: 12px 16px;
+  text-align: left;
+  border: none;
+  border-bottom: 1px solid #f0f0f0;
+  background-color: transparent;
+  color: #333;
+  transition: all 0.2s;
+}
+
+.sims-nav-item:hover {
+  background-color: #1c7100;
+}
+
+.sims-nav-item.active {
+  background-color: #259400;
+  color: white;
+}
+
+.sims-progress {
+  height: 12px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.sims-progress .progress-bar {
+  background-color: #4a8d56;
+}
+
+.sims-action-button {
+  height: 100%;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #1c7100;
+  border-color: #259400;
+  border-radius: 10px;
+  transition: all 0.2s;
+}
+
+.sims-action-button:hover {
+  background-color: #259400;
+  border-color: #259400;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.achievement-item {
+  padding: 8px 0;
+}
+
+.achievement-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.achievement-icon.completed {
+  background-color: #259400;
+  color: white;
+}
+
+.achievement-icon.incomplete {
+  background-color: #e9ecef;
+  color: #adb5bd;
+}
+
+/* Адаптивные настройки */
+@media (max-width: 768px) {
+  .sims-header {
+    padding: 10px;
+  }
+
+  .sims-username {
+    font-size: 1.2rem;
+  }
+
+  .sims-avatar-border {
+    border-width: 2px;
+  }
+
+  .sims-action-button {
+    min-height: 80px;
+  }
+}

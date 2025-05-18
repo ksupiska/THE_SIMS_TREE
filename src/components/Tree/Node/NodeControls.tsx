@@ -4,7 +4,7 @@ import { getControlButtonStyle } from "./Node.styles";
 import { NodeControlsProps } from "./Node.types";
 
 export const NodeControls: React.FC<NodeControlsProps> = ({
-    nodeId,
+    //nodeId,
     isRoot,
     onEdit,
     onAddChild,

@@ -1,5 +1,5 @@
 import React from "react";
-import Tree from "../components/Tree"; // путь к твоему компоненту дерева
+import { Tree } from "../components/Tree/Tree"; // путь к твоему компоненту дерева
 import { useNavigate } from "react-router-dom";
 
 import '../css/treepage.css';

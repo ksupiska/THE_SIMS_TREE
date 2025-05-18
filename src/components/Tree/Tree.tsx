@@ -1,12 +1,31 @@
 import React, { useState, useEffect, useRef } from "react";
+import { supabase } from '../../SupabaseClient';
+import axios from 'axios';
+
+import { useNavigate } from 'react-router-dom';
+
 import { Pencil } from "lucide-react";
 import { Button } from "react-bootstrap";
 import { Node } from "./Node/Node";
 import { Connectors } from "./Connectors";
 import { styles } from "./Tree.Styles";
-import { NodeType, TreeProps } from "./Tree.types";
+import { NodeType, TreeProps, CharacterType } from "./Tree.types";
 import { useTreeDrag } from "./Tree.hooks";
 import { calculateTreePositions, handleDeleteNode as deleteNode } from "../../utils/treeUtils";
+
+interface Character {
+    id: string;
+    name: string;
+    surname: string;
+    gender: string;
+    avatar?: string;
+    city: string;
+    kind: string;
+    state: string;
+    type: string;
+    biography: string;
+    death: string;
+}
 
 export const Tree: React.FC<TreeProps> = ({ initialNodes = [{ id: 1, x: 0, y: 0, label: "" }] }) => {
     const [nodes, setNodes] = useState<NodeType[]>(initialNodes);
@@ -16,6 +35,9 @@ export const Tree: React.FC<TreeProps> = ({ initialNodes = [{ id: 1, x: 0, y: 0,
     const containerRef = useRef<HTMLDivElement>(null);
     const { offset, scale, setOffset, handlers } = useTreeDrag();
 
+    const [characters, setCharacters] = useState<Character[]>([]);
+    const navigate = useNavigate();
+    
     useEffect(() => {
         const canvas = containerRef.current;
         if (canvas) {
@@ -49,17 +71,50 @@ export const Tree: React.FC<TreeProps> = ({ initialNodes = [{ id: 1, x: 0, y: 0,
         setShowModal(true);
     };
 
-    const handleSelectCharacter = (characterName: string) => {
-        setNodes((prev) =>
-            prev.map((node) =>
+    const handleSelectCharacter = (character: CharacterType) => {
+        setNodes(prev =>
+            prev.map(node =>
                 node.id === selectedNodeId
-                    ? { ...node, label: characterName }
+                    ? { ...node, character }
                     : node
             )
         );
         setShowModal(false);
     };
 
+    const handleCreateNewCharacter = () => {
+        navigate('/simcreateform');
+    };
+    useEffect(() => {
+        const fetchCharacters = async () => {
+            const { data, error } = await supabase.auth.getUser(); // Получаем текущего пользователя
+
+            if (error || !data.user) {
+                console.error('Пользователь не авторизован');
+                return;
+            }
+
+            const userId = data.user.id; // Получаем user_id текущего пользователя
+
+            try {
+                // Логирование запроса
+                console.log("Запрос к серверу с userId:", userId);
+                const response = await axios.get(`http://localhost:5000/api/characters?userId=${userId}`);
+                console.log("Ответ от сервера:", response.data); // Логируем ответ от сервера
+
+                // Проверка структуры данных
+                if (Array.isArray(response.data)) {
+                    setCharacters(response.data);
+                } else {
+                    console.error("Данные не являются массивом:", response.data);
+                }
+            } catch (error) {
+                console.error('Ошибка при получении персонажей:', error);
+            }
+        };
+
+        fetchCharacters();
+    }, []);
     return (
         <>
             <Button
@@ -106,7 +161,27 @@ export const Tree: React.FC<TreeProps> = ({ initialNodes = [{ id: 1, x: 0, y: 0,
                 <div style={styles.modalOverlay}>
                     <div style={styles.modal}>
                         <h3>Выберите персонажа</h3>
-                        <Button onClick={() => handleSelectCharacter("Новый персонаж")} style={{ marginTop: "10px" }}>
+
+                        {/* Список существующих персонажей */}
+                        {characters.map(character => (
+                            <div
+                                key={character.id}
+                                style={styles.characterItem}
+                                onClick={() => handleSelectCharacter(character)}
+                            >
+                                <img
+                                    src={character.avatar}
+                                    alt={`${character.name} ${character.surname}`}
+                                    style={styles.characterAvatar}
+                                />
+                                <span>{character.name} {character.surname}</span>
+                            </div>
+                        ))}
+
+                        <Button
+                            onClick={() => handleCreateNewCharacter()}
+                            style={{ marginTop: "10px" }}
+                        >
                             Добавить нового
                         </Button>
                         <Button onClick={() => setShowModal(false)} style={{ marginTop: "5px" }}>

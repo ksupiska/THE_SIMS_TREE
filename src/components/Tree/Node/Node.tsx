@@ -36,13 +36,45 @@ export const Node: React.FC<NodeProps> = ({
                         height: 100,
                         borderRadius: "50%",
                         display: "flex",
+                        flexDirection: "column",
                         alignItems: "center",
                         justifyContent: "center",
+                        overflow: "hidden",
+                        backgroundColor: "#fff",
+                        cursor: "default", // не показываем "ручку"
                     }}
-                    onClick={() => editMode && onNodeClick(node.id)}
                 >
-                    {node.label || "+"}
+                    {node.character ? (
+                        <>
+                            <img
+                                src={node.character.avatar}
+                                alt="Avatar"
+                                style={{
+                                    width: 70,
+                                    height: 70,
+                                    borderRadius: "50%",
+                                    objectFit: "cover",
+                                }}
+                            />
+                            <span
+                                style={{
+                                    fontSize: 12,
+                                    textAlign: "center",
+                                    marginTop: 5,
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    maxWidth: "90%",
+                                }}
+                            >
+                                
+                            </span>
+                        </>
+                    ) : (
+                        <span style={{ fontSize: 28, color: "#999" }}>+</span>
+                    )}
                 </div>
+
             </div>
         </div>
     );

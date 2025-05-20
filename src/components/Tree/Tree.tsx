@@ -202,35 +202,41 @@ export const Tree: React.FC<TreeProps> = ({ initialNodes = [{ id: 1, x: 0, y: 0,
             {showModal && (
                 <div style={styles.modalOverlay}>
                     <div style={styles.modal}>
-                        <h3>Выберите персонажа</h3>
+                        <h3 style={{ textAlign: "center", marginBottom: "16px" }}>Выберите персонажа</h3>
 
-                        {/* Список существующих персонажей */}
-                        {characters.map(character => (
-                            <div
-                                key={character.id}
-                                style={styles.characterItem}
-                                onClick={() => handleSelectCharacter(character)}
-                            >
-                                <img
-                                    src={character.avatar}
-                                    alt={`${character.name} ${character.surname}`}
-                                    style={styles.characterAvatar}
-                                />
-                                <span>{character.name} {character.surname}</span>
-                            </div>
-                        ))}
+                        {/* Сетка персонажей */}
+                        <div style={styles.characterGrid}>
+                            {characters.map(character => (
+                                <div
+                                    key={character.id}
+                                    style={styles.characterItem}
+                                    onClick={() => handleSelectCharacter(character)}
+                                    onMouseEnter={e =>
+                                        (e.currentTarget.style.borderColor = "#2196f3")
+                                    }
+                                    onMouseLeave={e =>
+                                        (e.currentTarget.style.borderColor = "transparent")
+                                    }
+                                >
+                                    <img
+                                        src={character.avatar}
+                                        alt={`${character.name} ${character.surname}`}
+                                        style={styles.characterAvatar}
+                                    />
+                                    <span style={{ fontSize: "14px", textAlign: "center" }}>
+                                        {character.name} {character.surname}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
 
-                        <Button
-                            onClick={() => handleCreateNewCharacter()}
-                            style={{ marginTop: "10px" }}
-                        >
-                            Добавить нового
-                        </Button>
-                        <Button onClick={() => setShowModal(false)} style={{ marginTop: "5px" }}>
-                            Отмена
-                        </Button>
+                        <div style={{ display: "flex", justifyContent: "center", marginTop: "20px", gap: "10px" }}>
+                            <Button onClick={handleCreateNewCharacter}>Добавить нового</Button>
+                            <Button variant="secondary" onClick={() => setShowModal(false)}>Отмена</Button>
+                        </div>
                     </div>
                 </div>
+
             )}
         </>
     );

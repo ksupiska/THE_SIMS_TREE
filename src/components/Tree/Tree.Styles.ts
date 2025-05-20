@@ -1,6 +1,6 @@
 import { CSSProperties } from "react";
 
-export const styles = {
+export const styles: { [key: string]: CSSProperties } = {
   canvas: {
     width: "100%",
     height: "100vh",
@@ -8,7 +8,7 @@ export const styles = {
     overflow: "hidden",
     position: "relative",
     touchAction: "none",
-  } as CSSProperties,
+  },
 
   inner: {
     position: "absolute",
@@ -18,10 +18,10 @@ export const styles = {
     height: "100000px",
     transformOrigin: "top left",
     transition: "transform 0.1s ease-out",
-  } as CSSProperties,
+  },
 
   modalOverlay: {
-    position: "fixed" as const,
+    position: "fixed",
     top: 0,
     left: 0,
     width: "100vw",
@@ -32,6 +32,7 @@ export const styles = {
     justifyContent: "center",
     zIndex: 1000,
   },
+
   modal: {
     backgroundColor: "#fff",
     borderRadius: "16px",
@@ -42,15 +43,17 @@ export const styles = {
     overflowY: "auto",
     boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3)",
   },
+
   characterGrid: {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fill, minmax(100px, 1fr))",
     gap: "16px",
     marginTop: "16px",
   },
+
   characterItem: {
     display: "flex",
-    flexDirection: "column" as const,
+    flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#f8f8f8",
@@ -60,15 +63,12 @@ export const styles = {
     transition: "all 0.2s ease-in-out",
     border: "1px solid transparent",
   },
-  characterItemHover: {
-    borderColor: "#2196f3",
-    backgroundColor: "#e3f2fd",
-  },
+
   characterAvatar: {
     width: "60px",
     height: "60px",
     borderRadius: "50%",
-    objectFit: "cover" as const,
+    objectFit: "cover",
     marginBottom: "8px",
   },
 
@@ -79,8 +79,9 @@ export const styles = {
     borderRadius: "8px",
     cursor: "pointer",
     transition: "0.2s",
-    textAlign: "center" as const,
+    textAlign: "center",
   },
+
   relationshipButtonHover: {
     backgroundColor: "#e0f7fa",
     borderColor: "#00acc1",

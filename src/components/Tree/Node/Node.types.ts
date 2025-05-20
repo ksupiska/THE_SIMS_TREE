@@ -6,6 +6,7 @@ export type NodeProps = {
     onNodeClick: (id: number) => void;
     onAddChild: (parentId: number) => void;
     onDeleteNode: (id: number) => void;
+    onAddPartner: (id: number) => void;
 };
 
 export type NodeControlsProps = {
@@ -14,4 +15,5 @@ export type NodeControlsProps = {
     onEdit: () => void;
     onAddChild: () => void;
     onDelete: () => void;
+    onAddPartner: () => void;
 };

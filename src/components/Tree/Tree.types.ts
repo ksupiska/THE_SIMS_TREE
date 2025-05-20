@@ -4,8 +4,8 @@ export type NodeType = {
   y: number;
   label: string;
   character?: CharacterType;
-  parentId?: number | null;
-  partnerId?: number | null;
+  parentId?: number | undefined;
+  partnerId?: number | undefined;
 };
 
 export type TreeProps = {

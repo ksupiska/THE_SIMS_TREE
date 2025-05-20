@@ -9,6 +9,7 @@ export const NodeControls: React.FC<NodeControlsProps> = ({
     onEdit,
     onAddChild,
     onDelete,
+    onAddPartner,
 }) => {
     const [isHoveredLeft, setIsHoveredLeft] = useState(false);
     const [isHoveredRight, setIsHoveredRight] = useState(false);
@@ -51,6 +52,7 @@ export const NodeControls: React.FC<NodeControlsProps> = ({
                     top: "50%",
                     transform: "translateY(-50%)",
                 }}
+                onClick={onAddPartner}
                 onMouseEnter={() => handleMouseEnter("right")}
                 onMouseLeave={() => handleMouseLeave("right")}
             >

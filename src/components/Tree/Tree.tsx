@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { Pencil } from "lucide-react";
 import { Button } from "react-bootstrap";
 import { Node } from "./Node/Node";
-import { Connectors } from "./Connectors";
+import Connectors from './Connectors';
 import { styles } from "./Tree.Styles";
 import { NodeType, TreeProps, CharacterType } from "./Tree.types";
 import { useTreeDrag } from "./Tree.hooks";
@@ -36,8 +36,10 @@ export const Tree: React.FC<TreeProps> = ({ initialNodes = [{ id: 1, x: 0, y: 0,
     const { offset, scale, setOffset, handlers } = useTreeDrag();
 
     const [characters, setCharacters] = useState<Character[]>([]);
+    //const renderedNodeIds = new Set<number>();
+
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         const canvas = containerRef.current;
         if (canvas) {
@@ -47,10 +49,45 @@ export const Tree: React.FC<TreeProps> = ({ initialNodes = [{ id: 1, x: 0, y: 0,
         }
     }, []);
 
+    //добавление партнера
+    const handleAddPartner = (targetNodeId: number) => {
+        const partnerNode: NodeType = {
+            id: Date.now(),
+            parentId: undefined, // партнёр — не ребёнок
+            x: 0,
+            y: 0,
+            label: "",
+            partnerId: targetNodeId,
+        };
+
+        const updatedNodes = [
+            ...nodes.map(n =>
+                n.id === targetNodeId ? { ...n, partnerId: partnerNode.id } : n
+            ),
+            partnerNode
+        ];
+
+        const { nodes: positionedNodes } = calculateTreePositions(updatedNodes, 1, 0, 0);
+        setNodes(positionedNodes);
+    };
+
+    //добавление ребенка
     const handleAddChildNode = (parentId: number) => {
+        const parentNode = nodes.find(n => n.id === parentId);
+        if (!parentNode) return;
+
+        const partner = parentNode.partnerId
+            ? nodes.find(n => n.id === parentNode.partnerId)
+            : null;
+
+        // Всегда используем одного родителя, но учитываем пару в логике позиционирования
+        const effectiveParentId = partner
+            ? Math.min(parentId, partner.id) // Всегда выбираем "меньший" id, чтобы было стабильно
+            : parentId;
+
         const newNode: NodeType = {
             id: Date.now(),
-            parentId,
+            parentId: effectiveParentId,
             x: 0,
             y: 0,
             label: "",
@@ -60,6 +97,7 @@ export const Tree: React.FC<TreeProps> = ({ initialNodes = [{ id: 1, x: 0, y: 0,
         const { nodes: updatedNodes } = calculateTreePositions(newNodes, 1, 0, 0);
         setNodes(updatedNodes);
     };
+
 
     const handleDeleteNode = (id: number) => {
         setNodes(prevNodes => deleteNode(prevNodes, id));
@@ -150,10 +188,14 @@ export const Tree: React.FC<TreeProps> = ({ initialNodes = [{ id: 1, x: 0, y: 0,
                             editMode={editMode}
                             onNodeClick={handleNodeClick}
                             onAddChild={handleAddChildNode}
+                            onAddPartner={handleAddPartner}
                             onDeleteNode={handleDeleteNode}
                         />
                     ))}
-                    <Connectors nodes={nodes} />
+                    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                        <Connectors nodes={nodes} />
+                        {/* Остальной код */}
+                    </div>
                 </div>
             </div>
 

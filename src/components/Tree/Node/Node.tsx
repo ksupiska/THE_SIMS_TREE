@@ -9,6 +9,7 @@ export const Node: React.FC<NodeProps> = ({
     onNodeClick,
     onAddChild,
     onDeleteNode,
+    onAddPartner,
 }) => {
     const [isHovered, setIsHovered] = useState(false);
 
@@ -25,6 +26,7 @@ export const Node: React.FC<NodeProps> = ({
                         isRoot={node.id === 1}
                         onEdit={() => onNodeClick(node.id)}
                         onAddChild={() => onAddChild(node.id)}
+                        onAddPartner={() => onAddPartner(node.id)}
                         onDelete={() => onDeleteNode(node.id)}
                     />
                 )}

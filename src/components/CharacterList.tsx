@@ -27,6 +27,43 @@ export default function CharacterList() {
   const [genderFilter, setGenderFilter] = useState('');
   const [typeFilter, setTypeFilter] = useState('');
 
+  //для изменения данны персонажей
+  const [isEditing, setIsEditing] = useState(false);
+  const [editFormData, setEditFormData] = useState<Character | null>(null);
+
+  const startEditing = () => {
+    setEditFormData(selectedCharacter);
+    setIsEditing(true);
+  };
+
+  const cancelEditing = () => {
+    setIsEditing(false);
+    setEditFormData(null);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    if (!editFormData) return;
+    const { name, value } = e.target;
+    setEditFormData({ ...editFormData, [name]: value });
+  };
+
+  const saveChanges = async () => {
+    if (!editFormData) return;
+    try {
+      await axios.put(`http://localhost:5000/api/characters/${editFormData.id}`, editFormData);
+      // Обновляем локальный список персонажей
+      setCharacters((prev) =>
+        prev.map((char) => (char.id === editFormData.id ? editFormData : char))
+      );
+      setSelectedCharacter(editFormData);
+      setIsEditing(false);
+      setEditFormData(null);
+    } catch (error) {
+      console.error("Ошибка при сохранении изменений:", error);
+    }
+  };
+
+
   useEffect(() => {
     const fetchCharacters = async () => {
       const { data, error } = await supabase.auth.getUser(); // Получаем текущего пользователя
@@ -182,60 +219,104 @@ export default function CharacterList() {
       )}
 
       {selectedCharacter && (
-        <div className="modal-overlay" onClick={() => setSelectedCharacter(null)}>
+        <div className="modal-overlay" onClick={() => { setSelectedCharacter(null); setIsEditing(false); }}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <img
-                src={selectedCharacter.avatar || '/default-avatar.png'}
-                alt="Аватар"
-                className="modal-avatar"
-              />
-              <h2>{selectedCharacter.name} {selectedCharacter.surname}</h2>
-            </div>
-
-            <div className="modal-body">
-              <div className="info-section">
-                <h4>Основная информация</h4>
-                <p><strong>Пол:</strong> {selectedCharacter.gender}</p>
-                <p><strong>Город:</strong> {selectedCharacter.city}</p>
-              </div>
-
-              <div className="info-section">
-                <h4>Дополнительно</h4>
-                <p><strong>Тип:</strong> {selectedCharacter.type}</p>
-                <p><strong>Состояние:</strong> {selectedCharacter.state}</p>
-                <p><strong>Черты характера:</strong> {selectedCharacter.kind}</p>
-              </div>
-
-              <div className="info-section">
-                <h4>Биография</h4>
-                <p>{selectedCharacter.biography}</p>
-              </div>
-
-              {selectedCharacter.state.toLowerCase() === 'мертв' && selectedCharacter.death && (
-                <div className="info-section">
-                  <h4>Причина смерти</h4>
-                  <p>{selectedCharacter.death}</p>
+            {!isEditing ? (
+              <>
+                <div className="modal-header">
+                  <img src={selectedCharacter.avatar || '/default-avatar.png'} alt="Аватар" className="modal-avatar" />
+                  <h2>{selectedCharacter.name} {selectedCharacter.surname}</h2>
                 </div>
-              )}
 
-              <div className="modal-footer">
-                <button onClick={() => setSelectedCharacter(null)}>Закрыть</button>
-                <button
-                  className="delete-button"
-                  onClick={(e) => {
+                <div className="modal-body">
+                  <div className="info-section">
+                    <h4>Основная информация</h4>
+                    <p><strong>Пол:</strong> {selectedCharacter.gender}</p>
+                    <p><strong>Город:</strong> {selectedCharacter.city}</p>
+                  </div>
+                  <div className="info-section">
+                    <h4>Дополнительно</h4>
+                    <p><strong>Тип:</strong> {selectedCharacter.type}</p>
+                    <p><strong>Состояние:</strong> {selectedCharacter.state}</p>
+                    <p><strong>Черты характера:</strong> {selectedCharacter.kind}</p>
+                  </div>
+                  <div className="info-section">
+                    <h4>Биография</h4>
+                    <p>{selectedCharacter.biography}</p>
+                  </div>
+                </div>
+
+                <div className="modal-footer">
+                  <button onClick={() => setSelectedCharacter(null)}>Закрыть</button>
+                  <button onClick={(e) => {
                     e.stopPropagation();
                     handleDelete(selectedCharacter.id);
                     setSelectedCharacter(null);
-                  }}
-                >
-                  Удалить
-                </button>
-              </div>
-            </div>
+                  }}>Удалить</button>
+                  <button onClick={(e) => {
+                    e.stopPropagation();
+                    startEditing();
+                  }}>Редактировать</button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="modal-header">
+                  <h2>Редактирование персонажа</h2>
+                </div>
+                <div className="modal-body">
+                  <Form>
+                    {['name', 'surname', 'city', 'type', 'state', 'kind', 'death'].map((field) => (
+                      <Form.Group className="mb-2" key={field}>
+                        <Form.Label>{field === 'kind' ? 'Черты характера' : field[0].toUpperCase() + field.slice(1)}</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name={field}
+                          value={(editFormData as Partial<Character>)[field as keyof Character] || ''}
+                          onChange={handleInputChange}
+                          disabled={field === 'death' && editFormData?.state?.toLowerCase() !== 'мертв'}
+                        />
+                      </Form.Group>
+                    ))}
+
+                    <Form.Group className="mb-2">
+                      <Form.Label>Пол</Form.Label>
+                      <Form.Select name="gender" value={editFormData?.gender || ''} onChange={handleInputChange}>
+                        <option value="мужской">Мужской</option>
+                        <option value="женский">Женский</option>
+                      </Form.Select>
+                    </Form.Group>
+
+                    <Form.Group className="mb-2">
+                      <Form.Label>Биография</Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        rows={3}
+                        name="biography"
+                        value={editFormData?.biography || ''}
+                        onChange={handleInputChange}
+                      />
+                    </Form.Group>
+                  </Form>
+                </div>
+
+                <div className="modal-footer">
+                  <button onClick={(e) => {
+                    e.stopPropagation();
+                    cancelEditing();
+                  }}>Отмена</button>
+                  <button onClick={(e) => {
+                    e.stopPropagation();
+                    saveChanges();
+                  }}>Сохранить</button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
+
+
     </div>
   );
 }

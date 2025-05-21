@@ -150,12 +150,69 @@ app.delete("/api/characters/:id", async (req, res) => {
   }
 });
 
+// обновление персонажа
+app.put("/api/characters/:id", upload.single("avatar"), async (req, res) => {
+  const { id } = req.params;
+  const { name, surname, gender, city, kind, state, type, biography, death } =
+    req.body;
+
+  const file = req.file;
+  let avatar = req.body.avatar || null; // если не обновляем — оставить текущий
+
+  if (file) {
+    const fileExt = path.extname(file.originalname);
+    const fileName = `${Date.now()}${fileExt}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("avatars")
+      .upload(fileName, file.buffer, {
+        contentType: file.mimetype,
+      });
+
+    if (uploadError) {
+      console.error("Ошибка при загрузке аватара:", uploadError.message);
+      return res.status(500).json({ error: "Ошибка при загрузке аватара" });
+    }
+
+    avatar = `${process.env.VITE_SUPABASE_URL}/storage/v1/object/public/avatars/${fileName}`;
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from("characters")
+      .update({
+        name,
+        surname,
+        gender,
+        city,
+        kind,
+        state,
+        type,
+        biography,
+        death,
+        avatar, // если изменили
+      })
+      .eq("id", id)
+      .single();
+
+    if (error) throw error;
+
+    console.log("Персонаж обновлён:", data);
+    res.status(200).json({ message: "Персонаж обновлён", character: data });
+  } catch (error) {
+    console.error("Ошибка при обновлении персонажа:", error);
+    res.status(500).json({ error: "Ошибка при обновлении персонажа" });
+  }
+});
+
 //добавить узел в дерево
 app.post("/api/tree_nodes", async (req, res) => {
   const { tree_id, character_id, parent_id, position_x, position_y } = req.body;
 
   if (!tree_id || !character_id) {
-    return res.status(400).json({ error: "tree_id и character_id обязательны" });
+    return res
+      .status(400)
+      .json({ error: "tree_id и character_id обязательны" });
   }
 
   try {
@@ -203,7 +260,6 @@ app.get("/api/tree_nodes", async (req, res) => {
     res.status(500).json({ error: "Ошибка при получении узлов" });
   }
 });
-
 
 // Главная
 app.get("/", (req, res) => {

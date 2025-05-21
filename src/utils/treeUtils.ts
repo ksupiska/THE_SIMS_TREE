@@ -39,7 +39,7 @@ export const calculateTreePositions = (
 
   // Массив с позиционированными узлами детей (с учётом смещений)
   const positionedChildren: PositionedNode[] = [];
-  
+
   subtrees.forEach((subtree, i) => {
     // Начальное смещение X для текущего поддерева — максимально из currentX и необходимого,
     // чтобы не было пересечений с уже размещёнными поддеревьями
@@ -133,53 +133,34 @@ export const calculateTreePositions = (
 };
 
 export const handleDeleteNode = (nodes: NodeType[], id: number): NodeType[] => {
-  if (id === 1) return nodes;
+  if (id === 1) return nodes; // Корень нельзя удалять
 
   const nodeToDelete = nodes.find((node) => node.id === id);
   if (!nodeToDelete) return nodes;
 
-  const newNodes = nodes.filter((node) => node.id !== id);
-  if (!nodeToDelete.parentId) return newNodes;
+  let updatedNodes = [...nodes];
 
-  const siblings = newNodes.filter(
-    (node) => node.parentId === nodeToDelete.parentId
-  );
-  if (siblings.length === 0) return newNodes;
+  if (nodeToDelete.partnerId !== undefined) {
+    const partner = nodes.find((n) => n.id === nodeToDelete.partnerId);
+    if (partner) {
+      // Удаляем узел и детей, у которых parentId == nodeToDelete.id или partner.id
+      const childrenToDelete = nodes.filter(
+        (n) =>
+          (n.parentId === nodeToDelete.id && n.partnerId === partner.id) ||
+          (n.parentId === partner.id && n.partnerId === nodeToDelete.id)
+      );
 
-  const parentNode = newNodes.find((node) => node.id === nodeToDelete.parentId);
-  if (!parentNode) return newNodes;
-
-  return repositionNodes(newNodes, siblings, parentNode);
-};
-
-const repositionNodes = (
-  nodes: NodeType[],
-  siblings: NodeType[],
-  parentNode: NodeType
-): NodeType[] => {
-  const parentCenterX = parentNode.x + NODE_WIDTH / 2;
-  const childY = parentNode.y + NODE_HEIGHT + VERTICAL_GAP;
-
-  if (siblings.length === 1) {
-    return nodes.map((node) =>
-      node.id === siblings[0].id
-        ? { ...node, x: parentCenterX - NODE_WIDTH / 2, y: childY }
-        : node
-    );
+      updatedNodes = updatedNodes.filter(
+        (n) =>
+          n.id !== nodeToDelete.id &&
+          !childrenToDelete.some((child) => child.id === n.id)
+      );
+    } else {
+      updatedNodes = updatedNodes.filter((n) => n.id !== nodeToDelete.id);
+    }
+  } else {
+    updatedNodes = updatedNodes.filter((n) => n.id !== nodeToDelete.id);
   }
 
-  const totalWidth =
-    siblings.length * NODE_WIDTH + (siblings.length - 1) * HORIZONTAL_GAP;
-  const startX = parentCenterX - totalWidth / 2;
-
-  return nodes.map((node) => {
-    const siblingIndex = siblings.findIndex((s) => s.id === node.id);
-    if (siblingIndex === -1) return node;
-
-    return {
-      ...node,
-      x: startX + siblingIndex * (NODE_WIDTH + HORIZONTAL_GAP),
-      y: childY,
-    };
-  });
+  return updatedNodes;
 };

@@ -151,8 +151,13 @@ export const Tree: React.FC<TreeProps> = ({ initialNodes = [{ id: 1, x: 0, y: 0,
 
 
     const handleDeleteNode = (id: number) => {
-        setNodes(prevNodes => deleteNode(prevNodes, id));
+        setNodes(prevNodes => {
+            const filteredNodes = deleteNode(prevNodes, id); // Удаляем узел
+            const { nodes: repositionedNodes } = calculateTreePositions(filteredNodes, 1, 0, 0); // Пересчитываем позиции
+            return repositionedNodes;
+        });
     };
+
 
     const handleNodeClick = (nodeId: number) => {
         if (!editMode) return;

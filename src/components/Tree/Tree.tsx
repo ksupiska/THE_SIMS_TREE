@@ -13,17 +13,30 @@ import { NodeType, TreeProps, CharacterType, PartnerType } from "./Tree.types";
 import { useTreeDrag } from "./Tree.hooks";
 import { calculateTreePositions, handleDeleteNode as deleteNode } from "../../utils/treeUtils";
 
-import { FaHeart, FaRing, FaUserSlash, FaHandshake } from "react-icons/fa";
+
+import { TbCirclesRelation } from "react-icons/tb"; //married женаты
+import { LiaRingSolid } from "react-icons/lia";//divorced в разводе
+import { GiBigDiamondRing } from "react-icons/gi"; //engaged помолвлены
+import { BsChatHeart } from "react-icons/bs";//flirting флирт
+import { FaHeartBroken } from "react-icons/fa";//former бывшие
+import { FaHeart } from "react-icons/fa";//partner партнер
+import { GiHeartWings } from "react-icons/gi"; //widow вдовцы
+import { FaUserFriends } from "react-icons/fa"; //friends друзья
+
 
 const partnerTypes: Array<{
     type: PartnerType;
     label: string;
     icon: JSX.Element;
 }> = [
-        { type: "married", label: "Супруг", icon: <FaRing /> },
-        { type: "partner", label: "Любовник", icon: <FaHeart /> },
-        { type: "former", label: "Бывший", icon: <FaUserSlash /> },
-        { type: "engaged", label: "Гражданский брак", icon: <FaHandshake /> },
+        { type: "married", label: "Супруги", icon: <TbCirclesRelation /> },
+        { type: "divorced", label: "В разводе", icon: <LiaRingSolid /> },
+        { type: "engaged", label: "Помолвлены", icon: <GiBigDiamondRing /> },
+        { type: "flirting", label: "Флирт", icon: <BsChatHeart /> },
+        { type: "former", label: "Бывшие", icon: <FaHeartBroken /> },
+        { type: "partner", label: "Партнер", icon: <FaHeart /> },
+        { type: "widow", label: "Вдовец/Вдова", icon: <GiHeartWings /> },
+        { type: "friends", label: "Друзья", icon: <FaUserFriends /> },
     ];
 
 interface Character {
@@ -292,15 +305,25 @@ export const Tree: React.FC<TreeProps> = ({ initialNodes = [{ id: 1, x: 0, y: 0,
                                     key={type}
                                     onClick={() => setSelectedPartnerType(type)}
                                     style={{
-                                        padding: "10px 14px",
-                                        borderRadius: "10px",
+                                        padding: "10px 16px",
+                                        borderRadius: "12px",
                                         display: "flex",
                                         alignItems: "center",
-                                        gap: "8px",
-                                        border: selectedPartnerType === type ? "2px solid #2196f3" : "1px solid #ccc",
-                                        backgroundColor: selectedPartnerType === type ? "#e3f2fd" : "#fff",
-                                        cursor: "pointer"
+                                        gap: "10px",
+                                        border: selectedPartnerType === type ? "2px solid rgb(59, 161, 0)" : "1px solid #ccc",
+                                        backgroundColor: selectedPartnerType === type ? "rgba(59, 161, 0, 0.1)" : "#f9f9f9",
+                                        color: "#333",
+                                        fontSize: "15px",
+                                        fontWeight: 500,
+                                        boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                                        transition: "all 0.2s ease-in-out",
+                                        cursor: "pointer",
+                                        minWidth: "140px",
+                                        justifyContent: "center",
                                     }}
+                                    onMouseEnter={e => (e.currentTarget.style.backgroundColor = "rgba(59, 161, 0, 0.15)")}
+                                    onMouseLeave={e => (e.currentTarget.style.backgroundColor = selectedPartnerType === type ? "rgba(59, 161, 0, 0.1)" : "#f9f9f9")}
+
                                 >
                                     {icon} {label}
                                 </button>
@@ -314,7 +337,7 @@ export const Tree: React.FC<TreeProps> = ({ initialNodes = [{ id: 1, x: 0, y: 0,
                                     key={character.id}
                                     style={styles.characterItem}
                                     onClick={() => handleSelectPartner(character)}
-                                    onMouseEnter={e => (e.currentTarget.style.borderColor = "#2196f3")}
+                                    onMouseEnter={e => (e.currentTarget.style.borderColor = "rgb(59, 161, 0)")}
                                     onMouseLeave={e => (e.currentTarget.style.borderColor = "transparent")}
                                 >
                                     <img

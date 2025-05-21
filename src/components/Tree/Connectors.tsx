@@ -1,6 +1,13 @@
 import React, { JSX } from "react";
 
-import { FaHeart, FaRing, FaUserSlash, FaHandshake } from "react-icons/fa";
+import { TbCirclesRelation } from "react-icons/tb"; //married женаты
+import { LiaRingSolid } from "react-icons/lia";//divorced в разводе
+import { GiBigDiamondRing } from "react-icons/gi"; //engaged помолвлены
+import { BsChatHeart } from "react-icons/bs";//flirting флирт
+import { FaHeartBroken } from "react-icons/fa";//former бывшие
+import { FaHeart } from "react-icons/fa";//partner партнер
+import { GiHeartWings } from "react-icons/gi"; //widow вдовцы
+import { FaUserFriends } from "react-icons/fa"; //friends друзья
 
 
 type NodeType = {
@@ -9,7 +16,7 @@ type NodeType = {
     parentId?: number;
     x: number;
     y: number;
-    partnerType?: 'married' | 'divorced' | 'engaged' | 'flirting' | 'former' | 'partner' | 'widow';//женаты, в разводе, помолвлены, флирт, бывшие, партнер, вдова(вдовец)
+    partnerType?: 'married' | 'divorced' | 'engaged' | 'flirting' | 'former' | 'partner' | 'widow' | 'friends';//женаты, в разводе, помолвлены, флирт, бывшие, партнер, вдова(вдовец), друзья
 };
 
 type ConnectorsProps = {
@@ -146,32 +153,53 @@ const Connectors: React.FC<ConnectorsProps> = ({ nodes }) => {
         let icon: JSX.Element | null = null;
         switch (node.partnerType) {
             case "married":
-                icon = <FaRing color="#8a8a8a" />;
+                icon = <TbCirclesRelation color="#8a8a8a" />;
                 break;
-            case "partner":
-                icon = <FaHeart color="red" />;
-                break;
-            case "former":
-                icon = <FaUserSlash color="gray" />;
+            case "divorced":
+                icon = <LiaRingSolid color="#8a8a8a" />;
                 break;
             case "engaged":
-                icon = <FaHandshake color="green" />;
+                icon = <GiBigDiamondRing color="#8a8a8a" />;
                 break;
+            case "flirting":
+                icon = <BsChatHeart color="#8a8a8a" />
+                break;
+            case "former":
+                icon = <FaHeartBroken color="#8a8a8a" />
+                break;
+            case "partner":
+                icon = <FaHeart color="#8a8a8a" />
+                break;
+            case "widow":
+                icon = <GiHeartWings color="#8a8a8a" />
+                break;
+            case "friends":
+                icon = <FaUserFriends color="#8a8a8a" />
+                break;
+
         }
 
         if (icon) {
             connectors.push(
                 <foreignObject
                     key={`partner-icon-${node.id}-${partner.id}`}
-                    x={x - 12}
-                    y={y - 12}
-                    width={28}
-                    height={28}
+                    x={x - 16}
+                    y={y - 16}
+                    width={32}
+                    height={32}
                 >
-                    <div style={{ width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <div style={{
+                        width: 32,
+                        height: 32,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: 20  // чтобы увеличить размер иконки (если она реагирует на fontSize)
+                    }}>
                         {icon}
                     </div>
                 </foreignObject>
+
 
             );
         }

@@ -29,4 +29,4 @@ export type CharacterType = {
   death: string;
 };
 
-export type PartnerType = 'married' | 'divorced' | 'engaged' | 'flirting' | 'former' | 'partner' | 'widow';
+export type PartnerType = 'married' | 'divorced' | 'engaged' | 'flirting' | 'former' | 'partner' | 'widow' | 'friends';

@@ -67,6 +67,7 @@ export const Node: React.FC<NodeProps> = ({
                                     overflow: "hidden",
                                     textOverflow: "ellipsis",
                                     maxWidth: "90%",
+                                    zIndex: 100,
                                 }}
                             >
                                 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, JSX } from "react";
 import { supabase } from '../../SupabaseClient';
 import axios from 'axios';
 
@@ -8,10 +8,23 @@ import { Pencil } from "lucide-react";
 import { Button } from "react-bootstrap";
 import { Node } from "./Node/Node";
 import Connectors from './Connectors';
-import { styles } from "./Tree.Styles";
-import { NodeType, TreeProps, CharacterType } from "./Tree.types";
+import { styles } from './Tree.Styles';
+import { NodeType, TreeProps, CharacterType, PartnerType } from "./Tree.types";
 import { useTreeDrag } from "./Tree.hooks";
 import { calculateTreePositions, handleDeleteNode as deleteNode } from "../../utils/treeUtils";
+
+import { FaHeart, FaRing, FaUserSlash, FaHandshake } from "react-icons/fa";
+
+const partnerTypes: Array<{
+    type: PartnerType;
+    label: string;
+    icon: JSX.Element;
+}> = [
+        { type: "married", label: "Супруг", icon: <FaRing /> },
+        { type: "partner", label: "Любовник", icon: <FaHeart /> },
+        { type: "former", label: "Бывший", icon: <FaUserSlash /> },
+        { type: "engaged", label: "Гражданский брак", icon: <FaHandshake /> },
+    ];
 
 interface Character {
     id: string;
@@ -35,8 +48,55 @@ export const Tree: React.FC<TreeProps> = ({ initialNodes = [{ id: 1, x: 0, y: 0,
     const containerRef = useRef<HTMLDivElement>(null);
     const { offset, scale, setOffset, handlers } = useTreeDrag();
 
+    // Состояние для показа модалки
+    const [showPartnerModal, setShowPartnerModal] = useState(false);
+
+    // Текущий узел, для которого добавляем партнёра
+    const [currentNodeId, setCurrentNodeId] = useState<number | null>(null);
+
     const [characters, setCharacters] = useState<Character[]>([]);
-    //const renderedNodeIds = new Set<number>();
+
+    const [selectedPartnerType, setSelectedPartnerType] = useState<PartnerType>('married');
+
+    // Открыть модалку и задать текущего персонажа
+    const openPartnerModal = (nodeId: number) => {
+        setCurrentNodeId(nodeId);
+        setShowPartnerModal(true);
+    };
+
+    // Обработчик выбора персонажа из модалки
+    const handleAddPartner = (
+        targetNodeId: number,
+        partnerCharacter: CharacterType,
+        partnerType: PartnerType
+    ) => {
+        const partnerNode: NodeType = {
+            id: Date.now(),
+            parentId: undefined,
+            x: 0,
+            y: 0,
+            label: `${partnerCharacter.name} ${partnerCharacter.surname}`,
+            partnerId: targetNodeId,
+            character: partnerCharacter,
+            partnerType, // сохраняем тип связи
+        };
+
+        const updatedNodes = nodes.map(n =>
+            n.id === targetNodeId ? { ...n, partnerId: partnerNode.id, partnerType } : n
+        ).concat(partnerNode);
+
+        const { nodes: positionedNodes } = calculateTreePositions(updatedNodes, 1, 0, 0);
+        setNodes(positionedNodes);
+    };
+
+    const handleSelectPartner = (partnerCharacter: CharacterType) => {
+        if (currentNodeId === null) return;
+
+        handleAddPartner(currentNodeId, partnerCharacter, selectedPartnerType);
+
+        setShowPartnerModal(false);
+        setCurrentNodeId(null);
+    };
 
     const navigate = useNavigate();
 
@@ -48,28 +108,6 @@ export const Tree: React.FC<TreeProps> = ({ initialNodes = [{ id: 1, x: 0, y: 0,
             setOffset({ x: centerX, y: centerY });
         }
     }, []);
-
-    //добавление партнера
-    const handleAddPartner = (targetNodeId: number) => {
-        const partnerNode: NodeType = {
-            id: Date.now(),
-            parentId: undefined, // партнёр — не ребёнок
-            x: 0,
-            y: 0,
-            label: "",
-            partnerId: targetNodeId,
-        };
-
-        const updatedNodes = [
-            ...nodes.map(n =>
-                n.id === targetNodeId ? { ...n, partnerId: partnerNode.id } : n
-            ),
-            partnerNode
-        ];
-
-        const { nodes: positionedNodes } = calculateTreePositions(updatedNodes, 1, 0, 0);
-        setNodes(positionedNodes);
-    };
 
     //добавление ребенка
     const handleAddChildNode = (parentId: number) => {
@@ -188,20 +226,18 @@ export const Tree: React.FC<TreeProps> = ({ initialNodes = [{ id: 1, x: 0, y: 0,
                             editMode={editMode}
                             onNodeClick={handleNodeClick}
                             onAddChild={handleAddChildNode}
-                            onAddPartner={handleAddPartner}
+                            onAddPartner={() => openPartnerModal(node.id)}
                             onDeleteNode={handleDeleteNode}
                         />
                     ))}
-                    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-                        <Connectors nodes={nodes} />
-                        {/* Остальной код */}
-                    </div>
+                    <Connectors nodes={nodes} />
                 </div>
             </div>
 
             {showModal && (
                 <div style={styles.modalOverlay}>
                     <div style={styles.modal}>
+
                         <h3 style={{ textAlign: "center", marginBottom: "16px" }}>Выберите персонажа</h3>
 
                         {/* Сетка персонажей */}
@@ -238,6 +274,70 @@ export const Tree: React.FC<TreeProps> = ({ initialNodes = [{ id: 1, x: 0, y: 0,
                 </div>
 
             )}
+
+            {showPartnerModal && (
+                <div style={styles.modalOverlay}>
+                    <div style={styles.modal}>
+                        <h3 style={{ textAlign: "center", marginBottom: "16px" }}>Выберите тип связи</h3>
+
+                        <div style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            gap: "10px",
+                            marginBottom: "16px",
+                            flexWrap: "wrap"
+                        }}>
+                            {partnerTypes.map(({ type, label, icon }) => (
+                                <button
+                                    key={type}
+                                    onClick={() => setSelectedPartnerType(type)}
+                                    style={{
+                                        padding: "10px 14px",
+                                        borderRadius: "10px",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "8px",
+                                        border: selectedPartnerType === type ? "2px solid #2196f3" : "1px solid #ccc",
+                                        backgroundColor: selectedPartnerType === type ? "#e3f2fd" : "#fff",
+                                        cursor: "pointer"
+                                    }}
+                                >
+                                    {icon} {label}
+                                </button>
+                            ))}
+                        </div>
+
+                        <h3 style={{ textAlign: "center", marginBottom: "16px" }}>Выберите партнёра</h3>
+                        <div style={styles.characterGrid}>
+                            {characters.map(character => (
+                                <div
+                                    key={character.id}
+                                    style={styles.characterItem}
+                                    onClick={() => handleSelectPartner(character)}
+                                    onMouseEnter={e => (e.currentTarget.style.borderColor = "#2196f3")}
+                                    onMouseLeave={e => (e.currentTarget.style.borderColor = "transparent")}
+                                >
+                                    <img
+                                        src={character.avatar}
+                                        alt={`${character.name} ${character.surname}`}
+                                        style={styles.characterAvatar}
+                                    />
+                                    <span style={{ fontSize: "14px", textAlign: "center" }}>
+                                        {character.name} {character.surname}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div style={{ display: "flex", justifyContent: "center", marginTop: "20px", gap: "10px" }}>
+                            <Button onClick={handleCreateNewCharacter}>Добавить нового</Button>
+                            <Button variant="secondary" onClick={() => setShowPartnerModal(false)}>Отмена</Button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+
         </>
     );
 };

@@ -1,3 +1,4 @@
+
 export type NodeType = {
   id: number;
   x: number;
@@ -6,6 +7,8 @@ export type NodeType = {
   character?: CharacterType;
   parentId?: number | undefined;
   partnerId?: number | undefined;
+  CharacterId?: number | undefined;
+  partnerType?: PartnerType; //тип связи партнера
 };
 
 export type TreeProps = {
@@ -25,3 +28,5 @@ export type CharacterType = {
   biography: string;
   death: string;
 };
+
+export type PartnerType = 'married' | 'divorced' | 'engaged' | 'flirting' | 'former' | 'partner' | 'widow';

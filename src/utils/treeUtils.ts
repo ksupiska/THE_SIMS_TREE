@@ -39,16 +39,7 @@ export const calculateTreePositions = (
 
   // Массив с позиционированными узлами детей (с учётом смещений)
   const positionedChildren: PositionedNode[] = [];
-
-  // Функция для получения границ поддерева по его узлам
-  // const getSubtreeBounds = (nodes: PositionedNode[]) => {
-  //   const xs = nodes.map((n) => n.x);
-  //   return {
-  //     left: Math.min(...xs),
-  //     right: Math.max(...xs) + NODE_WIDTH,
-  //   };
-  // };
-
+  
   subtrees.forEach((subtree, i) => {
     // Начальное смещение X для текущего поддерева — максимально из currentX и необходимого,
     // чтобы не было пересечений с уже размещёнными поддеревьями

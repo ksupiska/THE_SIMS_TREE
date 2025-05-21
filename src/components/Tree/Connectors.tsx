@@ -1,11 +1,15 @@
 import React, { JSX } from "react";
 
+import { FaHeart, FaRing, FaUserSlash, FaHandshake } from "react-icons/fa";
+
+
 type NodeType = {
     id: number;
     partnerId?: number;
     parentId?: number;
     x: number;
     y: number;
+    partnerType?: 'married' | 'divorced' | 'engaged' | 'flirting' | 'former' | 'partner' | 'widow';//женаты, в разводе, помолвлены, флирт, бывшие, партнер, вдова(вдовец)
 };
 
 type ConnectorsProps = {
@@ -35,51 +39,17 @@ const Connectors: React.FC<ConnectorsProps> = ({ nodes }) => {
         }
     });
 
-    // // Вспомогательная функция для рисования линии SVG (горизонтальная и вертикальная части)
-    // const renderConnector = (
-    //     x1: number,
-    //     y1: number,
-    //     x2: number,
-    //     y2: number,
-    //     key: string
-    // ) => {
-    //     // Линия из (x1,y1) вниз на y2, потом горизонтально к x2
-    //     // Или прямая линия, если x1===x2
-    //     const midY = y2;
-
-    //     if (x1 === x2) {
-    //         return (
-    //             <line
-    //                 key={key}
-    //                 x1={x1}
-    //                 y1={y1}
-    //                 x2={x2}
-    //                 y2={y2}
-    //                 stroke="black"
-    //                 strokeWidth={2}
-    //             />
-    //         );
-    //     }
-
-    //     return (
-    //         <g key={key} stroke="black" strokeWidth={2} fill="none">
-    //             <line x1={x1} y1={y1} x2={x1} y2={midY} />
-    //             <line x1={x1} y1={midY} x2={x2} y2={midY} />
-    //             <line x1={x2} y1={midY} x2={x2} y2={y2} />
-    //         </g>
-    //     );
-    // };
-
     const connectors: JSX.Element[] = [];
 
     // Пробегаем по всем узлам, которые могут быть родителями
+    // 🔗 1. Линии родитель -> дети
     nodes.forEach((node) => {
         const partner = findPartner(node);
 
         // Чтобы не дублировать линии для партнёров, отрисовываем линии только для "старшего" узла пары
         if (partner && partner.id < node.id) return;
 
-        // Находим всех детей пары (учитывая партнёра)
+        // Находим всех детей пары
         let children: NodeType[] = [];
 
         if (partner) {
@@ -90,9 +60,8 @@ const Connectors: React.FC<ConnectorsProps> = ({ nodes }) => {
             children = childrenByParents[node.id] || [];
         }
 
-        if (children.length === 0) return; // Нет детей — линии не рисуем
+        if (children.length === 0) return;
 
-        // Вычисляем центр родителей
         const parentsCenterX = partner
             ? (node.x + NODE_WIDTH / 2 + partner.x + NODE_WIDTH / 2) / 2
             : node.x + NODE_WIDTH / 2;
@@ -102,38 +71,27 @@ const Connectors: React.FC<ConnectorsProps> = ({ nodes }) => {
             const child = children[0];
             const childCenterX = child.x + NODE_WIDTH / 2;
             const childTopY = child.y;
-
-            const parentsCenterX = partner
-                ? (node.x + NODE_WIDTH / 2 + partner.x + NODE_WIDTH / 2) / 2
-                : node.x + NODE_WIDTH / 2;
-            const parentsBottomY = node.y + NODE_HEIGHT;
-
-            const verticalStep = 20; // длина первой вертикальной линии вниз
+            const verticalStep = 20;
 
             connectors.push(
                 <polyline
                     key={`connector-${node.id}-${child.id}`}
                     points={`
-        ${parentsCenterX},${parentsBottomY} 
-        ${parentsCenterX},${parentsBottomY + verticalStep} 
-        ${childCenterX},${parentsBottomY + verticalStep} 
-        ${childCenterX},${childTopY}
-      `}
+                        ${parentsCenterX},${parentsBottomY} 
+                        ${parentsCenterX},${parentsBottomY + verticalStep} 
+                        ${childCenterX},${parentsBottomY + verticalStep} 
+                        ${childCenterX},${childTopY}
+                    `}
                     fill="none"
                     stroke="black"
                     strokeWidth={2}
                 />
             );
-        }
-        else {
-            // Несколько детей — линия вниз от родителей, затем горизонтальная линия, затем линии к детям
-
-            // Центрируем горизонтальную линию по детям
+        } else {
             const childLeftX = Math.min(...children.map((c) => c.x + NODE_WIDTH / 2));
             const childRightX = Math.max(...children.map((c) => c.x + NODE_WIDTH / 2));
             const childrenLineY = parentsBottomY + VERTICAL_GAP / 2;
 
-            // Вертикальная линия от родителей вниз
             connectors.push(
                 <line
                     key={`connector-vert-${node.id}`}
@@ -146,7 +104,6 @@ const Connectors: React.FC<ConnectorsProps> = ({ nodes }) => {
                 />
             );
 
-            // Горизонтальная линия, соединяющая детей
             connectors.push(
                 <line
                     key={`connector-horiz-${node.id}`}
@@ -159,7 +116,6 @@ const Connectors: React.FC<ConnectorsProps> = ({ nodes }) => {
                 />
             );
 
-            // Вертикальные линии к каждому ребенку
             children.forEach((child) => {
                 const childCenterX = child.x + NODE_WIDTH / 2;
                 const childTopY = child.y;
@@ -179,9 +135,51 @@ const Connectors: React.FC<ConnectorsProps> = ({ nodes }) => {
         }
     });
 
+    // 💞 2. Иконки партнёрства
+    nodes.forEach((node) => {
+        const partner = findPartner(node);
+        if (!partner || partner.id < node.id) return;
+
+        const x = (node.x + NODE_WIDTH / 2 + partner.x + NODE_WIDTH / 2) / 2;
+        const y = (node.y + NODE_HEIGHT / 2 + partner.y + NODE_HEIGHT / 2) / 2;
+
+        let icon: JSX.Element | null = null;
+        switch (node.partnerType) {
+            case "married":
+                icon = <FaRing color="#8a8a8a" />;
+                break;
+            case "partner":
+                icon = <FaHeart color="red" />;
+                break;
+            case "former":
+                icon = <FaUserSlash color="gray" />;
+                break;
+            case "engaged":
+                icon = <FaHandshake color="green" />;
+                break;
+        }
+
+        if (icon) {
+            connectors.push(
+                <foreignObject
+                    key={`partner-icon-${node.id}-${partner.id}`}
+                    x={x - 12}
+                    y={y - 12}
+                    width={28}
+                    height={28}
+                >
+                    <div style={{ width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        {icon}
+                    </div>
+                </foreignObject>
+
+            );
+        }
+    });
+
     return (
         <svg
-            style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
+            style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0 }}
             pointerEvents="none"
         >
             {connectors}

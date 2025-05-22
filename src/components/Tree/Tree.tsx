@@ -13,6 +13,7 @@ import { NodeType, TreeProps, CharacterType, PartnerType } from "./Tree.types";
 import { useTreeDrag } from "./Tree.hooks";
 import { calculateTreePositions, handleDeleteNode as deleteNode } from "../../utils/treeUtils";
 
+import '../../css/treepage.css'
 
 import { TbCirclesRelation } from "react-icons/tb"; //married женаты
 import { LiaRingSolid } from "react-icons/lia";//divorced в разводе
@@ -294,7 +295,7 @@ export const Tree: React.FC<TreeProps> = ({ initialNodes = [{ id: 1, x: 0, y: 0,
             )}
 
             {showPartnerModal && (
-                <div style={styles.modalOverlay}>
+                <div style={styles.modalOverlay} className="modal">
                     <div style={styles.modal}>
                         <h3 style={{ textAlign: "center", marginBottom: "16px" }}>Выберите тип связи</h3>
 

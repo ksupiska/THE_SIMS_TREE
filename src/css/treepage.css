@@ -1,7 +1,19 @@
+@font-face {
+  font-family: "The Sims Sans SC";
+  src: url("/fonts/THE_SIMS_SANS-BOLD-SC.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.modal {
+  font-family: "The Sims Sans SC", sans-serif;
+}
 .tree-container {
   display: flex;
   height: 100vh;
   flex-direction: row;
+  font-family: "The Sims Sans SC", sans-serif;
 }
 
 .tree-wrapper {

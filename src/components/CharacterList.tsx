@@ -30,6 +30,8 @@ export default function CharacterList() {
   //для изменения данны персонажей
   const [isEditing, setIsEditing] = useState(false);
   const [editFormData, setEditFormData] = useState<Character | null>(null);
+  //для изменения аватара
+  const [selectedAvatarFile, setSelectedAvatarFile] = useState<File | null>(null);
 
   const startEditing = () => {
     setEditFormData(selectedCharacter);
@@ -46,22 +48,56 @@ export default function CharacterList() {
     const { name, value } = e.target;
     setEditFormData({ ...editFormData, [name]: value });
   };
+  //обработчик изменения файлов
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedAvatarFile(e.target.files[0]);
+    }
+  };
 
+  //сохранение результатов
   const saveChanges = async () => {
     if (!editFormData) return;
+
+    const formData = new FormData();
+
+    Object.entries(editFormData).forEach(([key, value]) => {
+      if (value !== null && value !== undefined) {
+        formData.append(key, String(value));
+      }
+    });
+
+    if (selectedAvatarFile) {
+      formData.append("avatar", selectedAvatarFile);
+    }
+
     try {
-      await axios.put(`http://localhost:5000/api/characters/${editFormData.id}`, editFormData);
-      // Обновляем локальный список персонажей
-      setCharacters((prev) =>
-        prev.map((char) => (char.id === editFormData.id ? editFormData : char))
+      const response = await axios.put(
+        `http://localhost:5000/api/characters/${editFormData.id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
-      setSelectedCharacter(editFormData);
+
+      const updatedCharacter = response.data.character;
+
+      setCharacters((prev) =>
+        prev.map((char) =>
+          char.id === updatedCharacter.id ? updatedCharacter : char
+        )
+      );
+      setSelectedCharacter(updatedCharacter);
       setIsEditing(false);
       setEditFormData(null);
+      setSelectedAvatarFile(null);
     } catch (error) {
       console.error("Ошибка при сохранении изменений:", error);
     }
   };
+
 
 
   useEffect(() => {
@@ -266,6 +302,11 @@ export default function CharacterList() {
                 </div>
                 <div className="modal-body">
                   <Form>
+                    <Form.Group className="mb-2">
+                      <Form.Label>Аватар</Form.Label>
+                      <Form.Control type="file" accept="image/*" onChange={(e) => handleFileChange(e)} />
+                    </Form.Group>
+
                     {['name', 'surname', 'city', 'type', 'state', 'kind', 'death'].map((field) => (
                       <Form.Group className="mb-2" key={field}>
                         <Form.Label>{field === 'kind' ? 'Черты характера' : field[0].toUpperCase() + field.slice(1)}</Form.Label>

@@ -190,9 +190,10 @@ app.put("/api/characters/:id", upload.single("avatar"), async (req, res) => {
         type,
         biography,
         death,
-        avatar, // если изменили
+        avatar,
       })
       .eq("id", id)
+      .select()
       .single();
 
     if (error) throw error;

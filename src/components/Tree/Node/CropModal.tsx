@@ -23,12 +23,22 @@ export const CropModal: React.FC<Props> = ({ imageSrc, onClose, onCropComplete }
         []
     );
 
-
     const handleDone = async () => {
-        const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
-        if (croppedImage) {
-            onCropComplete(croppedImage);
+        if (!croppedAreaPixels) {
+            // Если нет данных о кропе — можно просто закрыть модалку или показать предупреждение
+            console.warn("Область кропа не выбрана");
+            return;
         }
+
+        try {
+            const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
+            if (croppedImage) {
+                onCropComplete(croppedImage);
+            }
+        } catch (error) {
+            console.error("Ошибка при обрезке изображения:", error);
+        }
+
         onClose();
     };
 

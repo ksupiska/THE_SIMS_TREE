@@ -1,6 +1,6 @@
 @font-face {
-  font-family: 'The Sims Sans SC';
-  src: url('/fonts/THE_SIMS_SANS-BOLD-SC.woff2') format('woff2');
+  font-family: "The Sims Sans SC";
+  src: url("/fonts/THE_SIMS_SANS-BOLD-SC.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -159,6 +159,17 @@
 
 .sex-toggle-button:active {
   transform: scale(0.97); /* эффект нажатия */
+}
+
+.sex-toggle.error {
+  border: 1px solid red;
+  border-radius: 4px;
+  padding: 4px;
+}
+.text-danger {
+  color: red;
+  margin-top: 4px;
+  font-size: 0.9em;
 }
 
 .sims-traits-hint {

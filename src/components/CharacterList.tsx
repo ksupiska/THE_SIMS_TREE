@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import '../css/charaterlist.css'; // Подключим стили
 import { supabase } from '../SupabaseClient';
 import { Form, Container, Col, Row } from 'react-bootstrap'
+import { CropModal } from './Tree/Node/CropModal';
 interface Character {
   id: string;
   name: string;
@@ -30,8 +31,10 @@ export default function CharacterList() {
   //для изменения данны персонажей
   const [isEditing, setIsEditing] = useState(false);
   const [editFormData, setEditFormData] = useState<Character | null>(null);
-  //для изменения аватара
-  const [selectedAvatarFile, setSelectedAvatarFile] = useState<File | null>(null);
+
+  //для обрезки аватара
+  const [cropImage, setCropImage] = useState<string | null>(null);
+  const [showCropper, setShowCropper] = useState(false);
 
   const startEditing = () => {
     setEditFormData(selectedCharacter);
@@ -48,30 +51,21 @@ export default function CharacterList() {
     const { name, value } = e.target;
     setEditFormData({ ...editFormData, [name]: value });
   };
-  //обработчик изменения файлов
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setSelectedAvatarFile(e.target.files[0]);
-    }
-  };
 
   //сохранение результатов
   const saveChanges = async () => {
     if (!editFormData) return;
 
-    const formData = new FormData();
-
-    Object.entries(editFormData).forEach(([key, value]) => {
-      if (value !== null && value !== undefined) {
-        formData.append(key, String(value));
-      }
-    });
-
-    if (selectedAvatarFile) {
-      formData.append("avatar", selectedAvatarFile);
-    }
-
     try {
+      const formData = new FormData();
+      for (const [key, value] of Object.entries(editFormData)) {
+        if (key === "avatarFile" && value instanceof File) {
+          formData.append("avatar", value); // сервер ожидает "avatar"
+        } else if (typeof value === "string") {
+          formData.append(key, value);
+        }
+      }
+
       const response = await axios.put(
         `http://localhost:5000/api/characters/${editFormData.id}`,
         formData,
@@ -85,18 +79,16 @@ export default function CharacterList() {
       const updatedCharacter = response.data.character;
 
       setCharacters((prev) =>
-        prev.map((char) =>
-          char.id === updatedCharacter.id ? updatedCharacter : char
-        )
+        prev.map((char) => (char.id === updatedCharacter.id ? updatedCharacter : char))
       );
       setSelectedCharacter(updatedCharacter);
       setIsEditing(false);
       setEditFormData(null);
-      setSelectedAvatarFile(null);
     } catch (error) {
       console.error("Ошибка при сохранении изменений:", error);
     }
   };
+
 
 
 
@@ -303,9 +295,35 @@ export default function CharacterList() {
                 <div className="modal-body">
                   <Form>
                     <Form.Group className="mb-2">
-                      <Form.Label>Аватар</Form.Label>
-                      <Form.Control type="file" accept="image/*" onChange={(e) => handleFileChange(e)} />
+                      <Form.Label>Avatar</Form.Label>
+                      <Form.Control
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const target = e.target as HTMLInputElement;
+                          const file = target.files?.[0];
+                          if (file) {
+                            const reader = new FileReader();
+                            reader.onload = () => {
+                              setCropImage(reader.result as string);
+                              setShowCropper(true);
+                            };
+                            reader.readAsDataURL(file);
+                          }
+                        }}
+
+                      />
                     </Form.Group>
+
+                    {showCropper && cropImage && (
+                      <CropModal
+                        imageSrc={cropImage}
+                        onClose={() => setShowCropper(false)}
+                        onCropComplete={(croppedFile) => {
+                          setEditFormData((prev) => prev ? { ...prev, avatarFile: croppedFile } : null);
+                        }}
+                      />
+                    )}
 
                     {['name', 'surname', 'city', 'type', 'state', 'kind', 'death'].map((field) => (
                       <Form.Group className="mb-2" key={field}>

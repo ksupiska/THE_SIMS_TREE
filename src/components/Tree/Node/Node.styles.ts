@@ -3,8 +3,8 @@ import { CSSProperties } from "react";
 export const nodeStyles = {
     node: {
         position: "absolute",
-        width: "120px",
-        height: "120px",
+        width: "100px",
+        height: "100px",
         backgroundColor: "#fff",
         borderRadius: "50%",
         border: "2px solid #999",

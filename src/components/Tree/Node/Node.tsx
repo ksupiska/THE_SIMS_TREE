@@ -33,49 +33,36 @@ export const Node: React.FC<NodeProps> = ({
                 <div
                     style={{
                         ...nodeStyles.node,
-                        border: editMode ? "2px dashed #333" : "none",
-                        width: 100,
-                        height: 100,
-                        borderRadius: "50%",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        overflow: "hidden",
-                        backgroundColor: "#fff",
-                        cursor: "default", // не показываем "ручку"
+                        border: editMode ? "2px dashed #333" : nodeStyles.node.border,
+                        cursor: "default",
+                        backgroundColor: "transparent", // если хочешь, чтобы аватар был четко виден
                     }}
                 >
                     {node.character ? (
-                        <>
+                        <div
+                            style={{
+                                width: 100,
+                                height: 100,
+                                borderRadius: "50%",
+                                overflow: "hidden",
+                            }}
+                        >
                             <img
                                 src={node.character.avatar}
                                 alt="Avatar"
                                 style={{
-                                    width: 70,
-                                    height: 70,
-                                    borderRadius: "50%",
+                                    width: "100%",
+                                    height: "100%",
                                     objectFit: "cover",
+                                    display: "block",
+                                    borderRadius: "50%",
                                 }}
                             />
-                            <span
-                                style={{
-                                    fontSize: 12,
-                                    textAlign: "center",
-                                    marginTop: 5,
-                                    whiteSpace: "nowrap",
-                                    overflow: "hidden",
-                                    textOverflow: "ellipsis",
-                                    maxWidth: "90%",
-                                    zIndex: 100,
-                                }}
-                            >
-                                
-                            </span>
-                        </>
+                        </div>
                     ) : (
                         <span style={{ fontSize: 28, color: "#999" }}>+</span>
                     )}
+
                 </div>
 
             </div>

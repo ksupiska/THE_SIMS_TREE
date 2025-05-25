@@ -13,8 +13,8 @@ import { NodeType, TreeProps, CharacterType, PartnerType } from "./Tree.types";
 import { useTreeDrag } from "./Tree.hooks";
 import { calculateTreePositions, handleDeleteNode as deleteNode } from "../../utils/treeUtils";
 
-import { CharacterModal } from "./CharacterModal";
-import { PartnerModal } from "./PartnerModal";
+import { CharacterModal } from "./Modals/CharacterModal";
+import { PartnerModal } from "./Modals/PartnerModal";
 import '../../css/treepage.css'
 
 interface Character {
@@ -174,6 +174,7 @@ export const Tree: React.FC<TreeProps> = ({ treeName, initialNodes = [{ id: 1, x
 
         fetchCharacters();
     }, []);
+
     return (
         <>
             <h2 style={{ textAlign: "center", marginBottom: "1rem", color: 'black' }}>{treeName}</h2>

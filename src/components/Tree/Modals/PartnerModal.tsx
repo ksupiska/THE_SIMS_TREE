@@ -1,8 +1,8 @@
 import React from "react";
 import { Button } from "react-bootstrap";
-import { CharacterType, PartnerType } from "./Tree.types";
-import { partnerTypes } from "./PartnerTypes";
-import { styles } from "./Tree.Styles";
+import { CharacterType, PartnerType } from "../Tree.types";
+import { partnerTypes } from "../PartnerTypes";
+import { styles } from "../Tree.Styles";
 
 interface PartnerModalProps {
     show: boolean;

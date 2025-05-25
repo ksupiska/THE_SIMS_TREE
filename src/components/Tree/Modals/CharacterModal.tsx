@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "react-bootstrap";
-import { CharacterType } from "./Tree.types";
-import { styles } from "./Tree.Styles";
+import { CharacterType } from "../Tree.types";
+import { styles } from "../Tree.Styles";
 
 interface CharacterModalProps {
   show: boolean;

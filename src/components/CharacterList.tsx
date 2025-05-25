@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import '../css/charaterlist.css'; // Подключим стили
 import { supabase } from '../SupabaseClient';
 import { Form, Container, Col, Row } from 'react-bootstrap'
-import { CropModal } from './Tree/Node/CropModal';
+import { CropModal } from './Tree/Modals/CropModal';
 interface Character {
   id: string;
   name: string;

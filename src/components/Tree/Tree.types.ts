@@ -12,6 +12,7 @@ export type NodeType = {
 };
 
 export type TreeProps = {
+  treeId: string;
   initialNodes?: NodeType[];
 };
 

@@ -17,7 +17,6 @@ import { CharacterModal } from "./CharacterModal";
 import { PartnerModal } from "./PartnerModal";
 import '../../css/treepage.css'
 
-
 interface Character {
     id: string;
     name: string;
@@ -32,22 +31,16 @@ interface Character {
     death: string;
 }
 
-export const Tree: React.FC<TreeProps> = ({ initialNodes = [{ id: 1, x: 0, y: 0, label: "" }] }) => {
+export const Tree: React.FC<TreeProps> = ({ treeName, initialNodes = [{ id: 1, x: 0, y: 0, label: "" }] }) => {
     const [nodes, setNodes] = useState<NodeType[]>(initialNodes);
     const [editMode, setEditMode] = useState(false);
-    //const [showModal, setShowModal] = useState(false);
     const [selectedNodeId, setSelectedNodeId] = useState<number | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const { offset, scale, setOffset, handlers } = useTreeDrag();
 
-    // Состояние для показа модалки
-    //const [showPartnerModal, setShowPartnerModal] = useState(false);
-
     // Текущий узел, для которого добавляем партнёра
     const [currentNodeId, setCurrentNodeId] = useState<number | null>(null);
-
     const [characters, setCharacters] = useState<Character[]>([]);
-
     const [selectedPartnerType, setSelectedPartnerType] = useState<PartnerType>('married');
 
     // Модалки
@@ -116,8 +109,6 @@ export const Tree: React.FC<TreeProps> = ({ initialNodes = [{ id: 1, x: 0, y: 0,
         const { nodes: updatedNodes } = calculateTreePositions(newNodes, 1, 0, 0);
         setNodes(updatedNodes);
     };
-
-
     const handleDeleteNode = (id: number) => {
         setNodes(prevNodes => {
             const filteredNodes = deleteNode(prevNodes, id); // Удаляем узел
@@ -125,15 +116,11 @@ export const Tree: React.FC<TreeProps> = ({ initialNodes = [{ id: 1, x: 0, y: 0,
             return repositionedNodes;
         });
     };
-
-
-
     const handleNodeClick = (nodeId: number) => {
         if (!editMode) return;
         setSelectedNodeId(nodeId);
         setShowCharacterModal(true);
     };
-
     const handleSelectCharacter = (character: CharacterType) => {
         setNodes(prev =>
             prev.map(node =>
@@ -189,6 +176,7 @@ export const Tree: React.FC<TreeProps> = ({ initialNodes = [{ id: 1, x: 0, y: 0,
     }, []);
     return (
         <>
+            <h2 style={{ textAlign: "center", marginBottom: "1rem", color: 'black' }}>{treeName}</h2>
             <Button
                 onClick={() => setEditMode(!editMode)}
                 style={{
@@ -229,7 +217,6 @@ export const Tree: React.FC<TreeProps> = ({ initialNodes = [{ id: 1, x: 0, y: 0,
                     <Connectors nodes={nodes} />
                 </div>
             </div>
-
             <CharacterModal
                 show={showCharacterModal}
                 characters={characters}
@@ -237,7 +224,6 @@ export const Tree: React.FC<TreeProps> = ({ initialNodes = [{ id: 1, x: 0, y: 0,
                 onCreateNewCharacter={handleCreateNewCharacter}
                 onClose={() => setShowCharacterModal(false)}
             />
-
             <PartnerModal
                 show={showPartnerModal}
                 characters={characters}

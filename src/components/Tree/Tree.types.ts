@@ -13,6 +13,7 @@ export type NodeType = {
 
 export type TreeProps = {
   treeId: string;
+  treeName: string;
   initialNodes?: NodeType[];
 };
 

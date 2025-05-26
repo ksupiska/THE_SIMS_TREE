@@ -225,7 +225,7 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [{ 
             console.log("Результат сохранения:", result);
         } catch (error) {
             console.error("Ошибка сохранения:", error);
-            alert(`Ошибка: ${error.message}`);
+            //alert(`Ошибка: ${error.message}`);
         }
     };
 

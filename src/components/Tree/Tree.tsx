@@ -17,6 +17,7 @@ import { CharacterModal } from "./Modals/CharacterModal";
 import { PartnerModal } from "./Modals/PartnerModal";
 import '../../css/treepage.css'
 
+
 interface Character {
     id: string;
     name: string;
@@ -33,6 +34,7 @@ interface Character {
 
 export const Tree: React.FC<TreeProps> = ({ treeName, initialNodes = [{ id: 1, x: 0, y: 0, label: "" }] }) => {
     const [nodes, setNodes] = useState<NodeType[]>(initialNodes);
+
     const [editMode, setEditMode] = useState(false);
     const [selectedNodeId, setSelectedNodeId] = useState<number | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -144,6 +146,8 @@ export const Tree: React.FC<TreeProps> = ({ treeName, initialNodes = [{ id: 1, x
     const handleCreateNewCharacter = () => {
         navigate('/simcreateform');
     };
+
+
     useEffect(() => {
         const fetchCharacters = async () => {
             const { data, error } = await supabase.auth.getUser(); // Получаем текущего пользователя
@@ -174,6 +178,8 @@ export const Tree: React.FC<TreeProps> = ({ treeName, initialNodes = [{ id: 1, x
 
         fetchCharacters();
     }, []);
+
+
 
     return (
         <>

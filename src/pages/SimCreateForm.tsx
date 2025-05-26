@@ -15,11 +15,15 @@ import Modal from 'react-bootstrap/Modal';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
+import { useLocation } from "react-router-dom"
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 export default function SimCreateForm() {
+  const location = useLocation()
+  // const treeId = location.state?.treeId || null
+
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
   const [gender, setGender] = useState('');
@@ -29,6 +33,9 @@ export default function SimCreateForm() {
   const [type, setType] = useState('');
   const [biography, setBiography] = useState('');
   const [avatar, setAvatar] = useState<File | null>(null);
+
+  const [treeId, setTreeId] = useState('');
+
 
   const [userId, setUserId] = useState<string | null>(null);//юз пользователя
 
@@ -130,6 +137,47 @@ export default function SimCreateForm() {
   }, []);
 
   const [state, setState] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      // 1. Получаем treeId из location.state (если перешли с TreePage)
+      const locationTreeId = location.state?.treeId;
+      if (locationTreeId) {
+        setTreeId(locationTreeId);
+      }
+
+      // 2. Получаем пользователя
+      const { data: { user }, error } = await supabase.auth.getUser();
+
+      if (user) {
+        setUserId(user.id);
+
+        // 3. Если treeId не был передан, получаем последнее дерево пользователя
+        if (!locationTreeId) {
+          const { data: trees, error: treesError } = await supabase
+            .from('trees')
+            .select('id')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false })
+            .limit(1);
+
+          if (treesError) {
+            console.error("Ошибка при получении деревьев:", treesError);
+            return;
+          }
+
+          if (trees && trees.length > 0) {
+            setTreeId(trees[0].id);
+          }
+        }
+      } else {
+        console.error("Ошибка получения пользователя:", error);
+      }
+    };
+
+    fetchData();
+  }, [location.state]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -156,6 +204,7 @@ export default function SimCreateForm() {
     setErrors({}); // очистить ошибки перед отправкой
 
     const formData = new FormData();
+    console.log(treeId);
     formData.append('name', name);
     formData.append('surname', surname);
     formData.append('gender', gender);
@@ -165,6 +214,8 @@ export default function SimCreateForm() {
     formData.append('type', type);
     formData.append('biography', biography);
     formData.append('death', death);
+    formData.append('tree_id', treeId);
+
 
     formData.append('user_id', userId);
 
@@ -192,6 +243,11 @@ export default function SimCreateForm() {
       setAvatar(null);
 
       setErrors({});
+
+      if (!treeId) {
+        alert("Не выбрано дерево для добавления персонажа.");
+        return;
+      }
     } catch (error) {
       console.error('Ошибка при добавлении персонажа:', error);
     }

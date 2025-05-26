@@ -163,7 +163,8 @@ const TreePage: React.FC = () => {
 
         <button
           onClick={() => {
-            navigate("/simcreateform")
+            console.log("Navigating with treeId:", treeId);
+            navigate("/simcreateform", { state: { treeId } });
             closeSidebar()
           }}
         >

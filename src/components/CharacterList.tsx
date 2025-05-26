@@ -133,7 +133,7 @@ export default function CharacterList() {
   };
 
   const handleCreateNew = () => {
-    navigate('/simcreateform');
+    navigate('/simcreateform');//!!!!!!!!!!!!!!!!!ИСПРАВИТЬ С TREE_ID
   };
 
   return (

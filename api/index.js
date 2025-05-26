@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 import multer from "multer";
 import path from "path";
 
-import saveTreeRoute from "./routes/savetree.js";
+import save from './save.js'
 
 dotenv.config({ path: "../.env" });
 
@@ -25,7 +25,11 @@ const supabase = createClient(
 app.use(cors());
 app.use(express.json());
 // подключаем маршрут сохранения дерева
-app.use(saveTreeRoute);
+app.use((req, res, next) => {
+  req.supabase = supabase; // Добавляем клиент Supabase к каждому запросу
+  next();
+});
+app.use("/api", save);
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });

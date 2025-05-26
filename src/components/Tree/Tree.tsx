@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import { useNavigate } from 'react-router-dom';
 
-import { Pencil } from "lucide-react";
+import { Pencil, Save } from "lucide-react";
 import { Button } from "react-bootstrap";
 import { Node } from "./Node/Node";
 import Connectors from './Connectors';
@@ -32,7 +32,7 @@ interface Character {
     death: string;
 }
 
-export const Tree: React.FC<TreeProps> = ({ treeName, initialNodes = [{ id: 1, x: 0, y: 0, label: "" }] }) => {
+export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [{ id: 1, x: 0, y: 0, label: "" }] }) => {
     const [nodes, setNodes] = useState<NodeType[]>(initialNodes);
 
     const [editMode, setEditMode] = useState(false);
@@ -49,7 +49,6 @@ export const Tree: React.FC<TreeProps> = ({ treeName, initialNodes = [{ id: 1, x
     const [showCharacterModal, setShowCharacterModal] = useState(false);
     const [showPartnerModal, setShowPartnerModal] = useState(false);
 
-    // Обработчик выбора персонажа из модалки
     const handleAddPartner = (
         targetNodeId: number,
         partnerCharacter: CharacterType,
@@ -105,8 +104,14 @@ export const Tree: React.FC<TreeProps> = ({ treeName, initialNodes = [{ id: 1, x
             x: 0,
             y: 0,
             label: "",
+            //character: null,
         };
 
+        console.log("Создан узел:", {
+            id: newNode.id,
+            characterId: newNode.character?.id,
+            character: newNode.character
+        });
         const newNodes = [...nodes, newNode];
         const { nodes: updatedNodes } = calculateTreePositions(newNodes, 1, 0, 0);
         setNodes(updatedNodes);
@@ -179,7 +184,50 @@ export const Tree: React.FC<TreeProps> = ({ treeName, initialNodes = [{ id: 1, x
         fetchCharacters();
     }, []);
 
+    //сохранение древа
+    const handleSaveTree = async () => {
+        try {
+            console.log("Проверка nodes перед отправкой:", nodes);
 
+            // Подготовка данных для сохранения
+            const nodesToSave = nodes.map(node => {
+                // Проверяем, что character есть и содержит id
+                if (node.character && !node.character.id) {
+                    throw new Error(`У узла "${node.label || 'без имени'}" нет character.id`);
+                }
+
+                return {
+                    x: node.x,
+                    y: node.y,
+                    label: node.label || "",
+                    parentId: node.parentId || null,
+                    characterId: node.character?.id || null,  // Берём id из character
+                    partnerId: node.partnerId || null,
+                    partnerType: node.partnerType || null
+                };
+            });
+
+            console.log("Данные для сохранения:", nodesToSave);
+
+            const response = await fetch("http://localhost:5000/api/save", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    treeId,
+                    nodes: nodesToSave,
+                }),
+            });
+
+            const result = await response.json();
+            if (!response.ok) throw result;
+
+            alert("Дерево успешно сохранено!");
+            console.log("Результат сохранения:", result);
+        } catch (error) {
+            console.error("Ошибка сохранения:", error);
+            alert(`Ошибка: ${error.message}`);
+        }
+    };
 
     return (
         <>
@@ -201,6 +249,24 @@ export const Tree: React.FC<TreeProps> = ({ treeName, initialNodes = [{ id: 1, x
             >
                 <Pencil size={18} />
             </Button>
+            <Button
+                onClick={handleSaveTree}
+                style={{
+                    position: "relative",
+                    zIndex: 10,
+                    backgroundColor: "#007bff",
+                    padding: "7px",
+                    borderRadius: "8px",
+                    border: "none",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                }}
+            >
+                <Save size={18} />
+            </Button>
+
 
             <div style={styles.canvas} {...handlers}>
                 <div

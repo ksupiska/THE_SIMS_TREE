@@ -7,7 +7,7 @@ export type NodeType = {
   character?: CharacterType;
   parentId?: number | undefined;
   partnerId?: number | undefined;
-  CharacterId?: number | undefined;
+  characterId?: number | undefined;
   partnerType?: PartnerType; //тип связи партнера
 };
 

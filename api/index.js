@@ -1,4 +1,3 @@
-
 import express from "express";
 import cors from "cors";
 import { createClient } from "@supabase/supabase-js";
@@ -6,7 +5,7 @@ import dotenv from "dotenv";
 import multer from "multer";
 import path from "path";
 
-import save from './save.js'
+import save from "./save.js";
 
 dotenv.config({ path: "../.env" });
 
@@ -213,6 +212,29 @@ app.put("/api/characters/:id", upload.single("avatar"), async (req, res) => {
   } catch (error) {
     console.error("Ошибка при обновлении персонажа:", error);
     res.status(500).json({ error: "Ошибка при обновлении персонажа" });
+  }
+});
+
+// Загрузка дерева
+app.get("/api/tree", async (req, res) => {
+  const { treeId } = req.query;
+
+  if (!treeId) {
+    return res.status(400).json({ error: "treeId обязателен" });
+  }
+
+  try {
+    const { data: nodes, error } = await supabase
+      .from("tree_nodes")
+      .select("*")
+      .eq("tree_id", treeId);
+
+    if (error) throw error;
+
+    res.json({ nodes });
+  } catch (error) {
+    console.error("Ошибка загрузки дерева:", error);
+    res.status(500).json({ error: "Ошибка загрузки дерева" });
   }
 });
 

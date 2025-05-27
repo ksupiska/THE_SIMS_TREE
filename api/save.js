@@ -41,15 +41,17 @@ router.post("/save", async (req, res) => {
     // Подготавливаем данные для вставки
     const nodesToInsert = nodes.map((node) => ({
       tree_id: treeId,
+      id: node.id, // ← если id узла нужен
       x: node.x,
       y: node.y,
       label: node.label || "",
       parent_id: node.parentId || null,
-      characterId: node.character?.id || null,
+      character_id: node.character_id || null, // ← используем character_id из запроса
       partner_id: node.partnerId || null,
       partner_type: node.partnerType || null,
     }));
 
+    console.log("Данные для вставки в Supabase:", nodesToInsert);
     // Вставляем новые узлы
     const { error } = await supabase.from("tree_nodes").insert(nodesToInsert);
 

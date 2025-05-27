@@ -187,27 +187,16 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [{ 
     //сохранение древа
     const handleSaveTree = async () => {
         try {
-            console.log("Проверка nodes перед отправкой:", nodes);
-
-            // Подготовка данных для сохранения
-            const nodesToSave = nodes.map(node => {
-                // Проверяем, что character есть и содержит id
-                if (node.character && !node.character.id) {
-                    throw new Error(`У узла "${node.label || 'без имени'}" нет character.id`);
-                }
-
-                return {
-                    x: node.x,
-                    y: node.y,
-                    label: node.label || "",
-                    parentId: node.parentId || null,
-                    characterId: node.character?.id || null,  // Берём id из character
-                    partnerId: node.partnerId || null,
-                    partnerType: node.partnerType || null
-                };
-            });
-
-            console.log("Данные для сохранения:", nodesToSave);
+            const nodesToSave = nodes.map(node => ({
+                id: node.id,          // ID узла (если есть)
+                x: node.x,
+                y: node.y,
+                label: node.label || "",
+                parentId: node.parentId || null,
+                character_id: node.character?.id || null,  // ← character_id из character
+                partnerId: node.partnerId || null,
+                partnerType: node.partnerType || null,
+            }));
 
             const response = await fetch("http://localhost:5000/api/save", {
                 method: "POST",
@@ -221,14 +210,28 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [{ 
             const result = await response.json();
             if (!response.ok) throw result;
 
-            alert("Дерево успешно сохранено!");
-            console.log("Результат сохранения:", result);
+            console.log("Дерево сохранено:", result);
         } catch (error) {
             console.error("Ошибка сохранения:", error);
-            //alert(`Ошибка: ${error.message}`);
         }
     };
+    // Загрузка дерева при монтировании компонента
+    useEffect(() => {
+        const loadTree = async () => {
+            try {
+                const response = await fetch(`http://localhost:5000/api/tree?treeId=${treeId}`);
+                const data = await response.json();
 
+                if (response.ok) {
+                    setNodes(data.nodes);
+                }
+            } catch (error) {
+                console.error("Ошибка загрузки дерева:", error);
+            }
+        };
+
+        if (treeId) loadTree();
+    }, [treeId]);
     return (
         <>
             <h2 style={{ textAlign: "center", marginBottom: "1rem", color: 'black' }}>{treeName}</h2>

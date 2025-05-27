@@ -219,18 +219,19 @@ app.put("/api/characters/:id", upload.single("avatar"), async (req, res) => {
 app.get("/api/tree", async (req, res) => {
   const { treeId } = req.query;
 
-  if (!treeId) {
-    return res.status(400).json({ error: "treeId обязателен" });
-  }
-
   try {
+    // Загружаем узлы дерева И информацию о персонажах
     const { data: nodes, error } = await supabase
       .from("tree_nodes")
-      .select("*")
+      .select(
+        `
+        *,
+        character:character_id (*)  // Получаем все данные персонажа
+      `
+      )
       .eq("tree_id", treeId);
 
     if (error) throw error;
-
     res.json({ nodes });
   } catch (error) {
     console.error("Ошибка загрузки дерева:", error);

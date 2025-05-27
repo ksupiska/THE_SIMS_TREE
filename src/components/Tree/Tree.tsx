@@ -206,6 +206,7 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [{ 
                     nodes: nodesToSave,
                 }),
             });
+            localStorage.setItem('treeId', treeId);
 
             const result = await response.json();
             if (!response.ok) throw result;
@@ -215,7 +216,6 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [{ 
             console.error("Ошибка сохранения:", error);
         }
     };
-    // Загрузка дерева при монтировании компонента
     useEffect(() => {
         const loadTree = async () => {
             try {
@@ -223,7 +223,28 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [{ 
                 const data = await response.json();
 
                 if (response.ok) {
-                    setNodes(data.nodes);
+                    const loadedNodes = data.nodes.map((node: {
+                        id: number;
+                        x: number;
+                        y: number;
+                        label: string;
+                        parent_id: number | null;
+                        character: CharacterType | null;
+                        partner_id: number | null;
+                        partner_type: PartnerType | null;
+                    }): NodeType => ({
+                        id: node.id,
+                        x: node.x,
+                        y: node.y,
+                        label: node.label,
+                        parentId: node.parent_id || undefined,
+                        character: node.character || undefined,
+                        partnerId: node.partner_id || undefined,
+                        partnerType: node.partner_type || undefined
+                    }));
+
+                    setNodes(loadedNodes);
+                    console.log("Загруженные узлы с персонажами:", loadedNodes);
                 }
             } catch (error) {
                 console.error("Ошибка загрузки дерева:", error);
@@ -232,6 +253,7 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [{ 
 
         if (treeId) loadTree();
     }, [treeId]);
+
     return (
         <>
             <h2 style={{ textAlign: "center", marginBottom: "1rem", color: 'black' }}>{treeName}</h2>

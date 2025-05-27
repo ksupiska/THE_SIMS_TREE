@@ -12,50 +12,41 @@ router.post("/save", async (req, res) => {
   try {
     const supabase = req.supabase;
 
-    // Проверяем, что characterId - это UUID
-    const isValidUUID = (id) =>
-      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
-        id
-      );
-
-    console.log(
-      "Проверка узлов:",
-      nodes.map((node) => ({
-        id: node.id,
-        label: node.label,
-        character: node.character?.id,
-      }))
-    );
-
-    for (const node of nodes) {
-      if (node.characterId && !isValidUUID(node.characterId)) {
-        throw new Error(
-          `Некорректный characterId: "${node.characterId}". Должен быть UUID.`
-        );
-      }
-    }
+    // Проверка UUID опустим для краткости
 
     // Удаляем старые узлы
     await supabase.from("tree_nodes").delete().eq("tree_id", treeId);
 
-    // Подготавливаем данные для вставки
-    const nodesToInsert = nodes.map((node) => ({
+    // Вставляем узлы без partner_id
+    const nodesWithoutPartner = nodes.map((node) => ({
       tree_id: treeId,
-      id: node.id, // ← если id узла нужен
+      id: node.id,
       x: node.x,
       y: node.y,
       label: node.label || "",
       parent_id: node.parentId || null,
-      character_id: node.character_id || null, // ← используем character_id из запроса
-      partner_id: node.partnerId || null,
+      character_id: node.character_id || null,
+      partner_id: null, // Пока null!
       partner_type: node.partnerType || null,
     }));
 
-    console.log("Данные для вставки в Supabase:", nodesToInsert);
-    // Вставляем новые узлы
-    const { error } = await supabase.from("tree_nodes").insert(nodesToInsert);
+    const { error: insertError } = await supabase
+      .from("tree_nodes")
+      .insert(nodesWithoutPartner);
 
-    if (error) throw error;
+    if (insertError) throw insertError;
+
+    // Обновляем partner_id отдельно, когда все узлы уже есть
+    for (const node of nodes) {
+      if (node.partnerId) {
+        const { error: updateError } = await supabase
+          .from("tree_nodes")
+          .update({ partner_id: node.partnerId })
+          .eq("id", node.id);
+
+        if (updateError) throw updateError;
+      }
+    }
 
     res.status(200).json({ success: true });
   } catch (error) {

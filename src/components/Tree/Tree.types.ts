@@ -1,13 +1,13 @@
 
 export type NodeType = {
-  id: number;
+  id: string;
   x: number;
   y: number;
   label: string;
   character?: CharacterType;
-  parentId?: number | undefined;
-  partnerId?: number | undefined;
-  characterId?: number | undefined;
+  parentId?: string | undefined;
+  partnerId?: string | undefined;
+  characterId?: string | undefined;
   partnerType?: PartnerType; //тип связи партнера
 };
 

@@ -11,9 +11,9 @@ import { FaUserFriends } from "react-icons/fa"; //friends друзья
 
 
 type NodeType = {
-    id: number;
-    partnerId?: number;
-    parentId?: number;
+    id: string;
+    partnerId?: string;
+    parentId?: string;
     x: number;
     y: number;
     partnerType?: 'married' | 'divorced' | 'engaged' | 'flirting' | 'former' | 'partner' | 'widow' | 'friends';//женаты, в разводе, помолвлены, флирт, бывшие, партнер, вдова(вдовец), друзья
@@ -37,7 +37,7 @@ const Connectors: React.FC<ConnectorsProps> = ({ nodes }) => {
 
     // Группируем детей по парам родителей (ключ — id родителя или пары)
     // Чтобы у каждого узла можно было быстро получить детей пары
-    const childrenByParents: Record<number, NodeType[]> = {};
+    const childrenByParents: Record<string, NodeType[]> = {};
 
     nodes.forEach((node) => {
         if (node.parentId !== undefined) {

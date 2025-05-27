@@ -3,14 +3,14 @@ import { NodeType } from "../Tree.types";
 export type NodeProps = {
     node: NodeType;
     editMode: boolean;
-    onNodeClick: (id: number) => void;
-    onAddChild: (parentId: number) => void;
-    onDeleteNode: (id: number) => void;
-    onAddPartner: (id: number) => void;
+    onNodeClick: (id: string) => void;
+    onAddChild: (parentId: string) => void;
+    onDeleteNode: (id: string) => void;
+    onAddPartner: (id: string) => void;
 };
 
 export type NodeControlsProps = {
-    nodeId: number;
+    nodeId: string;
     isRoot: boolean;
     onEdit: () => void;
     onAddChild: () => void;

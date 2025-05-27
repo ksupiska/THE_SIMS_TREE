@@ -10,17 +10,16 @@ type PositionedNode = NodeType & { x: number; y: number };
 
 export const calculateTreePositions = (
   nodes: NodeType[],
-  rootId: number,
+  rootId: string,
   startX = 0,
   startY = 0
 ): { nodes: PositionedNode[]; width: number } => {
   const root = nodes.find((n) => n.id === rootId);
   if (!root) return { nodes: [], width: 0 };
 
-  const partner =
-    root.partnerId !== undefined
-      ? nodes.find((n) => n.id === root.partnerId)
-      : nodes.find((n) => n.partnerId === root.id);
+  const partner = nodes.find(
+    (n) => n.id === root.partnerId || n.partnerId === root.id
+  );
 
   const children = nodes.filter(
     (n) => n.parentId === root.id || (partner && n.parentId === partner.id)
@@ -132,8 +131,8 @@ export const calculateTreePositions = (
   return { nodes: result, width };
 };
 
-export const handleDeleteNode = (nodes: NodeType[], id: number): NodeType[] => {
-  if (id === 1) return nodes; // Корень нельзя удалять
+export const handleDeleteNode = (nodes: NodeType[], id: string): NodeType[] => {
+  if (id === "1") return nodes; // Корень нельзя удалять
 
   const nodeToDelete = nodes.find((node) => node.id === id);
   if (!nodeToDelete) return nodes;

@@ -3,6 +3,8 @@ import { NodeProps } from "./Node.types";
 import { NodeControls } from "./NodeControls";
 import { nodeStyles } from "./Node.styles";
 
+import { v4 as uuidv4 } from 'uuid';
+
 export const Node: React.FC<NodeProps> = ({
     node,
     editMode,
@@ -23,7 +25,7 @@ export const Node: React.FC<NodeProps> = ({
                 {editMode && isHovered && (
                     <NodeControls
                         nodeId={node.id}
-                        isRoot={node.id === 1}
+                        isRoot={node.id === uuidv4()} // Изменено на сравнение со string
                         onEdit={() => onNodeClick(node.id)}
                         onAddChild={() => onAddChild(node.id)}
                         onAddPartner={() => onAddPartner(node.id)}
@@ -35,7 +37,7 @@ export const Node: React.FC<NodeProps> = ({
                         ...nodeStyles.node,
                         border: editMode ? "2px dashed #333" : nodeStyles.node.border,
                         cursor: "default",
-                        backgroundColor: "transparent", // если хочешь, чтобы аватар был четко виден
+                        backgroundColor: "transparent",
                     }}
                 >
                     {node.character ? (
@@ -62,9 +64,7 @@ export const Node: React.FC<NodeProps> = ({
                     ) : (
                         <span style={{ fontSize: 28, color: "#999" }}>+</span>
                     )}
-
                 </div>
-
             </div>
         </div>
     );

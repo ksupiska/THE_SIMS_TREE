@@ -219,39 +219,41 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [{ 
     useEffect(() => {
         const loadTree = async () => {
             try {
+                console.log("Начинаем загрузку дерева для treeId:", treeId);
+
                 const response = await fetch(`http://localhost:5000/api/tree?treeId=${treeId}`);
                 const data = await response.json();
 
-                if (response.ok) {
-                    const loadedNodes = data.nodes.map((node: {
-                        id: number;
-                        x: number;
-                        y: number;
-                        label: string;
-                        parent_id: number | null;
-                        character: CharacterType | null;
-                        partner_id: number | null;
-                        partner_type: PartnerType | null;
-                    }): NodeType => ({
-                        id: node.id,
-                        x: node.x,
-                        y: node.y,
-                        label: node.label,
-                        parentId: node.parent_id || undefined,
-                        character: node.character || undefined,
-                        partnerId: node.partner_id || undefined,
-                        partnerType: node.partner_type || undefined
-                    }));
+                console.log("Ответ сервера:", data); // Добавьте этот лог
 
-                    setNodes(loadedNodes);
-                    console.log("Загруженные узлы с персонажами:", loadedNodes);
+                if (response.ok && data?.nodes?.length > 0) {
+                    console.log("Получены узлы:", data.nodes);
+                    setNodes(data.nodes); // Просто устанавливаем узлы как есть
+                } else {
+                    console.log("Дерево пустое, устанавливаем начальные узлы");
+                    setNodes([{
+                        id: 1,
+                        x: 0,
+                        y: 0,
+                        label: "Начните здесь"
+                    }]);
                 }
             } catch (error) {
-                console.error("Ошибка загрузки дерева:", error);
+                console.error("Ошибка загрузки:", error);
+                setNodes([{
+                    id: 1,
+                    x: 0,
+                    y: 0,
+                    label: "Ошибка загрузки"
+                }]);
             }
         };
 
-        if (treeId) loadTree();
+        if (treeId) {
+            loadTree();
+        } else {
+            console.error("treeId не определен!");
+        }
     }, [treeId]);
 
     return (

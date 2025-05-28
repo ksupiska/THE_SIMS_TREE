@@ -43,11 +43,11 @@ const Header = () => {
                             <Nav.Link href="/tree" className="fw-medium text-secondary">
                                 Древо
                             </Nav.Link>
-                            <Nav.Link href="/" className="fw-medium text-secondary">
-                                Дома
+                            <Nav.Link href="/instruction" className="fw-medium text-secondary">
+                                Инструкция
                             </Nav.Link>
-                            <Nav.Link href="/" className="fw-medium text-secondary">
-                                Сообщество
+                            <Nav.Link href="/admin" className="fw-medium text-secondary">
+                                Админ
                             </Nav.Link>
                         </Nav>
 

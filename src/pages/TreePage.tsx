@@ -191,7 +191,7 @@ const TreePage: React.FC = () => {
 
         <button
           onClick={() => {
-            navigate("/auth")
+            navigate("/instruction")
             closeSidebar()
           }}
         >

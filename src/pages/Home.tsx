@@ -3,6 +3,7 @@ import { Button, Container, Col, Row, Card } from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
 import '../css/home.css';
 
+import image from '../photo/ea533a0fddd16137ca550c160030816b.jpg';
 const Home = () => {
 
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ const Home = () => {
           </Col>
           <Col lg={5} className="d-flex align-items-center justify-content-center">
             <div className="position-relative rounded overflow-hidden" style={{ height: "350px", width: "100%" }}>
-              <img src="sss" alt="sss" />
+              <img src={image} alt="sss" />
               <div className="position-absolute bottom-0 end-0 m-3" style={{ width: "64px", height: "64px" }}>
                 <div
                   style={{
@@ -133,27 +134,6 @@ const Home = () => {
             </Card>
           </Col>
 
-          <Col md={6} lg={4}>
-            <Card
-              className="h-100 border-2 transition-all"
-              style={{ borderColor: "#e4f2ff" }}
-              onMouseOver={(e) => (e.currentTarget.style.borderColor = "#69d45b")}
-              onMouseOut={(e) => (e.currentTarget.style.borderColor = "#e4f2ff")}
-            >
-              <Card.Body className="p-4 text-center d-flex flex-column align-items-center">
-              <div
-                  className="rounded-circle d-flex justify-content-center align-items-center mb-3"
-                  style={{ backgroundColor: "#e4f2ff", width: "64px", height: "64px" }}
-                >
-                  <i className="bi bi-houses" style={{ fontSize: "32px", color: "#4a8d56" }}></i>
-                </div>
-                <Card.Title className="fs-4 fw-bold" style={{ color: "#4a8d56" }}>
-                  Дома и участки
-                </Card.Title>
-                <Card.Text className="text-secondary">Каталогизируйте дома и участки, где живут ваши симы.</Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
         </Row>
       </Container>
     </section>

@@ -18,6 +18,8 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import CharacterList from './components/CharacterList';
 import LoadingComponent from './components/LoadingComponent';
+import Instruction from './pages/Instruction';
+import AdminPage from './pages/AdminPage';
 
 import ProtectedRoute from './components/ProtectedRoute';
 import './index.css';
@@ -45,6 +47,8 @@ const App = () => {
         <Route path="/login" element={<LoginForm />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/update-password" element={<UpdatePassword />} />
+        <Route path="/instruction" element={<Instruction />} />
+        <Route path="/admin" element={<AdminPage />} />
         <Route path="/tree" element={
           <ProtectedRoute>
             <TreePage />

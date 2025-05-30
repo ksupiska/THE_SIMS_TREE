@@ -238,13 +238,13 @@ app.get("/api/tree", async (req, res) => {
     partner1_id,
     partner2_id,
     partner_type,
-    characters (id, name, surname, kind, city, type, avatar)
+    character:character_id (id, name, surname, kind, city, type, avatar)
   `
       )
       .eq("tree_id", treeId);
 
     if (error) throw error;
-
+    console.log(data);
     // Преобразуем для фронта
     const transformed = data.map((node) => ({
       id: node.id,
@@ -252,7 +252,7 @@ app.get("/api/tree", async (req, res) => {
       x: node.x,
       y: node.y,
       characterId: node.character_id,
-      character: node.characters, // ← вложенный объект персонажа
+      character: node.character, // ← вложенный объект персонажа
       parent1_id: node.parent1_id,
       parent2_id: node.parent2_id,
       partner1_id: node.partner1_id,

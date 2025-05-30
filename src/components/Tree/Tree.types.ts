@@ -12,6 +12,21 @@ export type NodeType = {
   partnerType?: PartnerType | null;
 };
 
+export type ServerNodeType = {
+    id: string;
+    label: string;
+    x: number;
+    y: number;
+    character: CharacterType;
+    character_id: string | null;
+    parent1_id: string | null;
+    parent2_id: string | null;
+    partner1_id: string | null;
+    partner2_id: string | null;
+    partner_type: PartnerType | null;
+};
+
+
 export type TreeProps = {
   treeId: string;
   treeName: string;

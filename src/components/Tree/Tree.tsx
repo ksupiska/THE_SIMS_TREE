@@ -10,7 +10,7 @@ import { Button } from "react-bootstrap";
 import { Node } from "./Node/Node";
 // import Connectors from './Connectors';
 import { styles } from './Tree.Styles';
-import { NodeType, TreeProps, CharacterType, PartnerType } from "./Tree.types";
+import { NodeType, TreeProps, CharacterType, PartnerType, ServerNodeType } from "./Tree.types";
 import { useTreeDrag } from "./Tree.hooks";
 import { calculateTreePositions, handleDeleteNode as deleteNode } from "../../utils/treeUtils";
 
@@ -275,12 +275,12 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
                 console.log("Ответ сервера:", data);
 
                 if (response.ok && data?.nodes?.length > 0) {
-                    const transformedNodes = data.nodes.map((node: any) => ({
+                    const transformedNodes = data.nodes.map((node: ServerNodeType) => ({
                         id: node.id,
                         label: node.label,
                         x: node.x,
                         y: node.y,
-                        character: node.characters,
+                        character: node.character,
                         characterId: node.character_id,
                         parent1_id: node.parent1_id,
                         parent2_id: node.parent2_id,

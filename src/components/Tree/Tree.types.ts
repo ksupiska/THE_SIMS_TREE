@@ -1,14 +1,15 @@
-
 export type NodeType = {
   id: string;
   x: number;
   y: number;
   label: string;
   character?: CharacterType;
-  parentId?: string | undefined;
-  partnerId?: string | undefined;
-  characterId?: string | undefined;
-  partnerType?: PartnerType; //тип связи партнера
+  characterId?: string | null;
+  parent1_id?: string | null;
+  parent2_id?: string | null;
+  partner1_id?: string | null;
+  partner2_id?: string | null;
+  partnerType?: PartnerType | null;
 };
 
 export type TreeProps = {

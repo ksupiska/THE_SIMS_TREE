@@ -7,18 +7,18 @@ import path from "path";
 
 import save from "./save.js";
 
-dotenv.config({ path: "../.env" });
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
 
-console.log("Supabase URL:", process.env.VITE_SUPABASE_URL);
-console.log("Supabase Key:", process.env.VITE_SUPABASE_KEY);
+console.log("Supabase URL:", process.env.SUPABASE_URL);
+console.log("Supabase Key:", process.env.SUPABASE_KEY);
 
 // Supabase клиент
 const supabase = createClient(
-  process.env.VITE_SUPABASE_URL,
-  process.env.VITE_SUPABASE_KEY
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_KEY
 );
 
 app.use(cors());
@@ -219,23 +219,51 @@ app.put("/api/characters/:id", upload.single("avatar"), async (req, res) => {
 app.get("/api/tree", async (req, res) => {
   const { treeId } = req.query;
 
+  if (!treeId) {
+    return res.status(400).json({ error: "treeId обязателен" });
+  }
+
   try {
-    // Загружаем узлы дерева И информацию о персонажах
-    const { data: nodes, error } = await supabase
+    const { data, error } = await supabase
       .from("tree_nodes")
       .select(
         `
-        *,
-        character:character_id (*)  // Получаем все данные персонажа
-      `
+    id,
+    label,
+    x,
+    y,
+    character_id,
+    parent1_id,
+    parent2_id,
+    partner1_id,
+    partner2_id,
+    partner_type,
+    characters (id, name, surname, kind, city, type, avatar)
+  `
       )
       .eq("tree_id", treeId);
 
     if (error) throw error;
-    res.json({ nodes });
+
+    // Преобразуем для фронта
+    const transformed = data.map((node) => ({
+      id: node.id,
+      label: node.label,
+      x: node.x,
+      y: node.y,
+      characterId: node.character_id,
+      character: node.characters, // ← вложенный объект персонажа
+      parent1_id: node.parent1_id,
+      parent2_id: node.parent2_id,
+      partner1_id: node.partner1_id,
+      partner2_id: node.partner2_id,
+      partnerType: node.partner_type,
+    }));
+
+    res.json({ nodes: transformed });
   } catch (error) {
-    console.error("Ошибка загрузки дерева:", error);
-    res.status(500).json({ error: "Ошибка загрузки дерева" });
+    console.error("Ошибка при загрузке дерева:", error);
+    res.status(500).json({ error: "Ошибка загрузки" });
   }
 });
 

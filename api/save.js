@@ -1,60 +1,42 @@
 import express from "express";
 
 const router = express.Router();
-
 router.post("/save", async (req, res) => {
+  const supabase = req.supabase; // <- вот сюда
+
   const { treeId, nodes } = req.body;
 
-  if (!treeId || !nodes || !Array.isArray(nodes)) {
-    return res.status(400).json({ error: "Некорректные данные" });
+  if (!treeId || !Array.isArray(nodes)) {
+    return res.status(400).json({ error: "Неверные данные" });
   }
 
   try {
-    const supabase = req.supabase;
-
-    // Проверка UUID опустим для краткости
-
     // Удаляем старые узлы
     await supabase.from("tree_nodes").delete().eq("tree_id", treeId);
 
-    // Вставляем узлы без partner_id
-    const nodesWithoutPartner = nodes.map((node) => ({
-      tree_id: treeId,
-      id: node.id,
-      x: node.x,
-      y: node.y,
-      label: node.label || "",
-      parent_id: node.parentId || null,
-      character_id: node.character_id || null,
-      partner_id: null, // Пока null!
-      partner_type: node.partnerType || null,
-    }));
+    // Вставляем новые
+    const { error } = await supabase.from("tree_nodes").insert(
+      nodes.map((node) => ({
+        id: node.id,
+        tree_id: treeId,
+        label: node.label,
+        x: node.x,
+        y: node.y,
+        character_id: node.characterId || node.character_id,
+        parent1_id: node.parent1_id,
+        parent2_id: node.parent2_id,
+        partner1_id: node.partner1_id,
+        partner2_id: node.partner2_id, // исправлено, см. ниже
+        partner_type: node.partnerType || node.partner_type,
+      }))
+    );
 
-    const { error: insertError } = await supabase
-      .from("tree_nodes")
-      .insert(nodesWithoutPartner);
+    if (error) throw error;
 
-    if (insertError) throw insertError;
-
-    // Обновляем partner_id отдельно, когда все узлы уже есть
-    for (const node of nodes) {
-      if (node.partnerId) {
-        const { error: updateError } = await supabase
-          .from("tree_nodes")
-          .update({ partner_id: node.partnerId })
-          .eq("id", node.id);
-
-        if (updateError) throw updateError;
-      }
-    }
-
-    res.status(200).json({ success: true });
+    res.json({ success: true });
   } catch (error) {
-    console.error("Ошибка сохранения:", error);
-    res.status(500).json({
-      error: "Ошибка сохранения",
-      details: error.message,
-    });
+    console.error("Ошибка при сохранении дерева:", error);
+    res.status(500).json({ error: "Ошибка при сохранении" });
   }
 });
 

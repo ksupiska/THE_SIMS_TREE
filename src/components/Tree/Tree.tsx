@@ -3,12 +3,12 @@ import { supabase } from '../../SupabaseClient';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 
 import { Pencil, Save } from "lucide-react";
 import { Button } from "react-bootstrap";
 import { Node } from "./Node/Node";
-import Connectors from './Connectors';
+// import Connectors from './Connectors';
 import { styles } from './Tree.Styles';
 import { NodeType, TreeProps, CharacterType, PartnerType } from "./Tree.types";
 import { useTreeDrag } from "./Tree.hooks";
@@ -17,6 +17,7 @@ import { calculateTreePositions, handleDeleteNode as deleteNode } from "../../ut
 import { CharacterModal } from "./Modals/CharacterModal";
 import { PartnerModal } from "./Modals/PartnerModal";
 import '../../css/treepage.css'
+import { useNavigate } from "react-router-dom";
 
 
 interface Character {
@@ -33,13 +34,24 @@ interface Character {
     death: string;
 }
 
-export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [{ id: '1', x: 0, y: 0, label: "" }] }) => {
-    const [nodes, setNodes] = useState<NodeType[]>(initialNodes);
+export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] }) => {
+    const [nodes, setNodes] = useState<NodeType[]>(initialNodes.length ? initialNodes : [{
+        id: uuidv4(),
+        x: 0,
+        y: 0,
+        label: 'Начало',
+        parent1_id: null,
+        parent2_id: null,
+        partner1_id: null,
+        partner2_id: null,
+        partnerType: null,
+        characterId: null,
+    }]);
 
     const [editMode, setEditMode] = useState(false);
     const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
-    const { offset, scale, setOffset, handlers } = useTreeDrag();
+    const { offset, scale, handlers } = useTreeDrag();
 
     // Текущий узел, для которого добавляем партнёра
     const [currentNodeId, setCurrentNodeId] = useState<string | null>(null);
@@ -50,6 +62,19 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [{ 
     const [showCharacterModal, setShowCharacterModal] = useState(false);
     const [showPartnerModal, setShowPartnerModal] = useState(false);
 
+    const [rootId, setRootId] = useState<string | null>(null);
+    useEffect(() => {
+        if (nodes.length > 0 && !rootId) {
+            const rootNode = getRootNode(nodes);
+            if (rootNode) {
+                setRootId(rootNode.id);
+            }
+        }
+    }, [nodes, rootId]);
+
+
+    const getRootNode = (nodes: NodeType[]): NodeType | undefined =>
+        nodes.find(n => !n.parent1_id && !n.parent2_id);
 
     const handleAddPartner = async (
         targetNodeId: string,
@@ -57,86 +82,88 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [{ 
         partnerType: PartnerType
     ) => {
         try {
-            const newId = uuidv4();
+            const newPartnerId = uuidv4();
 
             const partnerNode: NodeType = {
-                id: newId,
+                id: newPartnerId,
                 x: 0,
                 y: 0,
                 label: `${partnerCharacter.name} ${partnerCharacter.surname}`,
                 character: partnerCharacter,
                 characterId: partnerCharacter.id,
-                partnerId: targetNodeId,       // ← указывает на target
+                parent1_id: null,
+                parent2_id: null,
+                partner2_id: targetNodeId,
                 partnerType,
             };
 
-            const updatedNodes = nodes.map(node => {
+            const updatedNodes = nodes.map((node) => {
                 if (node.id === targetNodeId) {
-                    return { ...node, partnerId: newId, partnerType };
+                    return {
+                        ...node,
+                        partnerId: newPartnerId,
+                        partner2_id: newPartnerId, // Соединяем партнёра
+                        partnerType,
+                    };
                 }
                 return node;
-            }).concat(partnerNode); // ← добавляем нового партнёра
+            }).concat(partnerNode);
 
-            const rootNode = updatedNodes[0]; // если ты знаешь, что корень — первый
-            const rootId = rootNode.id;
+            const rootNode = getRootNode(updatedNodes);
+            if (!rootNode) {
+                console.error("Корень дерева не найден");
+                return;
+            }
 
-            const { nodes: positionedNodes } = calculateTreePositions(updatedNodes, rootId, 0, 0);
+            const { nodes: positionedNodes } = calculateTreePositions(updatedNodes, rootNode.id, 0, 0);
             setNodes(positionedNodes);
 
-            await handleSaveTree();
-
-            console.log('Партнёр успешно добавлен', {
-                targetNodeId,
-                partnerNodeId: newId,
-            });
-            console.log("После добавления партнёра, узлы:", updatedNodes);
-
+            console.log('Партнёр успешно добавлен');
         } catch (error) {
             console.error('Ошибка при добавлении партнёра:', error);
         }
     };
 
-
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        const canvas = containerRef.current;
-        if (canvas) {
-            const centerX = window.innerWidth / 2;
-            const centerY = window.innerHeight / 2;
-            setOffset({ x: centerX, y: centerY });
-        }
-    }, []);
-
-    //добавление ребенка
-    const handleAddChildNode = (parentId: string) => { // changed to string
+    const handleAddChildNode = (parentId: string, childCharacter?: CharacterType) => {
         const parentNode = nodes.find(n => n.id === parentId);
         if (!parentNode) return;
 
-        const partner = parentNode.partnerId
-            ? nodes.find(n => n.id === parentNode.partnerId)
+        const partnerNode = parentNode.partner2_id
+            ? nodes.find(n => n.id === parentNode.partner2_id)
             : null;
 
-        const effectiveParentId = partner
-            ? [parentId, partner.id].sort()[0] // Sort string IDs to get consistent parent
-            : parentId;
-
-        const newNode: NodeType = {
-            id: uuidv4(), // changed to UUID
-            parentId: effectiveParentId,
+        const newChildNode: NodeType = {
+            id: uuidv4(),
             x: 0,
             y: 0,
-            label: "",
+            label: childCharacter
+                ? `${childCharacter.name} ${childCharacter.surname}`
+                : "Новый ребенок",
+            character: childCharacter,
+            characterId: childCharacter?.id || null,
+            parent1_id: parentNode.id,
+            parent2_id: partnerNode?.id || null,
+            partner2_id: null,
+            partnerType: null,
         };
 
-        const newNodes = [...nodes, newNode];
-        const { nodes: updatedNodes } = calculateTreePositions(newNodes, '1', 0, 0);
-        setNodes(updatedNodes);
+        const updatedNodes = [...nodes, newChildNode];
+        const rootNode = getRootNode(updatedNodes);
+        if (!rootNode) return;
+
+        const { nodes: positionedNodes } = calculateTreePositions(updatedNodes, rootNode.id, 0, 0);
+        setNodes(positionedNodes);
     };
+
+
+
     const handleDeleteNode = (id: string) => {
         setNodes(prevNodes => {
-            const filteredNodes = deleteNode(prevNodes, id); // Удаляем узел
-            const { nodes: repositionedNodes } = calculateTreePositions(filteredNodes, '1', 0, 0); // Пересчитываем позиции
+            const filteredNodes = deleteNode(prevNodes, id);
+            const rootNode = filteredNodes.find(n => !n.parent1_id && !n.parent2_id);
+            if (!rootNode) return filteredNodes;
+
+            const { nodes: repositionedNodes } = calculateTreePositions(filteredNodes, rootNode.id, 0, 0);
             return repositionedNodes;
         });
     };
@@ -150,12 +177,18 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [{ 
         setNodes(prev =>
             prev.map(node =>
                 node.id === selectedNodeId
-                    ? { ...node, character }
+                    ? {
+                        ...node,
+                        character,
+                        characterId: character.id,
+                        label: `${character.name} ${character.surname}`
+                    }
                     : node
             )
         );
         setShowCharacterModal(false);
     };
+
     const openPartnerModal = (nodeId: string) => {
         setCurrentNodeId(nodeId);
         setShowPartnerModal(true);
@@ -166,11 +199,6 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [{ 
         handleAddPartner(currentNodeId, partnerCharacter, selectedPartnerType);
         setShowPartnerModal(false);
     };
-
-    const handleCreateNewCharacter = () => {
-        navigate('/simcreateform');
-    };
-
 
     useEffect(() => {
         const fetchCharacters = async () => {
@@ -206,24 +234,18 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [{ 
     //сохранение древа
     const handleSaveTree = async () => {
         try {
-
-            const nodesToSave = nodes.map(node => {
-                // Получаем id персонажа партнёра, если есть
-                const partnerCharacterId = node.partnerId
-                    ? nodes.find(n => n.id === node.partnerId)?.character?.id || null
-                    : null;
-
-                return {
-                    id: node.id,
-                    x: node.x,
-                    y: node.y,
-                    label: node.label || "",
-                    parentId: node.parentId || null,
-                    character_id: node.character?.id || null,
-                    partnerId: partnerCharacterId,  // Вот тут id персонажа, а не узла
-                    partnerType: node.partnerType || null,
-                };
-            });
+            const nodesToSave = nodes.map(node => ({
+                id: node.id,
+                label: node.label,
+                x: node.x,
+                y: node.y,
+                character_id: node.characterId || null,
+                parent1_id: node.parent1_id || null,
+                parent2_id: node.parent2_id || null,
+                partner1_id: node.partner1_id || null,
+                partner2_id: node.partner2_id || null,
+                partner_type: node.partnerType || null,
+            }));
 
             const response = await fetch("http://localhost:5000/api/save", {
                 method: "POST",
@@ -233,18 +255,14 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [{ 
                     nodes: nodesToSave,
                 }),
             });
-            localStorage.setItem('treeId', treeId);
-            console.log("Отправляем узлы:", nodesToSave);
 
-
-            const result = await response.json();
-            if (!response.ok) throw result;
-
-            console.log("Дерево сохранено:", result);
+            if (!response.ok) throw new Error("Ошибка сохранения");
+            console.log("Дерево сохранено");
         } catch (error) {
             console.error("Ошибка сохранения:", error);
         }
     };
+
 
     useEffect(() => {
         const loadTree = async () => {
@@ -257,8 +275,22 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [{ 
                 console.log("Ответ сервера:", data);
 
                 if (response.ok && data?.nodes?.length > 0) {
-                    console.log("Получены узлы:", data.nodes);
-                    setNodes(data.nodes); // Используем данные с сервера напрямую
+                    const transformedNodes = data.nodes.map((node: any) => ({
+                        id: node.id,
+                        label: node.label,
+                        x: node.x,
+                        y: node.y,
+                        character: node.characters,
+                        characterId: node.character_id,
+                        parent1_id: node.parent1_id,
+                        parent2_id: node.parent2_id,
+                        partner1_id: node.partner1_id,
+                        partner2_id: node.partner2_id,
+                        partnerType: node.partner_type,
+                    }));
+
+                    console.log("Получены и преобразованы узлы:", transformedNodes);
+                    setNodes(transformedNodes);
                 } else {
                     console.log("Дерево пустое, создаём стартовый узел");
                     setNodes([{
@@ -266,10 +298,11 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [{ 
                         x: 0,
                         y: 0,
                         label: "Начните здесь",
-                        parentId: undefined,
-                        partnerId: undefined,
-                        partnerType: undefined,
-                        characterId: undefined,
+                        parent1_id: null,
+                        parent2_id: null,
+                        partner1_id: null,
+                        partner2_id: null,
+                        characterId: null,
                     }]);
                 }
             } catch (error) {
@@ -279,10 +312,11 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [{ 
                     x: 0,
                     y: 0,
                     label: "Ошибка загрузки",
-                    parentId: undefined,
-                    partnerId: undefined,
-                    partnerType: undefined,
-                    characterId: undefined,
+                    parent1_id: null,
+                    parent2_id: null,
+                    partner1_id: null,
+                    partner2_id: null,
+                    characterId: null,
                 }]);
             }
         };
@@ -294,6 +328,10 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [{ 
         }
     }, [treeId]);
 
+    const navigate = useNavigate();
+    const handleCreateNewCharacter = () => {
+        navigate("/simcreateform"); // Переход на страницу создания персонажа
+    };
 
     return (
         <>
@@ -353,7 +391,7 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [{ 
                             onDeleteNode={handleDeleteNode}
                         />
                     ))}
-                    <Connectors nodes={nodes} />
+                    {/* <Connectors nodes={nodes} /> */}
                 </div>
             </div>
             <CharacterModal

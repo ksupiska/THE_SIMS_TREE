@@ -1,8 +1,18 @@
 
 import '../css/globals.css';
 import { motion } from "framer-motion"
-import { useInView } from "react-intersection-observer"
-import { BsDiamond, BsArrowRight, BsStars, BsPeople, BsGear, BsDownload } from "react-icons/bs"
+import { useInView } from "react-intersection-observer";
+import { BsDiamond, BsStars, BsDownload, BsArrowsFullscreen, BsApp, BsCursorFill, BsCircleFill, BsHearts } from "react-icons/bs";
+import { FaChildren } from "react-icons/fa6";
+
+import imageSaveTreeName from '../photo/Create-new-tree.png';
+import imageUseCanvas from '../photo/How-to-use-canvas.png';
+import imageuseNodes from '../photo/How-to-use-nodes.png';
+import imageWhatBtns from '../photo/What-is-the-btns.png';
+import imageAddCharacter from '../photo/Add-character.png';
+import imageAddPartner from '../photo/Add-partner.png';
+import imageAddChild from '../photo/Add-child.png';
+import imageSaveTree from '../photo/Save-tree.png';
 
 interface Section {
   id: string;
@@ -19,60 +29,84 @@ const sections = [
     id: "getting-started",
     title: "Начало работы",
     description:
-      'Чтобы начать использовать Древо династий, откройте игру The Sims 4 и перейдите в режим жизни. Нажмите на кнопку меню в правом верхнем углу экрана и выберите "Древо династий" из выпадающего меню.',
-    imagePath: "/images/getting-started.png",
+      'Для того, чтобы начать пользоваться возможностями нашего сайта, вам нужно открыть страницу "Древо". Вы увидите модальное окно, в котором нужно будет ввести название вашей новой династии. После чего вы получите доступ к холсту создания и редактирования узлов древа',
+    imagePath: imageSaveTreeName,
     imageAlt: "Меню доступа к Древу династий",
     color: "pink-purple",
     icon: <BsStars className="icon" />,
   },
   {
-    id: "viewing-tree",
-    title: "Просмотр древа",
+    id: "how-to-use-tree",
+    title: "Как пользоваться холстом",
     description:
-      "В Древе династий вы увидите всех связанных персонажей вашей текущей семьи. Линии показывают родственные связи: зеленые линии обозначают кровное родство, синие — брачные узы, а оранжевые — усыновление.",
-    imagePath: "/images/viewing-tree.png",
-    imageAlt: "Просмотр древа династий",
+      `Пользоваться холстом очень и очень просто! Использование на ПК: одним нажатием левой кнопкой мышки и ее перетаскиванием в любой части холста, мы можем двигать его в разные стороны, тем самым (если ваше древо уже большое) можно посмотреть все древо. Чтобы увеличить или уменьшить масштаб, достаточно навести курсор на холст и прокрутить колесиком мышки. Использование на мобильных устройствах: также тапом на холст и перетаскиванием пальцем можно просмотреть все древо. Чтобы увеличить или уменьшить масштаб, достаточко тапнуть двумя пальцами и свести их вместе.`,
+    imagePath:imageUseCanvas,
+    imageAlt: 'Как пользоваться холстом',
+    color: 'blue-cyan',
+    icon: <BsArrowsFullscreen className="icon" />,
+  },
+  {
+    id: "how-to-use-nodes",
+    title: "Как пользоваться узлами",
+    description:
+      'Чтобы начать работать с узлами, нужно просто нажать на кнопку "Редактировать", чтобы войти в режим редактирования древа. После чего (на ПК: навести курсор мышки на узел. На мобильных устройствах: нажать на узел пальчиком) откроется ряд возможностей: удаление, добавление персонажа, добавление ребенка персонажу и добавление партнера (см. далее о значении каждой кнопки)',
+    imagePath:imageuseNodes,
+    imageAlt: 'Как пользоваться узлами',
+    color: 'blue-cyan',
+    icon: <BsApp className="icon" />,
+  },
+  {
+    id: "meaning-of-btns-on-nodes",
+    title: "Значение кнопок на узлах",
+    description:
+      `Кнопка с мусорной корзиной означает удаление узла. (если вы удалите первый и единственный узел, ничего страшного! Просто перезагрузите страницу и узел снова будет на месте)
+      Кнопка с шестерёнкой добавляет нового персонажа (но сначала его нужно будет выбрать или создать)
+      Кнопка с плюсом добавит ребенка первому персонажу
+      Кнопка с сердцем добавляет партнера персонажу (нужно будет выбрать тип связи и персонажа)
+      `,
+    imagePath: imageWhatBtns,
+    imageAlt: "Значение кнопок на узлах",
     color: "blue-cyan",
-    icon: <BsPeople className="icon" />,
+    icon: <BsCursorFill className="icon" />,
   },
   {
     id: "adding-sims",
     title: "Добавление персонажей",
     description:
-      'Чтобы добавить нового персонажа в древо, нажмите на кнопку "+" в нижней части экрана. Вы можете создать нового персонажа или добавить существующего из библиотеки игры.',
-    imagePath: "/images/adding-sims.png",
+      'Чтобы добавить нового персонажа в древо, нажмите на кнопку с шестерёнкой. Вы можете создать нового персонажа или добавить существующего из списка.',
+    imagePath: imageAddCharacter,
     imageAlt: "Добавление персонажей в древо",
     color: "green-emerald",
-    icon: <BsArrowRight className="icon" />,
+    icon: <BsCircleFill className="icon" />,
   },
   {
-    id: "editing-relationships",
-    title: "Редактирование связей",
+    id: "adding-relationships",
+    title: "Добавление партнеров персонажам",
     description:
-      'Для изменения связей между персонажами выберите персонажа и нажмите на кнопку "Редактировать связи". Затем выберите тип связи и другого персонажа, с которым хотите установить отношения.',
-    imagePath: "/images/editing-relationships.png",
-    imageAlt: "Редактирование связей между персонажами",
-    color: "yellow-orange",
-    icon: <BsGear className="icon" />,
+      'Для добавления персонажу партнера, нужно нажать на сердце. Вы можете выбрать тип связи персонажам и выбрать самого партнера (или создать нового)',
+    imagePath: imageAddPartner,
+    imageAlt: "Добавление партнеров",
+    color: "green-emerald",
+    icon: <BsHearts className="icon" />,
   },
   {
-    id: "customizing-tree",
-    title: "Настройка внешнего вида",
+    id: "adding-child",
+    title: "Добавление детей",
     description:
-      "Вы можете настроить внешний вид древа, изменив фон, стиль линий и размер изображений персонажей. Для этого нажмите на кнопку настроек в правом нижнем углу экрана.",
-    imagePath: "/images/customizing-tree.png",
-    imageAlt: "Настройка внешнего вида древа",
-    color: "purple-pink",
-    icon: <BsDiamond className="icon" />,
+      "Вы можете добавлять детей своим персонажам, по нажатию на кнопку плюса. Для того, чтобы доавить персонажа в узел нажмите на шестеренку и выберите персонажа",
+    imagePath: imageAddChild,
+    imageAlt: "Добавление детей",
+    color: "green-emerald",
+    icon: <FaChildren className="icon" />,
   },
   {
     id: "exporting-tree",
-    title: "Экспорт древа",
+    title: "Сохранение древа",
     description:
-      'Чтобы сохранить изображение вашего древа династий, нажмите на кнопку "Экспорт" в нижней панели инструментов. Вы можете выбрать формат изображения и место сохранения.',
-    imagePath: "/images/exporting-tree.png",
-    imageAlt: "Экспорт древа династий",
-    color: "indigo-blue",
+      'Чтобы сохранить ваше созданное древо и оно никуда не потерялось, нужно просто после завершения работы с деревом нажать на кнопку "Сохранить". Вот и всё, ваше древо сохранено!',
+    imagePath: imageSaveTree,
+    imageAlt: "Сохранение древа династий",
+    color: "purple-pink",
     icon: <BsDownload className="icon" />,
   },
 ]

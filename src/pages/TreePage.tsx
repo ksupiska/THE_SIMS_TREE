@@ -102,7 +102,7 @@ const TreePage: React.FC = () => {
 
       {isModalOpen && (
         <div className="modal-backdrop">
-          <div className="modal-content1">
+          <div className="modal-content">
             <h2>Введите название династии</h2>
             <input
               type="text"
@@ -110,7 +110,7 @@ const TreePage: React.FC = () => {
               onChange={(e) => setDynastyName(e.target.value)}
               placeholder="Название династии"
             />
-            <div className="modal-buttons1">
+            <div className="modal-buttons">
               <button onClick={handleSaveDynasty} disabled={isLoading || !dynastyName.trim()}>
                 {isLoading ? "Сохраняем..." : "Сохранить"}
               </button>

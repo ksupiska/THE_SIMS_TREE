@@ -38,7 +38,7 @@ export type CharacterType = {
   name: string;
   surname: string;
   gender: string;
-  avatar: string;
+  avatar?: string;
   city: string;
   kind: string;
   state: string;

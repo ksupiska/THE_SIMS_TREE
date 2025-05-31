@@ -72,7 +72,7 @@ app.post("/api/characters", upload.single("avatar"), async (req, res) => {
       return res.status(500).json({ error: "Ошибка при загрузке аватара" });
     }
 
-    avatar = `${process.env.VITE_SUPABASE_URL}/storage/v1/object/public/avatars/${fileName}`;
+    avatar = `${process.env.SUPABASE_URL}/storage/v1/object/public/avatars/${fileName}`;
   }
 
   try {

@@ -37,6 +37,7 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
     }]);
 
     const [editMode, setEditMode] = useState(false);
+    const [isSaved, setIsSaved] = useState(false);
     const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const { offset, scale, handlers } = useTreeDrag();
@@ -250,6 +251,7 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
 
             if (!response.ok) throw new Error("Ошибка сохранения");
             console.log("Дерево сохранено");
+            setIsSaved(true);
         } catch (error) {
             console.error("Ошибка сохранения:", error);
         }
@@ -328,40 +330,60 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
     return (
         <>
             <h2 style={{ textAlign: "center", marginBottom: "1rem", color: 'black' }}>{treeName}</h2>
-            <Button
-                onClick={() => setEditMode(!editMode)}
-                style={{
-                    position: "relative",
-                    zIndex: 10,
-                    backgroundColor: editMode ? "#219600" : "#9e9e9e",
-                    padding: "7px",
-                    borderRadius: "8px",
-                    border: "none",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "5px",
-                }}
-            >
-                <Pencil size={18} />
-            </Button>
-            <Button
-                onClick={handleSaveTree}
-                style={{
-                    position: "relative",
-                    zIndex: 10,
-                    backgroundColor: "#007bff",
-                    padding: "7px",
-                    borderRadius: "8px",
-                    border: "none",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "5px",
-                }}
-            >
-                <Save size={18} />
-            </Button>
+            <div style={{
+                display: "flex",
+                gap: "10px",
+                position: "relative",
+                zIndex: 10,
+                margin: "10px 0"
+            }}>
+                <Button
+                    onClick={() => setEditMode(!editMode)}
+                    style={{
+                        backgroundColor: editMode ? "#219600" : "#9e9e9e",
+                        padding: "7px 12px",
+                        borderRadius: "8px",
+                        border: "none",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                        transition: "all 0.3s ease",
+                        color: "white",
+                        fontWeight: "500",
+                        boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+                        minWidth: "120px",
+                        justifyContent: "center"
+                    }}
+                >
+                    <Pencil size={18} />
+                    {editMode ? "Режим редактирования" : "Редактировать"}
+                </Button>
+
+                <Button
+                    onClick={handleSaveTree}
+                    style={{
+                        backgroundColor: isSaved ? "#4CAF50" : "#007bff",
+                        padding: "7px 12px",
+                        borderRadius: "8px",
+                        border: "none",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                        transition: "all 0.3s ease",
+                        color: "white",
+                        fontWeight: "500",
+                        boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+                        minWidth: "120px",
+                        justifyContent: "center"
+                    }}
+                    disabled={isSaved}
+                >
+                    <Save size={18} />
+                    {isSaved ? "Сохранено!" : "Сохранить"}
+                </Button>
+            </div>
 
 
             <div style={styles.canvas} {...handlers}>

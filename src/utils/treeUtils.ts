@@ -127,14 +127,11 @@ export const calculateTreePositions = (
 };
 
 export const handleDeleteNode = (nodes: NodeType[], id: string): NodeType[] => {
-  //if (id === "1") return nodes; // Корень нельзя удалять
-
   const nodeToDelete = nodes.find((node) => node.id === id);
   if (!nodeToDelete) return nodes;
 
   let updatedNodes = [...nodes];
 
-  // Получаем всех партнёров удаляемого узла
   const partnerIds = [
     nodeToDelete.partner1_id,
     nodeToDelete.partner2_id,
@@ -156,7 +153,6 @@ export const handleDeleteNode = (nodes: NodeType[], id: string): NodeType[] => {
       !childrenToDelete.some((child) => child.id === n.id)
   );
 
-  // Очищаем partner1_id / partner2_id у других узлов, где фигурировал удаляемый
   updatedNodes = updatedNodes.map((n) => {
     const updated = { ...n };
     if (updated.partner1_id === nodeToDelete.id) {

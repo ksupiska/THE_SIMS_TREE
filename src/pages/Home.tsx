@@ -1,270 +1,291 @@
-// src/pages/Home.tsx
-import { Button, Container, Col, Row, Card } from "react-bootstrap";
-import { useNavigate } from 'react-router-dom';
-import '../css/home.css';
+"use client"
 
-import image from '../photo/ea533a0fddd16137ca550c160030816b.jpg';
-const Home = () => {
+import { useEffect, type ReactNode } from "react"
+import { motion, useAnimation } from "framer-motion"
+import { useInView } from "react-intersection-observer"
+import { BsDiamond, BsTree, BsPeople, BsPencilSquare, BsShare, BsDownload, BsArrowRight, BsStars } from "react-icons/bs"
+import "../css/home.css";
 
-  const navigate = useNavigate();
+import image from '../photo/Example-tree.png';
 
-  const handleStart = () =>{
-    navigate('/profile');
-  };
-  const handleRegister = () => {
-    navigate('/signup');
-  };
+// Типы для пропсов компонентов
+interface AnimatedSectionProps {
+  children: ReactNode
+  delay?: number
+}
 
-  return <div className='home'>
-    <section className="py-5 py-md-7" style={{ background: "linear-gradient(to bottom, #e4f2ff, #ffffff)" }}>
-      <Container>
-        <Row className="align-items-center g-5">
-          <Col lg={7} className="d-flex flex-column justify-content-center">
-            <div>
-              <h1 className="fw-bold display-4" style={{ color: "#4a8d56" }}>
-                Добро пожаловать в мир The Sims Tree
-              </h1>
-              <p className="fs-5 text-secondary mb-4">
-                Исследуйте генеалогические древа, создавайте свои истории и делитесь ими с сообществом.
-              </p>
-            </div>
-            <div className="d-flex flex-column flex-sm-row gap-2">
-              <Button
-                className="d-inline-flex align-items-center"
-                style={{ backgroundColor: "#4a8d56", borderColor: "#4a8d56" }}
-                onClick={handleStart}
-              >
-                Начать
-              </Button>
-              <Button
-                variant="outline-secondary"
-                className="d-inline-flex align-items-center"
-                style={{ borderColor: "#4a8d56", color: "#4a8d56" }}
-              >
-                Узнать больше
-              </Button>
-            </div>
-          </Col>
-          <Col lg={5} className="d-flex align-items-center justify-content-center">
-            <div className="position-relative rounded overflow-hidden" style={{ height: "350px", width: "100%" }}>
-              <img src={image} alt="sss" />
-              <div className="position-absolute bottom-0 end-0 m-3" style={{ width: "64px", height: "64px" }}>
-                <div
-                  style={{
-                    width: "160px",  // ширина
-                    height: "160px",  // высота
-                    backgroundColor: "#69d45b",
-                    opacity: 0.8,
-                    clipPath: "polygon(50% 0%, 70% 50%, 50% 100%, 30% 50%)", // создаёт ромб
-                    margin: "-150px",  // отступы
-                  }}
-                ></div>
+interface FeatureCardProps {
+  icon: ReactNode
+  title: string
+  description: string
+  color: string
+}
 
-              </div>
-            </div>
-          </Col>
-        </Row>
-      </Container>
-    </section>
-    {/* Features Section */}
-    <section className="py-5 py-md-7 bg-white">
-      <Container>
-        <div className="text-center mb-5">
-          <span
-            className="d-inline-block px-3 py-1 rounded-pill fs-6 mb-2"
-            style={{ backgroundColor: "#e4f2ff", color: "#4a8d56" }}
+// Компонент для анимированных секций
+function AnimatedSection({ children, delay = 0 }: AnimatedSectionProps) {
+  const controls = useAnimation()
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.2,
+  })
+
+  useEffect(() => {
+    if (inView) {
+      controls.start("visible")
+    }
+  }, [controls, inView])
+
+  return (
+    <motion.div
+      ref={ref}
+      animate={controls}
+      initial="hidden"
+      variants={{
+        hidden: { opacity: 0, y: 50 },
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: {
+            duration: 0.6,
+            delay: delay,
+            ease: "easeOut",
+          },
+        },
+      }}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+// Компонент для карточки функции
+function FeatureCard({ icon, title, description, color }: FeatureCardProps) {
+  return (
+    <motion.div
+      className={`feature-card ${color}`}
+      whileHover={{ y: -10, boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.35)" }}
+      transition={{ duration: 0.3 }}
+    >
+      <div className="feature-icon-wrapper">{icon}</div>
+      <h3 className="feature-title">{title}</h3>
+      <p className="feature-description">{description}</p>
+    </motion.div>
+  )
+}
+
+export default function HomePage() {
+  // Данные о функциях сайта
+  const features = [
+    {
+      icon: <BsTree />,
+      title: "Интерактивное древо династий",
+      description:
+        "Создавайте и настраивайте родословные для ваших персонажей с визуализацией связей и отношений между ними.",
+      color: "pink-purple",
+    },
+    {
+      icon: <BsPeople />,
+      title: "Создание персонажей",
+      description: "Добавляйте новых персонажей в вашу династию с подробными профилями, характеристиками и историями.",
+      color: "blue-cyan",
+    },
+    {
+      icon: <BsPencilSquare />,
+      title: "Написание статей",
+      description: "Публикуйте собственные статьи о ваших династиях, делитесь советами и историями с сообществом.",
+      color: "green-emerald",
+    },
+    {
+      icon: <BsShare />,
+      title: "Обмен династиями",
+      description: "Делитесь своими династиями с другими игроками и просматривайте чужие творения для вдохновения.",
+      color: "yellow-orange",
+    },
+    {
+      icon: <BsDownload />,
+      title: "Экспорт и печать",
+      description: "Сохраняйте ваши династии в различных форматах или распечатывайте их для личной коллекции.",
+      color: "purple-pink",
+    },
+    {
+      icon: <BsStars />,
+      title: "Настройка внешнего вида",
+      description: "Персонализируйте внешний вид вашего древа династий с помощью различных тем, цветов и стилей.",
+      color: "indigo-blue",
+    },
+  ]
+
+  return (
+    <div className="home-container">
+      {/* Герой-секция */}
+      <section className="hero-section">
+        <div className="hero-overlay"></div>
+        <div className="hero-content">
+          <motion.div
+            className="hero-text"
+            initial={{ opacity: 0, y: -30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
           >
-            Возможности
-          </span>
-          <h2 className="display-5 fw-bold mb-3" style={{ color: "#4a8d56" }}>
-            Создавайте свою историю
-          </h2>
-          <p className="fs-5 text-secondary mx-auto" style={{ maxWidth: "900px" }}>
-            The Sims Tree предлагает множество инструментов для создания и отслеживания генеалогических древ ваших
-            симов.
-          </p>
+            <div className="hero-title-wrapper">
+              <h1 className="hero-title">Sims Tree</h1>
+            </div>
+            <p className="hero-subtitle">Создавайте, редактируйте и делитесь историями ваших династий</p>
+            <p className="hero-subtitle">в The Sims 4</p>
+            <div className="hero-buttons">
+              <a href="/tree" className="primary-button">
+                Начать создание
+                <BsArrowRight className="button-icon" />
+              </a>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="hero-image-container"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <div className="hero-image-wrapper">
+              <img
+                src={image}
+                alt="Пример древа династий"
+                width={600}
+                height={400}
+                className="hero-image"
+              />
+              <div className="image-decoration top"></div>
+              <div className="image-decoration bottom"></div>
+            </div>
+          </motion.div>
         </div>
 
-        <Row className="g-4 justify-content-center">
-          <Col md={6} lg={4}>
-            <Card
-              className="h-100 border-2 transition-all"
-              style={{ borderColor: "#e4f2ff" }}
-              onMouseOver={(e) => (e.currentTarget.style.borderColor = "#69d45b")}
-              onMouseOut={(e) => (e.currentTarget.style.borderColor = "#e4f2ff")}
-            >
-              <Card.Body className="p-4 text-center d-flex flex-column align-items-center">
-                <div
-                  className="rounded-circle d-flex justify-content-center align-items-center mb-3"
-                  style={{ backgroundColor: "#e4f2ff", width: "64px", height: "64px" }}
-                >
-                  <i className="bi bi-tree" style={{ fontSize: "32px", color: "#4a8d56" }}></i>
-                </div>
-                <Card.Title className="fs-4 fw-bold" style={{ color: "#4a8d56" }}>
-                  Генеалогические древа
-                </Card.Title>
-                <Card.Text className="text-secondary">
-                  Создавайте и управляйте сложными семейными древами для ваших симов.
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
+        <div className="hero-wave">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+            <path
+              fill="#ffffff"
+              fillOpacity="1"
+              d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+            ></path>
+          </svg>
+        </div>
+      </section>
 
-          <Col md={6} lg={4}>
-            <Card
-              className="h-100 border-2 transition-all"
-              style={{ borderColor: "#e4f2ff" }}
-              onMouseOver={(e) => (e.currentTarget.style.borderColor = "#69d45b")}
-              onMouseOut={(e) => (e.currentTarget.style.borderColor = "#e4f2ff")}
-            >
-              <Card.Body className="p-4 text-center d-flex flex-column align-items-center">
-                <div
-                  className="rounded-circle d-flex justify-content-center align-items-center mb-3"
-                  style={{ backgroundColor: "#e4f2ff", width: "64px", height: "64px" }}
-                >
-                  <i className="bi bi-people" style={{ fontSize: "32px", color: "#4a8d56" }}></i>
-                </div>
-                <Card.Title className="fs-4 fw-bold" style={{ color: "#4a8d56" }}>
-                  Профили персонажей
-                </Card.Title>
-                <Card.Text className="text-secondary">
-                  Детальные профили для каждого персонажа с историей, чертами и отношениями.
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-
-        </Row>
-      </Container>
-    </section>
-    {/* Community Section */}
-    <section className="py-5 py-md-7" style={{ backgroundColor: "#e4f2ff" }}>
-      <Container>
-        <Row className="g-5">
-          <Col lg={6} className="d-flex flex-column justify-content-center">
-            <span
-              className="d-inline-block px-3 py-1 rounded-pill fs-6 mb-2 bg-white"
-              style={{ color: "#4a8d56", width: "fit-content" }}
-            >
-              Сообщество
-            </span>
-            <h2 className="display-5 fw-bold mb-3" style={{ color: "#4a8d56" }}>
-              Присоединяйтесь к сообществу
-            </h2>
-            <p className="fs-5 text-secondary mb-4">
-              Делитесь своими историями, находите вдохновение и общайтесь с другими фанатами The Sims.
+      {/* Секция "О сервисе" */}
+      <section className="about-section">
+        <div className="section-container">
+          <AnimatedSection>
+            <h2 className="section-title">Что такое Древо династий?</h2>
+            <div className="section-divider"></div>
+            <p className="section-description">
+              Наш сервис позволяет игрокам The Sims 4 создавать интерактивные родословные для своих персонажей,
+              отслеживать историю семьи и делиться своими династиями с сообществом. Независимо от того, играете ли вы в
+              The Sims 4 уже много лет или только начинаете, наш инструмент поможет вам организовать и визуализировать
+              историю ваших симов.
             </p>
-            <div>
-              <Button style={{ backgroundColor: "#4a8d56", borderColor: "#4a8d56" }}>Присоединиться</Button>
-            </div>
-          </Col>
-          <Col lg={6}>
-            <Row className="g-3">
-              <Col xs={6}>
-                <Row className="g-3">
-                  <Col xs={12}>
-                    <div className="rounded overflow-hidden">
-                      <img src="sss" alt="sss" />
-                    </div>
-                  </Col>
-                  <Col xs={12}>
-                    <div className="rounded overflow-hidden">
-                      <img src="sss" alt="sss" />
-                    </div>
-                  </Col>
-                </Row>
-              </Col>
-              <Col xs={6}>
-                <Row className="g-3">
-                  <Col xs={12}>
-                    <div className="rounded overflow-hidden">
-                      <img src="sss" alt="sss" />
-                    </div>
-                  </Col>
-                  <Col xs={12}>
-                    <div className="rounded overflow-hidden">
-                      <img src="sss" alt="sss" />
-                    </div>
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </Container>
-    </section>
-
-    {/* Latest Updates */}
-    <section className="py-5 py-md-7 bg-white">
-      <Container>
-        <div className="text-center mb-5">
-          <span
-            className="d-inline-block px-3 py-1 rounded-pill fs-6 mb-2"
-            style={{ backgroundColor: "#e4f2ff", color: "#4a8d56" }}
-          >
-            Новости
-          </span>
-          <h2 className="display-5 fw-bold mb-3" style={{ color: "#4a8d56" }}>
-            Последние обновления
-          </h2>
-          <p className="fs-5 text-secondary mx-auto" style={{ maxWidth: "900px" }}>
-            Будьте в курсе последних новостей и обновлений The Sims Tree.
-          </p>
+          </AnimatedSection>
         </div>
+      </section>
 
-        <Row className="g-4">
-          {[1, 2, 3].map((i) => (
-            <Col key={i} md={4}>
-              <Card
-                className="h-100 border-2 transition-all"
-                style={{ borderColor: "#e4f2ff" }}
-                onMouseOver={(e) => (e.currentTarget.style.borderColor = "#69d45b")}
-                onMouseOut={(e) => (e.currentTarget.style.borderColor = "#e4f2ff")}
-              >
-                <div className="position-relative" style={{ height: "200px" }}>
-                  <img src="sss" alt="sss" />
-                </div>
-                <Card.Body className="p-4">
-                  <div className="d-flex align-items-center gap-2 text-secondary mb-2">
-                    <i className="bi bi-calendar-event"></i>
-                    <small>30 апреля 2025</small>
-                  </div>
-                  <Card.Title className="fs-4 fw-bold" style={{ color: "#4a8d56" }}>
-                    Новое обновление {i}
-                  </Card.Title>
-                  <Card.Text className="text-secondary">
-                    Краткое описание обновления и новых функций, которые были добавлены.
-                  </Card.Text>
-                  <Button variant="link" className="p-0 d-flex align-items-center" style={{ color: "#4a8d56" }}>
-                    Читать далее
-                  </Button>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
-      </Container>
-    </section>
-    {/* CTA Section */}
-    <section className="py-5 py-md-7 text-white" style={{ backgroundColor: "#4a8d56" }}>
-      <Container>
-        <div className="text-center">
-          <h2 className="display-5 fw-bold mb-3">Начните свое путешествие сегодня</h2>
-          <p className="fs-5 mx-auto mb-4" style={{ maxWidth: "700px" }}>
-            Присоединяйтесь к тысячам игроков, которые уже создают свои уникальные истории в The Sims Tree.
-          </p>
-          <div className="d-flex flex-column flex-sm-row gap-2 justify-content-center">
-            <Button variant="light" className="fw-medium" style={{ color: "#4a8d56" }} onClick={handleRegister}>
-              Зарегистрироваться
-            </Button>
-            <Button variant="outline-light" className="fw-medium">
-              Узнать больше
-            </Button>
+      {/* Секция с функциями */}
+      <section className="features-section">
+        <div className="section-container">
+          <AnimatedSection>
+            <h2 className="section-title">Возможности сервиса</h2>
+            <div className="section-divider"></div>
+          </AnimatedSection>
+
+          <div className="features-grid">
+            {features.map((feature, index) => (
+              <AnimatedSection key={index} delay={index * 0.1}>
+                <FeatureCard
+                  icon={feature.icon}
+                  title={feature.title}
+                  description={feature.description}
+                  color={feature.color}
+                />
+              </AnimatedSection>
+            ))}
           </div>
         </div>
-      </Container>
-    </section>
-  </div>;
-};
+      </section>
 
-export default Home;
+      {/* Секция "Как это работает" */}
+      <section className="how-it-works-section">
+        <div className="section-container">
+          <AnimatedSection>
+            <h2 className="section-title">Как это работает</h2>
+            <div className="section-divider"></div>
+          </AnimatedSection>
+
+          <div className="steps-container">
+            <AnimatedSection delay={0.1}>
+              <div className="step-card">
+                <div className="step-number">1</div>
+                <h3 className="step-title">Создайте аккаунт</h3>
+                <p className="step-description">
+                  Зарегистрируйтесь на нашем сайте, чтобы получить доступ ко всем функциям и сохранять свои династии.
+                </p>
+              </div>
+            </AnimatedSection>
+
+            <AnimatedSection delay={0.2}>
+              <div className="step-card">
+                <div className="step-number">2</div>
+                <h3 className="step-title">Создайте династию</h3>
+                <p className="step-description">
+                  Начните с создания новой династии и добавления основателя — первого персонажа вашей родословной.
+                </p>
+              </div>
+            </AnimatedSection>
+
+            <AnimatedSection delay={0.3}>
+              <div className="step-card">
+                <div className="step-number">3</div>
+                <h3 className="step-title">Добавляйте персонажей</h3>
+                <p className="step-description">
+                  Расширяйте свою династию, добавляя новых персонажей и устанавливая связи между ними.
+                </p>
+              </div>
+            </AnimatedSection>
+
+            <AnimatedSection delay={0.4}>
+              <div className="step-card">
+                <div className="step-number">4</div>
+                <h3 className="step-title">Делитесь и развивайте</h3>
+                <p className="step-description">
+                  Публикуйте свою династию, пишите статьи о ней и получайте отзывы от сообщества.
+                </p>
+              </div>
+            </AnimatedSection>
+          </div>
+        </div>
+      </section>
+
+      {/* Секция призыва к действию */}
+      <section className="cta-section">
+        <div className="cta-overlay"></div>
+        <div className="section-container">
+          <AnimatedSection>
+            <h2 className="cta-title">Готовы начать свою историю?</h2>
+            <p className="cta-description">
+              Присоединяйтесь к тысячам игроков, которые уже создают и делятся своими династиями
+            </p>
+            <a href="/auth" className="cta-button">
+              Создать аккаунт
+              <BsArrowRight className="button-icon" />
+            </a>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* Декоративные элементы */}
+      <div className="decoration decoration-top-left">
+        <BsDiamond className="decoration-diamond pink" />
+      </div>
+      <div className="decoration decoration-bottom-right">
+        <BsDiamond className="decoration-diamond blue" />
+      </div>
+    </div>
+  )
+}

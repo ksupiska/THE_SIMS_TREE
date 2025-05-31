@@ -167,7 +167,7 @@ export default function Home() {
           >
             <div className="hero-title">
               <BsDiamond className="hero-diamond left" />
-              <h1 className="main-title">Древо династий</h1>
+              <h1 className="main-title">Sims Tree</h1>
               <BsDiamond className="hero-diamond right" />
             </div>
             <p className="hero-subtitle">Полное руководство по использованию функции Древа династий в The Sims 4</p>

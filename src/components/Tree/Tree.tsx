@@ -10,7 +10,7 @@ import { Button } from "react-bootstrap";
 import { Node } from "./Node/Node";
 // import Connectors from './Connectors';
 import { styles } from './Tree.Styles';
-import { NodeType, TreeProps, CharacterType, PartnerType, ServerNodeType } from "./Tree.types";
+import { NodeType, TreeProps, CharacterType, PartnerType, ServerNodeType } from './Tree.types';
 import { useTreeDrag } from "./Tree.hooks";
 import { calculateTreePositions, handleDeleteNode as deleteNode } from "../../utils/treeUtils";
 
@@ -18,6 +18,8 @@ import { CharacterModal } from "./Modals/CharacterModal";
 import { PartnerModal } from "./Modals/PartnerModal";
 import '../../css/treepage.css'
 import { useNavigate } from "react-router-dom";
+
+import Connectors from "./Connectors";
 
 
 export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] }) => {
@@ -30,7 +32,7 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
         parent2_id: null,
         partner1_id: null,
         partner2_id: null,
-        partnerType: null,
+        partnerType: undefined,
         characterId: null,
     }]);
 
@@ -65,7 +67,7 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
     const handleAddPartner = async (
         targetNodeId: string,
         partnerCharacter: CharacterType,
-        partnerType: PartnerType
+        partner_type: PartnerType
     ) => {
         try {
             const newPartnerId = uuidv4();
@@ -79,17 +81,17 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
                 characterId: partnerCharacter.id,
                 parent1_id: null,
                 parent2_id: null,
-                partner2_id: targetNodeId,
-                partnerType,
+                partner1_id: targetNodeId, // Устанавливаем связь с основным узлом
+                partner2_id: null,
+                partnerType: partner_type,
             };
 
             const updatedNodes = nodes.map((node) => {
                 if (node.id === targetNodeId) {
                     return {
                         ...node,
-                        partnerId: newPartnerId,
-                        partner2_id: newPartnerId, // Соединяем партнёра
-                        partnerType,
+                        partner2_id: newPartnerId, // Устанавливаем связь с партнёром
+                        partnerType: partner_type,
                     };
                 }
                 return node;
@@ -114,9 +116,9 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
         const parentNode = nodes.find(n => n.id === parentId);
         if (!parentNode) return;
 
-        const partnerNode = parentNode.partner2_id
-            ? nodes.find(n => n.id === parentNode.partner2_id)
-            : null;
+        // Ищем партнёра через оба поля partner1_id и partner2_id
+        const partnerId = parentNode.partner1_id || parentNode.partner2_id;
+        const partnerNode = partnerId ? nodes.find(n => n.id === partnerId) : null;
 
         const newChildNode: NodeType = {
             id: uuidv4(),
@@ -126,11 +128,12 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
                 ? `${childCharacter.name} ${childCharacter.surname}`
                 : "Новый ребенок",
             character: childCharacter,
-            characterId: childCharacter?.id || null,
+            characterId: childCharacter?.id || null, // Исправлено: явно указываем null
             parent1_id: parentNode.id,
             parent2_id: partnerNode?.id || null,
+            partner1_id: null,
             partner2_id: null,
-            partnerType: null,
+            partnerType: undefined,
         };
 
         const updatedNodes = [...nodes, newChildNode];
@@ -140,6 +143,7 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
         const { nodes: positionedNodes } = calculateTreePositions(updatedNodes, rootNode.id, 0, 0);
         setNodes(positionedNodes);
     };
+
 
 
 
@@ -230,8 +234,10 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
                 parent2_id: node.parent2_id || null,
                 partner1_id: node.partner1_id || null,
                 partner2_id: node.partner2_id || null,
-                partner_type: node.partnerType || null,
+                partner_type: node.partnerType === undefined ? null : node.partnerType,
             }));
+            console.log("Отправляем на сервер:", nodesToSave);
+
 
             const response = await fetch("http://localhost:5000/api/save", {
                 method: "POST",
@@ -267,12 +273,12 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
                         x: node.x,
                         y: node.y,
                         character: node.character,
-                        characterId: node.character_id,
+                        characterId: node.characterId,
                         parent1_id: node.parent1_id,
                         parent2_id: node.parent2_id,
                         partner1_id: node.partner1_id,
                         partner2_id: node.partner2_id,
-                        partnerType: node.partner_type,
+                        partnerType: node.partnerType,
                     }));
 
                     console.log("Получены и преобразованы узлы:", transformedNodes);
@@ -378,7 +384,7 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
                         />
 
                     ))}
-                    {/* <Connectors nodes={nodes} /> */}
+                    <Connectors nodes={nodes} />
                 </div>
             </div>
             <CharacterModal

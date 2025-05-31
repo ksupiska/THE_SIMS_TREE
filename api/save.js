@@ -27,7 +27,7 @@ router.post("/save", async (req, res) => {
         parent2_id: node.parent2_id,
         partner1_id: node.partner1_id,
         partner2_id: node.partner2_id, // исправлено, см. ниже
-        partner_type: node.partnerType || node.partner_type,
+        partner_type: node.partner_type ?? node.partnerType ?? null,
       }))
     );
 

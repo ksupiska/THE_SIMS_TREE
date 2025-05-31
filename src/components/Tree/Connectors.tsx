@@ -1,92 +1,94 @@
-import React, { JSX } from "react";
+import { JSX } from "react";
+import React from "react";
 
-import { TbCirclesRelation } from "react-icons/tb"; //married женаты
-import { LiaRingSolid } from "react-icons/lia";//divorced в разводе
-import { GiBigDiamondRing } from "react-icons/gi"; //engaged помолвлены
-import { BsChatHeart } from "react-icons/bs";//flirting флирт
-import { FaHeartBroken } from "react-icons/fa";//former бывшие
-import { FaHeart } from "react-icons/fa";//partner партнер
-import { GiHeartWings } from "react-icons/gi"; //widow вдовцы
-import { FaUserFriends } from "react-icons/fa"; //friends друзья
+import { TbCirclesRelation } from "react-icons/tb"; // married
+import { LiaRingSolid } from "react-icons/lia"; // divorced
+import { GiBigDiamondRing } from "react-icons/gi"; // engaged
+import { BsChatHeart } from "react-icons/bs"; // flirting
+import { FaHeartBroken, FaHeart, FaUserFriends } from "react-icons/fa"; // former, partner, friends
+import { GiHeartWings } from "react-icons/gi"; // widow
 
-
-type NodeType = {
-    id: string;
-    partnerId?: string;
-    parentId?: string;
-    x: number;
-    y: number;
-    partnerType?: 'married' | 'divorced' | 'engaged' | 'flirting' | 'former' | 'partner' | 'widow' | 'friends';//женаты, в разводе, помолвлены, флирт, бывшие, партнер, вдова(вдовец), друзья
-};
+import { NodeType } from "./Tree.types";
 
 type ConnectorsProps = {
     nodes: NodeType[];
+    nodeWidth?: number;
+    nodeHeight?: number;
+    verticalGap?: number;
+    scale?: number;
 };
 
-const NODE_WIDTH = 100;
-const NODE_HEIGHT = 100;
-//const PARTNER_GAP = 60;
-const VERTICAL_GAP = 100;
+const Connectors: React.FC<ConnectorsProps> = ({
+    nodes,
+    nodeWidth = 100,
+    nodeHeight = 100,
+    verticalGap = 100,
+    scale = 1,
+}) => {
+    const connectors: JSX.Element[] = [];
+    //console.log('все узлы: ', nodes);
 
-const Connectors: React.FC<ConnectorsProps> = ({ nodes }) => {
-    // Функция для поиска партнёра узла
-    const findPartner = (node: NodeType) =>
-        node.partnerId !== undefined
-            ? nodes.find((n) => n.id === node.partnerId)
-            : nodes.find((n) => n.partnerId === node.id);
-
-    // Группируем детей по парам родителей (ключ — id родителя или пары)
-    // Чтобы у каждого узла можно было быстро получить детей пары
-    const childrenByParents: Record<string, NodeType[]> = {};
-
-    nodes.forEach((node) => {
-        if (node.parentId !== undefined) {
-            if (!childrenByParents[node.parentId]) childrenByParents[node.parentId] = [];
-            childrenByParents[node.parentId].push(node);
+    // Группировка детей по паре родителей
+    const childrenByParentPair: Record<string, NodeType[]> = {};
+    nodes.forEach((child) => {
+        const { parent1_id, parent2_id } = child;
+        if (parent1_id || parent2_id) {
+            // Используем полные ID и правильную сортировку
+            const key = [parent1_id, parent2_id]
+                .sort((a, b) => (a || "").localeCompare(b || ""))
+                .join("|"); // Используем другой разделитель
+            if (!childrenByParentPair[key]) childrenByParentPair[key] = [];
+            childrenByParentPair[key].push(child);
         }
     });
 
-    const connectors: JSX.Element[] = [];
+    // console.log('группировка детей по родителям:', childrenByParentPair)
+    // Отрисовка связей родитель -> дети
+    Object.entries(childrenByParentPair).forEach(([key, children]) => {
+        const [p1_id, p2_id] = key.split("|"); // Используем тот же разделитель
 
-    // Пробегаем по всем узлам, которые могут быть родителями
-    // 🔗 1. Линии родитель -> дети
-    nodes.forEach((node) => {
-        const partner = findPartner(node);
+        const parent1 = p1_id !== "null" ? nodes.find((n) => n.id === p1_id) : null;
+        const parent2 = p2_id !== "null" ? nodes.find((n) => n.id === p2_id) : null;
+        // console.log("Найденные родители:", {
+        //     key,
+        //     p1_id,
+        //     p2_id,
+        //     parent1: parent1?.id,
+        //     parent2: parent2?.id
+        // });
+        if (!parent1 && !parent2) return;
 
-        // Чтобы не дублировать линии для партнёров, отрисовываем линии только для "старшего" узла пары
-        if (partner && partner.id < node.id) return;
+        const parentsCenterX = parent1 && parent2
+            ? (parent1.x + nodeWidth / 2 + parent2.x + nodeWidth / 2) / 2
+            : (parent1 || parent2)!.x + nodeWidth / 2;
+        const parentsBottomY = (parent1 || parent2)!.y + nodeHeight;
 
-        // Находим всех детей пары
-        let children: NodeType[] = [];
+        // console.log(`Координаты линии для родителей ${p1_id}-${p2_id}:`, { // 4. Проверяем координаты
+        //     parentsCenterX,
+        //     parentsBottomY,
+        //     childrenCount: children.length
+        // });
 
-        if (partner) {
-            const children1 = childrenByParents[node.id] || [];
-            const children2 = childrenByParents[partner.id] || [];
-            children = [...children1, ...children2];
-        } else {
-            children = childrenByParents[node.id] || [];
-        }
-
-        if (children.length === 0) return;
-
-        const parentsCenterX = partner
-            ? (node.x + NODE_WIDTH / 2 + partner.x + NODE_WIDTH / 2) / 2
-            : node.x + NODE_WIDTH / 2;
-        const parentsBottomY = node.y + NODE_HEIGHT;
 
         if (children.length === 1) {
             const child = children[0];
-            const childCenterX = child.x + NODE_WIDTH / 2;
+            const childCenterX = child.x + nodeWidth / 2;
             const childTopY = child.y;
             const verticalStep = 20;
 
+            // console.log(`Рисуем линию к одному ребенку ${child.id}:`, { // 5. Координаты для одного ребенка
+            //     from: [parentsCenterX, parentsBottomY],
+            //     to: [childCenterX, childTopY],
+            //     intermediate: [parentsCenterX, parentsBottomY + verticalStep, childCenterX, parentsBottomY + verticalStep]
+            // });
+
             connectors.push(
                 <polyline
-                    key={`connector-${node.id}-${child.id}`}
+                    key={`connector-${key}-${child.id}`}
                     points={`
-                        ${parentsCenterX},${parentsBottomY} 
-                        ${parentsCenterX},${parentsBottomY + verticalStep} 
-                        ${childCenterX},${parentsBottomY + verticalStep} 
+                        ${parentsCenterX},${parentsBottomY}
+                        ${parentsCenterX},${parentsBottomY + verticalStep}
+                        ${childCenterX},${parentsBottomY + verticalStep}
                         ${childCenterX},${childTopY}
                     `}
                     fill="none"
@@ -95,13 +97,22 @@ const Connectors: React.FC<ConnectorsProps> = ({ nodes }) => {
                 />
             );
         } else {
-            const childLeftX = Math.min(...children.map((c) => c.x + NODE_WIDTH / 2));
-            const childRightX = Math.max(...children.map((c) => c.x + NODE_WIDTH / 2));
-            const childrenLineY = parentsBottomY + VERTICAL_GAP / 2;
+            const childLeftX = Math.min(...children.map((c) => c.x + nodeWidth / 2));
+            const childRightX = Math.max(...children.map((c) => c.x + nodeWidth / 2));
+            const childrenLineY = parentsBottomY + verticalGap / 2;
+            // console.log(`Рисуем линии к нескольким детям (${children.length}) для родителей ${p1_id}-${p2_id}:`, { // 6. Координаты для нескольких детей
+            //     verticalLine: [parentsCenterX, parentsBottomY, parentsCenterX, childrenLineY],
+            //     horizontalLine: [childLeftX, childrenLineY, childRightX, childrenLineY],
+            //     children: children.map(c => ({
+            //         id: c.id,
+            //         line: [c.x + nodeWidth / 2, childrenLineY, c.x + nodeWidth / 2, c.y]
+            //     }))
+            // });
 
+            // Вертикальная линия от родителей
             connectors.push(
                 <line
-                    key={`connector-vert-${node.id}`}
+                    key={`vert-${key}`}
                     x1={parentsCenterX}
                     y1={parentsBottomY}
                     x2={parentsCenterX}
@@ -111,9 +122,10 @@ const Connectors: React.FC<ConnectorsProps> = ({ nodes }) => {
                 />
             );
 
+            // Горизонтальная линия между детьми
             connectors.push(
                 <line
-                    key={`connector-horiz-${node.id}`}
+                    key={`horiz-${key}`}
                     x1={childLeftX}
                     y1={childrenLineY}
                     x2={childRightX}
@@ -123,13 +135,14 @@ const Connectors: React.FC<ConnectorsProps> = ({ nodes }) => {
                 />
             );
 
+            // Вертикальные линии от горизонтальной к каждому ребенку
             children.forEach((child) => {
-                const childCenterX = child.x + NODE_WIDTH / 2;
+                const childCenterX = child.x + nodeWidth / 2;
                 const childTopY = child.y;
 
                 connectors.push(
                     <line
-                        key={`connector-child-${node.id}-${child.id}`}
+                        key={`child-${key}-${child.id}`}
                         x1={childCenterX}
                         y1={childrenLineY}
                         x2={childCenterX}
@@ -142,16 +155,39 @@ const Connectors: React.FC<ConnectorsProps> = ({ nodes }) => {
         }
     });
 
-    // 💞 2. Иконки партнёрства
-    nodes.forEach((node) => {
-        const partner = findPartner(node);
-        if (!partner || partner.id < node.id) return;
+    // Иконки партнёрства (без линий)
+    const partnerIcons: { n1: NodeType; n2: NodeType; partnerType?: string }[] = [];
+    const renderedPartnerPairs = new Set<string>();
 
-        const x = (node.x + NODE_WIDTH / 2 + partner.x + NODE_WIDTH / 2) / 2;
-        const y = (node.y + NODE_HEIGHT / 2 + partner.y + NODE_HEIGHT / 2) / 2;
+    nodes.forEach((node) => {
+        const partnerId = node.partner1_id || node.partner2_id;
+        if (!partnerId) return;
+
+        const partnerNode = nodes.find((n) => n.id === partnerId);
+        if (!partnerNode) return;
+
+        const partnerReciprocates =
+            partnerNode.partner1_id === node.id || partnerNode.partner2_id === node.id;
+        if (!partnerReciprocates) return;
+
+        const key = [node.id, partnerNode.id].sort().join("-");
+        if (renderedPartnerPairs.has(key)) return;
+        renderedPartnerPairs.add(key);
+
+        partnerIcons.push({
+            n1: node,
+            n2: partnerNode,
+            partnerType: node.partnerType || partnerNode.partnerType,
+        });
+    });
+
+    // Рисуем только иконки партнёрства
+    partnerIcons.forEach(({ n1, n2, partnerType }) => {
+        const x = (n1.x + nodeWidth / 2 + n2.x + nodeWidth / 2) / 2;
+        const y = (n1.y + nodeHeight / 2 + n2.y + nodeHeight / 2) / 2;
 
         let icon: JSX.Element | null = null;
-        switch (node.partnerType) {
+        switch (partnerType) {
             case "married":
                 icon = <TbCirclesRelation color="#8a8a8a" />;
                 break;
@@ -162,53 +198,58 @@ const Connectors: React.FC<ConnectorsProps> = ({ nodes }) => {
                 icon = <GiBigDiamondRing color="#8a8a8a" />;
                 break;
             case "flirting":
-                icon = <BsChatHeart color="#8a8a8a" />
+                icon = <BsChatHeart color="#8a8a8a" />;
                 break;
             case "former":
-                icon = <FaHeartBroken color="#8a8a8a" />
+                icon = <FaHeartBroken color="#8a8a8a" />;
                 break;
             case "partner":
-                icon = <FaHeart color="#8a8a8a" />
+                icon = <FaHeart color="#8a8a8a" />;
                 break;
             case "widow":
-                icon = <GiHeartWings color="#8a8a8a" />
+                icon = <GiHeartWings color="#8a8a8a" />;
                 break;
             case "friends":
-                icon = <FaUserFriends color="#8a8a8a" />
+                icon = <FaUserFriends color="#8a8a8a" />;
                 break;
-
+            default:
+                icon = null;
         }
 
         if (icon) {
+            const size = 32 / scale;
             connectors.push(
                 <foreignObject
-                    key={`partner-icon-${node.id}-${partner.id}`}
-                    x={x - 16}
-                    y={y - 16}
-                    width={32}
-                    height={32}
+                    key={`partner-icon-${n1.id}-${n2.id}`}
+                    x={x - size / 2}
+                    y={y - size / 2}
+                    width={size}
+                    height={size}
+                    pointerEvents="auto"
                 >
-                    <div style={{
-                        width: 32,
-                        height: 32,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: 20  // чтобы увеличить размер иконки (если она реагирует на fontSize)
-                    }}>
+                    <div
+                        style={{
+                            width: size,
+                            height: size,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            transform: `scale(${1 / scale})`,
+                            transformOrigin: "center",
+                        }}
+                    >
                         {icon}
                     </div>
                 </foreignObject>
-
-
             );
         }
     });
 
     return (
         <svg
-            style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 0 }}
-            pointerEvents="none"
+            style={{ position: "absolute", top: 0, left: 0, overflow: "visible", pointerEvents: "none" }}
+            width="100%"
+            height="100%"
         >
             {connectors}
         </svg>

@@ -28,7 +28,6 @@ export const Node: React.FC<NodeProps> = ({
                         onAddChild={() => onAddChild(node.id)}
                         onAddPartner={() => onAddPartner(node.id)}
                         onDelete={() => onDeleteNode(node.id)}
-                    // Убрали onAvatarClick отсюда, так как он теперь в основном компоненте
                     />
                 )}
                 <div
@@ -38,7 +37,6 @@ export const Node: React.FC<NodeProps> = ({
                         alignItems: "center",
                         cursor: "pointer",
                     }}
-                    onClick={() => onNodeClick?.(node.id)}
                 >
                     <div
                         style={{

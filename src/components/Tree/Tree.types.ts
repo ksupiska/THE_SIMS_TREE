@@ -9,7 +9,7 @@ export type NodeType = {
   parent2_id?: string | null;
   partner1_id?: string | null;
   partner2_id?: string | null;
-  partnerType?: PartnerType | null;
+  partnerType?: PartnerType;
 };
 
 export type ServerNodeType = {
@@ -18,12 +18,12 @@ export type ServerNodeType = {
     x: number;
     y: number;
     character: CharacterType;
-    character_id: string | null;
+    characterId: string | null;
     parent1_id: string | null;
     parent2_id: string | null;
     partner1_id: string | null;
     partner2_id: string | null;
-    partner_type: PartnerType | null;
+    partnerType: PartnerType;
 };
 
 

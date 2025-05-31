@@ -244,14 +244,14 @@ app.get("/api/tree", async (req, res) => {
       .eq("tree_id", treeId);
 
     if (error) throw error;
-    console.log(data);
+    console.log('узлы:', data);
     // Преобразуем для фронта
     const transformed = data.map((node) => ({
       id: node.id,
       label: node.label,
       x: node.x,
       y: node.y,
-      characterId: node.character_id,
+      characterId: node.character_id, 
       character: node.character, // ← вложенный объект персонажа
       parent1_id: node.parent1_id,
       parent2_id: node.parent2_id,

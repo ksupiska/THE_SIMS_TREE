@@ -322,7 +322,7 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
 
     const navigate = useNavigate();
     const handleCreateNewCharacter = () => {
-        navigate("/simcreateform"); // Переход на страницу создания персонажа
+        navigate("/simcreateform", { state: { treeId } }); // Переход на страницу создания персонажа
     };
 
     return (

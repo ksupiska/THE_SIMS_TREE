@@ -59,18 +59,21 @@ body {
   border-radius: 2px;
   transition: all 0.3s ease;
   transform-origin: center;
+  margin: 1px 0;
+  will-change: transform;
 }
 
 .hamburger-line.open:nth-child(1) {
-  transform: rotate(45deg) translate(7px, 7px);
+   transform: translateY(6px) rotate(45deg);
 }
 
 .hamburger-line.open:nth-child(2) {
   opacity: 0;
+  transform: scale(0);
 }
 
 .hamburger-line.open:nth-child(3) {
-  transform: rotate(-45deg) translate(7px, -7px);
+  transform: translateY(-12px) rotate(-45deg);
 }
 
 /* Overlay для мобильного sidebar */
@@ -252,7 +255,7 @@ body {
 }
 
 /* Модальное окно */
-.modal-backdrop {
+.modal-backdrop1 {
   position: fixed;
   top: 0;
   left: 0;
@@ -276,7 +279,7 @@ body {
   }
 }
 
-.modal-content {
+.modal-content1 {
   background: linear-gradient(145deg, #ffffff, #f7fafc);
   border-radius: 25px;
   padding: 40px;
@@ -299,7 +302,7 @@ body {
   }
 }
 
-.modal-content::before {
+.modal-content1::before {
   content: "";
   position: absolute;
   top: 0;
@@ -310,7 +313,7 @@ body {
   border-radius: 25px 25px 0 0;
 }
 
-.modal-content h2 {
+.modal-content1 h2 {
   color: #2d3748;
   font-weight: 800;
   font-size: 1.8rem;
@@ -318,7 +321,7 @@ body {
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-.modal-content input {
+.modal-content1 input {
   width: 100%;
   padding: 15px 20px;
   border: 3px solid #e2e8f0;
@@ -331,19 +334,19 @@ body {
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.modal-content input:focus {
+.modal-content1 input:focus {
   outline: none;
   border-color: #6bcf7f;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 0 3px rgba(107, 207, 127, 0.3);
 }
 
-.modal-buttons {
+.modal-buttons1 {
   display: flex;
   gap: 15px;
   justify-content: center;
 }
 
-.modal-buttons button {
+.modal-buttons1 button {
   padding: 12px 25px;
   border: none;
   border-radius: 20px;
@@ -356,32 +359,32 @@ body {
   min-width: 120px;
 }
 
-.modal-buttons button:first-child {
+.modal-buttons1 button:first-child {
   background: linear-gradient(145deg, #6bcf7f, #4ade80);
   color: white;
   box-shadow: 0 4px 15px rgba(107, 207, 127, 0.4);
 }
 
-.modal-buttons button:first-child:hover:not(:disabled) {
+.modal-buttons1 button:first-child:hover:not(:disabled) {
   background: linear-gradient(145deg, #4ade80, #22c55e);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(107, 207, 127, 0.6);
 }
 
-.modal-buttons button:first-child:disabled {
+.modal-buttons1 button:first-child:disabled {
   background: linear-gradient(145deg, #a0aec0, #718096);
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
 }
 
-.modal-buttons button:last-child {
+.modal-buttons1 button:last-child {
   background: linear-gradient(145deg, #e2e8f0, #cbd5e0);
   color: #4a5568;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.modal-buttons button:last-child:hover {
+.modal-buttons1 button:last-child:hover {
   background: linear-gradient(145deg, #cbd5e0, #a0aec0);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
@@ -493,21 +496,21 @@ body {
     font-size: 14px;
   }
 
-  .modal-content {
+  .modal-content1 {
     margin: 20px;
     padding: 30px 20px;
   }
 
-  .modal-content h2 {
+  .modal-content1 h2 {
     font-size: 1.5rem;
   }
 
-  .modal-buttons {
+  .modal-buttons1 {
     flex-direction: column;
     gap: 10px;
   }
 
-  .modal-buttons button {
+  .modal-buttons1 button {
     width: 100%;
   }
 }
@@ -541,15 +544,15 @@ body {
     font-size: 13px;
   }
 
-  .modal-content {
+  .modal-content1 {
     padding: 25px 15px;
   }
 
-  .modal-content h2 {
+  .modal-content1 h2 {
     font-size: 1.3rem;
   }
 
-  .modal-content input {
+  .modal-content1 input {
     padding: 12px 15px;
     font-size: 14px;
   }

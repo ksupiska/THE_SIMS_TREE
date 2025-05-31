@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import '../css/charaterlist.css'; // Подключим стили
 import { supabase } from '../SupabaseClient';
 import { Form, Container, Col, Row } from 'react-bootstrap'
@@ -21,7 +20,6 @@ interface Character {
 export default function CharacterList() {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
-  const navigate = useNavigate();
 
   //для фильтрации
   const [searchTerm, setSearchTerm] = useState('');
@@ -131,11 +129,6 @@ export default function CharacterList() {
       console.error('Ошибка при удалении персонажа:', error);
     }
   };
-
-  const handleCreateNew = () => {
-    navigate('/simcreateform');//!!!!!!!!!!!!!!!!!ИСПРАВИТЬ С TREE_ID
-  };
-
   return (
     <div className="character-list-container">
       <h2>Список персонажей</h2>
@@ -192,10 +185,6 @@ export default function CharacterList() {
               </Form.Group>
             </div>
           </Col>
-          <Col className='p-5'>
-            <button className="create-button" onClick={handleCreateNew}>
-              Создать нового персонажа
-            </button></Col>
         </Row>
       </Container>
 

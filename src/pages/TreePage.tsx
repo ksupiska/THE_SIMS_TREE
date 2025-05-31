@@ -1,7 +1,6 @@
 "use client"
 
-import type React from "react"
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Tree } from "../components/Tree/Tree"
 import { supabase } from "../SupabaseClient"
@@ -17,13 +16,11 @@ const TreePage: React.FC = () => {
   const navigate = useNavigate()
 
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [allTrees, setAllTrees] = useState<TreeItem[]>([])
   const [dynastyName, setDynastyName] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const [treeId, setTreeId] = useState<string | null>(null)
+  const [tree, setTree] = useState<TreeItem | null>(null)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
-  // Загружаем дерево при первом заходе
   useEffect(() => {
     const fetchTree = async () => {
       const {
@@ -36,16 +33,15 @@ const TreePage: React.FC = () => {
         return
       }
 
-      const { data, error } = await supabase.from("trees").select("*").eq("user_id", user.id).limit(1)
+      const { data, error } = await supabase.from("trees").select("*").eq("user_id", user.id).limit(1).single()
 
-      if (error) {
+      if (error && error.code !== "PGRST116") {
         console.error("Ошибка при получении древа:", error.message)
         return
       }
 
-      if (data && data.length > 0) {
-        setAllTrees(data)
-        setTreeId(data[0].id)
+      if (data) {
+        setTree(data)
       } else {
         setIsModalOpen(true)
       }
@@ -79,8 +75,7 @@ const TreePage: React.FC = () => {
       console.error("Ошибка при создании древа:", insertError?.message)
       alert("Не удалось создать древо.")
     } else {
-      setAllTrees((prev) => [...prev, data])
-      setTreeId(data.id)
+      setTree(data)
       setIsModalOpen(false)
     }
 
@@ -97,19 +92,17 @@ const TreePage: React.FC = () => {
 
   return (
     <div className="tree-container">
-      {/* Кнопка-гамбургер для мобильных устройств */}
       <button className="mobile-menu-toggle" onClick={toggleSidebar} aria-label="Открыть меню">
         <span className={`hamburger-line ${isSidebarOpen ? "open" : ""}`}></span>
         <span className={`hamburger-line ${isSidebarOpen ? "open" : ""}`}></span>
         <span className={`hamburger-line ${isSidebarOpen ? "open" : ""}`}></span>
       </button>
 
-      {/* Overlay для закрытия sidebar при клике вне его */}
       {isSidebarOpen && <div className="sidebar-overlay" onClick={closeSidebar}></div>}
 
       {isModalOpen && (
         <div className="modal-backdrop">
-          <div className="modal-content">
+          <div className="modal-content1">
             <h2>Введите название династии</h2>
             <input
               type="text"
@@ -117,56 +110,26 @@ const TreePage: React.FC = () => {
               onChange={(e) => setDynastyName(e.target.value)}
               placeholder="Название династии"
             />
-            <div className="modal-buttons">
+            <div className="modal-buttons1">
               <button onClick={handleSaveDynasty} disabled={isLoading || !dynastyName.trim()}>
                 {isLoading ? "Сохраняем..." : "Сохранить"}
               </button>
-              <button onClick={() => setIsModalOpen(false)}>Отмена</button>
             </div>
           </div>
         </div>
       )}
 
-      <div className="tree-wrapper">
-        {treeId && <Tree treeId={treeId} treeName={allTrees.find((t) => t.id === treeId)?.name ?? ""} />}
-      </div>
+      <div className="tree-wrapper">{tree && <Tree treeId={tree.id} treeName={tree.name} />}</div>
 
       <div className={`sidebar ${isSidebarOpen ? "sidebar-open" : ""}`}>
-        {/* Кнопка закрытия внутри sidebar */}
-        <button className="sidebar-close" onClick={closeSidebar}>
-          ✕
-        </button>
 
-        <h3>Династия</h3>
-        <select
-          value={treeId ?? ""}
-          onChange={(e) => {
-            setTreeId(e.target.value)
-            closeSidebar() // Закрываем sidebar после выбора
-          }}
-        >
-          {allTrees.map((tree) => (
-            <option key={tree.id} value={tree.id}>
-              {tree.name}
-            </option>
-          ))}
-        </select>
-
+        <h3>Панель навигации</h3>
         <button
           onClick={() => {
-            setIsModalOpen(true)
+            navigate("/simcreateform", { state: { treeId: tree?.id } })
             closeSidebar()
           }}
-        >
-          Новая династия
-        </button>
-
-        <button
-          onClick={() => {
-            console.log("Navigating with treeId:", treeId);
-            navigate("/simcreateform", { state: { treeId } });
-            closeSidebar()
-          }}
+          disabled={!tree}
         >
           Создать персонажа
         </button>
@@ -176,17 +139,9 @@ const TreePage: React.FC = () => {
             navigate("/list")
             closeSidebar()
           }}
+          disabled={!tree}
         >
           Список персонажей
-        </button>
-
-        <button
-          onClick={() => {
-            navigate("/profile")
-            closeSidebar()
-          }}
-        >
-          Редактировать древо
         </button>
 
         <button

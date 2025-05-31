@@ -20,20 +20,6 @@ import '../../css/treepage.css'
 import { useNavigate } from "react-router-dom";
 
 
-interface Character {
-    id: string;
-    name: string;
-    surname: string;
-    gender: string;
-    avatar?: string;
-    city: string;
-    kind: string;
-    state: string;
-    type: string;
-    biography: string;
-    death: string;
-}
-
 export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] }) => {
     const [nodes, setNodes] = useState<NodeType[]>(initialNodes.length ? initialNodes : [{
         id: uuidv4(),
@@ -55,7 +41,7 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
 
     // Текущий узел, для которого добавляем партнёра
     const [currentNodeId, setCurrentNodeId] = useState<string | null>(null);
-    const [characters, setCharacters] = useState<Character[]>([]);
+    const [characters, setCharacters] = useState<CharacterType[]>([]);
     const [selectedPartnerType, setSelectedPartnerType] = useState<PartnerType>('married');
 
     // Модалки
@@ -390,6 +376,7 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
                             onAddPartner={() => openPartnerModal(node.id)}
                             onDeleteNode={handleDeleteNode}
                         />
+
                     ))}
                     {/* <Connectors nodes={nodes} /> */}
                 </div>

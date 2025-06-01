@@ -151,7 +151,11 @@ export default function BlogPage() {
                                     <div className="article-content-blog">
                                         <h2 className="article-title-blog">{article.title}</h2>
                                         <p className="article-excerpt-blog">{article.content.substring(0, 150)}...</p>
-                                        <Button href={`/blog/${article.id}`} className="read-more-blog">
+                                        <Button 
+                                        variant="link" 
+                                        className="read-more-blog"
+                                         onClick={() => navigate(`/article/${article.id}`)}
+                                        >
                                             <span>Читать далее</span>
                                             <BsArrowRight className="arrow-icon-blog" />
                                         </Button>

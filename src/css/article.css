@@ -1,0 +1,330 @@
+@font-face {
+  font-family: "The Sims Sans SC";
+  src: url("/fonts/THE_SIMS_SANS-BOLD-SC.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+.article-page-container-full-article {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fafafa 0%, #f8fafc 100%);
+  font-family: "The Sims Sans SC", sans-serif;
+}
+
+/* Загрузка */
+.loading-container-full-article {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: #6b7280;
+}
+
+.loading-spinner-full-article {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(139, 92, 246, 0.3);
+  border-radius: 50%;
+  border-top-color: #8b5cf6;
+  animation: spin-full-article 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin-full-article {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Ошибка */
+.error-container-full-article {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+  padding: 2rem;
+}
+
+.error-container-full-article h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 1rem;
+}
+
+.error-container-full-article p {
+  color: #6b7280;
+  margin-bottom: 2rem;
+  max-width: 400px;
+}
+
+.back-button-full-article {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: white;
+  padding: 0.875rem 1.5rem;
+  border-radius: 2rem;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.back-button-full-article:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
+  color: white;
+}
+
+/* Навигация */
+.article-navigation-full-article {
+  padding: 2rem 1rem 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.back-link-full-article {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #6b7280;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.back-link-full-article:hover {
+  color: #8b5cf6;
+  transform: translateX(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.back-icon-full-article {
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.back-link-full-article:hover .back-icon-full-article {
+  transform: translateX(-3px);
+}
+
+/* Основной контент статьи */
+.article-content-full-article {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1rem 3rem;
+}
+
+/* Заголовок статьи */
+.article-header-full-article {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: white;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.article-title-full-article {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1f2937;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.article-meta-full-article {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.meta-item-full-article {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.meta-icon-full-article {
+  font-size: 1rem;
+  color: #8b5cf6;
+}
+
+/* Изображение статьи */
+.article-image-container-full-article {
+  margin-bottom: 3rem;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.article-image-full-article {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Текст статьи */
+.article-text-full-article {
+  margin-bottom: 2rem;
+  padding: 0;
+}
+
+.article-paragraph-full-article {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: #374151;
+  margin-bottom: 1.5rem;
+}
+
+.article-paragraph-full-article:last-child {
+  margin-bottom: 0;
+}
+
+/* Действия с статьей */
+.article-actions-full-article {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.action-button-full-article {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  border: none;
+  border-radius: 2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.like-button-full-article {
+  color: #ef4444;
+  border: 2px solid #fecaca;
+}
+
+.like-button-full-article:hover {
+  background: #fef2f2;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.2);
+}
+
+.share-button-full-article {
+  color: #3b82f6;
+  border: 2px solid #bfdbfe;
+}
+
+.share-button-full-article:hover {
+  background: #eff6ff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2);
+}
+
+.action-icon-full-article {
+  font-size: 1.125rem;
+}
+
+/* Рекомендуемые статьи */
+.related-articles-full-article {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1rem 3rem;
+}
+
+.related-title-full-article {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #374151;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.related-grid-full-article {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.related-card-full-article {
+  background: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.related-card-full-article:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  color: inherit;
+}
+
+.related-image-full-article {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.related-card-title-full-article {
+  padding: 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Адаптивность */
+
+/* Плавная прокрутка */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Выделение текста */
+::selection {
+  background: rgba(139, 92, 246, 0.2);
+  color: #1f2937;
+}
+
+/* Кастомный скроллбар */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #8b5cf6, #ec4899);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #7c3aed, #db2777);
+}

@@ -22,6 +22,7 @@ import Instruction from './pages/Instruction';
 import AdminPage from './pages/AdminPage';
 import CreateArticlePage from './pages/CreateArticle';
 import BlogPage from './pages/Blog';
+import ArticlePage from './pages/ArticlePage';
 
 import ProtectedRoute from './components/ProtectedRoute';
 import './index.css';
@@ -52,6 +53,11 @@ const App = () => {
         <Route path="/instruction" element={<Instruction />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/blog" element={<BlogPage />} />
+        <Route path="/article/:id" element={
+          <ProtectedRoute>
+            <ArticlePage />
+          </ProtectedRoute>
+        } />
         <Route path="/createarticle" element={
           <ProtectedRoute>
             <CreateArticlePage />

@@ -1,27 +1,19 @@
-@font-face {
-  font-family: "The Sims Sans SC";
-  src: url("/fonts/THE_SIMS_SANS-BOLD-SC.woff2") format("woff2");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-.admin-container {
-  font-family: "The Sims Sans SC", sans-serif;
+/* Стили для админ панели */
+.admin-container-adm {
   min-height: 100vh;
   background: linear-gradient(135deg, #e0f2fe 0%, #f3e8ff 50%, #fce7f3 100%);
   position: relative;
 }
 
 /* Заголовок админки */
-.admin-header {
+.admin-header-adm {
   position: relative;
   overflow: hidden;
   padding: 3rem 1rem;
   text-align: center;
 }
 
-.admin-header-overlay {
+.admin-header-overlay-adm {
   position: absolute;
   top: 0;
   left: 0;
@@ -31,14 +23,14 @@
   opacity: 0.9;
 }
 
-.admin-header-content {
+.admin-header-content-adm {
   position: relative;
   z-index: 10;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.admin-title-wrapper {
+.admin-title-wrapper-adm {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -46,42 +38,42 @@
   margin-bottom: 1rem;
 }
 
-.admin-main-title {
+.admin-main-title-adm {
   font-size: 2.5rem;
   font-weight: 700;
   color: white;
   letter-spacing: -0.025em;
 }
 
-.admin-diamond {
+.admin-diamond-adm {
   color: white;
   font-size: 2rem;
   transform: rotate(45deg);
   animation: pulse 2s infinite;
 }
 
-.admin-subtitle {
+.admin-subtitle-adm {
   font-size: 1.125rem;
   color: white;
   opacity: 0.9;
 }
 
 /* Основной контент */
-.admin-content {
+.admin-content-adm {
   padding: 3rem 1rem;
 }
 
-.admin-wrapper {
+.admin-wrapper-adm {
   max-width: 1200px;
   margin: 0 auto;
 }
 
 /* Секция создания статьи */
-.create-section {
+.create-section-adm {
   margin-bottom: 3rem;
 }
 
-.create-button {
+.create-button-adm {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -97,24 +89,24 @@
   box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
 }
 
-.create-button:hover {
+.create-button-adm:hover {
   transform: translateY(-2px);
   box-shadow: 0 15px 35px rgba(16, 185, 129, 0.4);
 }
 
-.create-icon {
+.create-icon-adm {
   font-size: 1.25rem;
 }
 
 /* Форма создания */
-.create-form {
+.create-form-adm {
   background: white;
   border-radius: 1.5rem;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   overflow: hidden;
 }
 
-.form-header {
+.form-header-adm {
   background: linear-gradient(135deg, #a855f7, #ec4899);
   padding: 1.5rem 2rem;
   display: flex;
@@ -122,19 +114,31 @@
   align-items: center;
 }
 
-.form-title {
+.form-title-section-adm {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.form-title-icon-adm {
+  font-size: 1.5rem;
+  color: white;
+}
+
+.form-title-adm {
   color: white;
   font-size: 1.5rem;
   font-weight: 700;
+  margin: 0;
 }
 
-.form-actions {
+.form-actions-adm {
   display: flex;
   gap: 0.75rem;
 }
 
-.save-button,
-.cancel-button {
+.save-button-adm,
+.cancel-button-adm {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -146,45 +150,48 @@
   transition: all 0.3s ease;
 }
 
-.save-button {
+.save-button-adm {
   background: rgba(255, 255, 255, 0.2);
   color: white;
 }
 
-.cancel-button {
+.cancel-button-adm {
   background: rgba(255, 255, 255, 0.1);
   color: white;
 }
 
-.save-button:hover,
-.cancel-button:hover {
+.save-button-adm:hover,
+.cancel-button-adm:hover {
   background: rgba(255, 255, 255, 0.3);
   transform: translateY(-1px);
 }
 
-.button-icon {
+.button-icon-adm {
   font-size: 1rem;
 }
 
-.form-content {
+.form-content-adm {
   padding: 2rem;
 }
 
-.form-group {
+.form-group-adm {
   margin-bottom: 1.5rem;
 }
 
-.form-label {
+.form-label-adm {
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   font-weight: 600;
   color: #374151;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.form-input,
-.form-textarea {
+.form-input-adm,
+.form-textarea-adm {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.875rem 1rem;
   border: 2px solid #e5e7eb;
   border-radius: 0.75rem;
   font-size: 1rem;
@@ -192,24 +199,176 @@
   font-family: inherit;
 }
 
-.form-input:focus,
-.form-textarea:focus {
+.form-input-adm:focus,
+.form-textarea-adm:focus {
+  outline: none;
+  border-color: #a855f7;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+  transform: translateY(-1px);
+}
+
+.form-textarea-adm {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.6;
+}
+
+.character-count-adm {
+  text-align: right;
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+/* Загрузка изображений для формы создания */
+.image-upload-container-adm {
+  border: 2px dashed #d1d5db;
+  border-radius: 1rem;
+  padding: 1rem;
+  transition: all 0.3s ease;
+  background: #fafafa;
+}
+
+.image-upload-container-adm:hover {
+  border-color: #a855f7;
+  background: #faf5ff;
+}
+
+.image-preview-container-adm {
+  position: relative;
+  margin-bottom: 1rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.image-preview-adm {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.image-overlay-adm {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.image-preview-container-adm:hover .image-overlay-adm {
+  opacity: 1;
+}
+
+.remove-image-btn-adm {
+  background: #ef4444;
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.remove-image-btn-adm:hover {
+  background: #dc2626;
+  transform: scale(1.1);
+}
+
+.upload-placeholder-adm {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #9ca3af;
+}
+
+.upload-icon-adm {
+  font-size: 3rem;
+  color: #d1d5db;
+  margin-bottom: 0.75rem;
+}
+
+.upload-placeholder-adm p {
+  font-weight: 500;
+  margin: 0;
+}
+
+.upload-options-adm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.upload-btn-adm {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  font-size: 0.875rem;
+}
+
+.upload-btn-adm:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+}
+
+.btn-icon-adm {
+  font-size: 1rem;
+}
+
+.url-input-container-adm {
+  width: 100%;
+  max-width: 400px;
+}
+
+.url-input-adm {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 2rem;
+  font-size: 0.875rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.url-input-adm:focus {
   outline: none;
   border-color: #a855f7;
   box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
 }
 
-.form-textarea {
-  resize: vertical;
-  min-height: 120px;
+.url-input-adm::placeholder {
+  color: #9ca3af;
+  font-style: italic;
 }
 
 /* Секция статей */
-.articles-section {
+.articles-section-adm {
   margin-top: 3rem;
 }
 
-.section-title {
+.section-title-adm {
   font-size: 1.875rem;
   font-weight: 700;
   color: #374151;
@@ -217,14 +376,14 @@
   text-align: center;
 }
 
-.articles-grid {
+.articles-grid-adm {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 2rem;
 }
 
 /* Карточки статей */
-.article-card {
+.article-card-adm {
   background: white;
   border-radius: 1.5rem;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
@@ -232,24 +391,24 @@
   transition: all 0.3s ease;
 }
 
-.article-card:hover {
+.article-card-adm:hover {
   transform: translateY(-5px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
-.article-image-wrapper {
+.article-image-wrapper-adm {
   position: relative;
   height: 200px;
   overflow: hidden;
 }
 
-.article-image {
+.article-image-adm {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.article-status {
+.article-status-adm {
   position: absolute;
   top: 1rem;
   right: 1rem;
@@ -259,21 +418,21 @@
   font-weight: 600;
 }
 
-.article-status.published {
+.article-status-adm.published {
   background: linear-gradient(135deg, #10b981, #059669);
   color: white;
 }
 
-.article-status.draft {
+.article-status-adm.draft {
   background: linear-gradient(135deg, #f59e0b, #d97706);
   color: white;
 }
 
-.article-content {
+.article-content-adm {
   padding: 1.5rem;
 }
 
-.article-title {
+.article-title-adm {
   font-size: 1.25rem;
   font-weight: 700;
   color: #374151;
@@ -281,24 +440,24 @@
   line-height: 1.4;
 }
 
-.article-excerpt {
+.article-excerpt-adm {
   color: #6b7280;
   line-height: 1.6;
   margin-bottom: 1rem;
 }
 
-.article-meta {
+.article-meta-adm {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.article-date {
+.article-date-adm {
   color: #9ca3af;
   font-size: 0.875rem;
 }
 
-.article-actions {
+.article-actions-adm {
   display: flex;
   gap: 0.5rem;
   padding: 1rem 1.5rem;
@@ -306,7 +465,7 @@
   border-top: 1px solid #e5e7eb;
 }
 
-.action-button {
+.action-button-adm {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -318,59 +477,59 @@
   transition: all 0.3s ease;
 }
 
-.action-button.edit {
+.action-button-adm.edit {
   background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   color: white;
 }
 
-.action-button.view {
+.action-button-adm.view {
   background: linear-gradient(135deg, #10b981, #059669);
   color: white;
 }
 
-.action-button.delete {
+.action-button-adm.delete {
   background: linear-gradient(135deg, #ef4444, #dc2626);
   color: white;
 }
 
-.action-button:hover {
+.action-button-adm:hover {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-.action-icon {
+.action-icon-adm {
   font-size: 1rem;
 }
 
 /* Декоративные элементы */
-.admin-decoration {
+.admin-decoration-adm {
   position: fixed;
   opacity: 0.15;
   pointer-events: none;
   z-index: 1;
 }
 
-.admin-decoration-left {
+.admin-decoration-left-adm {
   top: 20%;
   left: 2rem;
 }
 
-.admin-decoration-right {
+.admin-decoration-right-adm {
   bottom: 20%;
   right: 2rem;
 }
 
-.admin-decoration-diamond {
+.admin-decoration-diamond-adm {
   font-size: 3rem;
   transform: rotate(45deg);
 }
 
-.admin-decoration-diamond.purple {
+.admin-decoration-diamond-adm.purple {
   color: #a855f7;
   animation: float 4s ease-in-out infinite;
 }
 
-.admin-decoration-diamond.green {
+.admin-decoration-diamond-adm.green {
   color: #10b981;
   animation: float 4s ease-in-out infinite reverse;
 }
@@ -387,61 +546,78 @@
 
 /* Адаптивность */
 @media (max-width: 768px) {
-  .admin-main-title {
+  .admin-main-title-adm {
     font-size: 2rem;
   }
 
-  .admin-diamond {
+  .admin-diamond-adm {
     font-size: 1.5rem;
   }
 
-  .articles-grid {
+  .articles-grid-adm {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
 
-  .form-header {
+  .form-header-adm {
     flex-direction: column;
     gap: 1rem;
     text-align: center;
   }
 
-  .form-actions {
+  .form-actions-adm {
     justify-content: center;
   }
 
-  .admin-content {
+  .admin-content-adm {
     padding: 2rem 1rem;
   }
 
-  .admin-header {
+  .admin-header-adm {
     padding: 2rem 1rem;
   }
 
-  .admin-decoration {
+  .admin-decoration-adm {
     display: none;
+  }
+
+  .upload-options-adm {
+    gap: 0.75rem;
+  }
+
+  .upload-btn-adm {
+    width: 100%;
+    justify-content: center;
   }
 }
 
 @media (max-width: 480px) {
-  .admin-main-title {
+  .admin-main-title-adm {
     font-size: 1.5rem;
   }
 
-  .create-button {
+  .create-button-adm {
     width: 100%;
     justify-content: center;
   }
 
-  .form-content {
+  .form-content-adm {
     padding: 1.5rem;
   }
 
-  .article-content {
+  .article-content-adm {
     padding: 1rem;
   }
 
-  .article-actions {
+  .article-actions-adm {
     padding: 1rem;
+  }
+
+  .upload-placeholder-adm {
+    padding: 1.5rem 1rem;
+  }
+
+  .upload-icon-adm {
+    font-size: 2rem;
   }
 }

@@ -20,6 +20,8 @@ import CharacterList from './components/CharacterList';
 import LoadingComponent from './components/LoadingComponent';
 import Instruction from './pages/Instruction';
 import AdminPage from './pages/AdminPage';
+import CreateArticlePage from './pages/CreateArticle';
+import BlogPage from './pages/Blog';
 
 import ProtectedRoute from './components/ProtectedRoute';
 import './index.css';
@@ -49,6 +51,12 @@ const App = () => {
         <Route path="/update-password" element={<UpdatePassword />} />
         <Route path="/instruction" element={<Instruction />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/createarticle" element={
+          <ProtectedRoute>
+            <CreateArticlePage />
+          </ProtectedRoute>
+        } />
         <Route path="/tree" element={
           <ProtectedRoute>
             <TreePage />

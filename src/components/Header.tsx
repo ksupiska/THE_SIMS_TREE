@@ -49,6 +49,9 @@ const Header = () => {
                             <Nav.Link href="/admin" className="fw-medium text-secondary">
                                 Админ
                             </Nav.Link>
+                            <Nav.Link href="/blog" className="fw-medium text-secondary">
+                                Блог
+                            </Nav.Link>
                         </Nav>
 
                         <div className="d-flex align-items-center gap-3 mt-3 mt-lg-0">

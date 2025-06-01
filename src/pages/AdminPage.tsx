@@ -10,31 +10,13 @@ interface Article {
   id: string
   title: string
   content: string
-  image: string
-  status: "draft" | "published"
-  createdAt: string
+  image: string | null
+  status: "draft" | "published" | "pending"
+  created_at: string // поля из Supabase обычно snake_case
 }
 
 export default function AdminPage() {
-  const [articles, setArticles] = useState<Article[]>([
-    {
-      id: "1",
-      title: "Как создать идеальную семью в The Sims 4",
-      content: "Подробное руководство по созданию семьи...",
-      image: "/placeholder.svg?height=200&width=300",
-      status: "published",
-      createdAt: "2024-01-15",
-    },
-    {
-      id: "2",
-      title: "Секреты строительства домов",
-      content: "Лучшие советы по архитектуре в игре...",
-      image: "/placeholder.svg?height=200&width=300",
-      status: "draft",
-      createdAt: "2024-01-14",
-    },
-  ])
-
+  const [articles, setArticles] = useState<Article[]>([])
   const [isCreating, setIsCreating] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [newArticle, setNewArticle] = useState({
@@ -42,57 +24,48 @@ export default function AdminPage() {
     content: "",
     image: "",
   })
-
-
-  const handleCreateArticle = () => {
-    if (newArticle.title && newArticle.content) {
-      const article: Article = {
-        id: Date.now().toString(),
-        title: newArticle.title,
-        content: newArticle.content,
-        image: newArticle.image || "/placeholder.svg?height=200&width=300",
-        status: "draft",
-        createdAt: new Date().toISOString().split("T")[0],
-      }
-      setArticles([article, ...articles])
-      setNewArticle({ title: "", content: "", image: "" })
-      setIsCreating(false)
-    }
-  }
-
-  const handleDeleteArticle = (id: string) => {
-    setArticles(articles.filter((article) => article.id !== id))
-  }
-
-  const handleToggleStatus = (id: string) => {
-    setArticles(
-      articles.map((article) =>
-        article.id === id ? { ...article, status: article.status === "draft" ? "published" : "draft" } : article,
-      ),
-    )
-  }
-
   const [isAdmin, setIsAdmin] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
+  // Загрузка статей из Supabase
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchProfileAndArticles = async () => {
       const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        setIsLoading(false)
+        return
+      }
 
-      if (user) {
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("role")
-          .eq("id", user.id)
-          .single()
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single()
 
-        setIsAdmin(profile?.role === "admin")
+      if (profile?.role !== "admin") {
+        setIsAdmin(false)
+        setIsLoading(false)
+        return
+      }
+
+      setIsAdmin(true)
+
+      // Получаем статьи с любым статусом, чтобы показать и "pending"
+      const { data: articlesData, error } = await supabase
+        .from<Article>("articles")
+        .select("*")
+        .order("created_at", { ascending: false })
+
+      if (error) {
+        console.error("Ошибка загрузки статей:", error)
+      } else {
+        setArticles(articlesData || [])
       }
 
       setIsLoading(false)
     }
 
-    fetchProfile()
+    fetchProfileAndArticles()
   }, [])
 
   if (isLoading) {
@@ -103,6 +76,63 @@ export default function AdminPage() {
     return <p>У вас нет доступа к этой странице.</p>
   }
 
+  // Создание статьи — сохраняем в Supabase с статусом draft (или pending, если хочешь)
+  const handleCreateArticle = async () => {
+    if (!newArticle.title || !newArticle.content) return
+
+    const { data, error } = await supabase
+      .from("articles")
+      .insert({
+        title: newArticle.title,
+        content: newArticle.content,
+        image: newArticle.image || null,
+        status: "draft", // или "pending", если статья отправляется на проверку
+      })
+      .select()
+      .single()
+
+    if (error) {
+      alert("Ошибка при создании статьи: " + error.message)
+      return
+    }
+
+    setArticles([data, ...articles])
+    setNewArticle({ title: "", content: "", image: "" })
+    setIsCreating(false)
+  }
+
+  // Удаление статьи из Supabase и локально
+  const handleDeleteArticle = async (id: string) => {
+    const { error } = await supabase.from("articles").delete().eq("id", id)
+    if (error) {
+      alert("Ошибка при удалении статьи: " + error.message)
+      return
+    }
+    setArticles(articles.filter(article => article.id !== id))
+  }
+
+  // Переключение статуса статьи в Supabase и локально
+  const handleToggleStatus = async (id: string) => {
+    const article = articles.find(a => a.id === id)
+    if (!article) return
+
+    // меняем статус draft <-> published
+    const newStatus = article.status === "draft" ? "published" : "draft"
+
+    const { error } = await supabase
+      .from("articles")
+      .update({ status: newStatus })
+      .eq("id", id)
+
+    if (error) {
+      alert("Ошибка при обновлении статуса: " + error.message)
+      return
+    }
+
+    setArticles(
+      articles.map(a => (a.id === id ? { ...a, status: newStatus } : a))
+    )
+  }
 
   return (
     <main className="admin-container">
@@ -210,7 +240,9 @@ export default function AdminPage() {
                   <div className="article-image-wrapper">
                     <img src={article.image || "/placeholder.svg"} alt={article.title} className="article-image" />
                     <div className={`article-status ${article.status}`}>
-                      {article.status === "published" ? "Опубликовано" : "Черновик"}
+                      {article.status === "published" && "Опубликовано"}
+                      {article.status === "draft" && "Черновик"}
+                      {article.status === "pending" && "На проверке"}
                     </div>
                   </div>
 
@@ -218,7 +250,7 @@ export default function AdminPage() {
                     <h3 className="article-title">{article.title}</h3>
                     <p className="article-excerpt">{article.content.substring(0, 100)}...</p>
                     <div className="article-meta">
-                      <span className="article-date">{article.createdAt}</span>
+                      <span className="article-date">{article.created_at.split("T")[0]}</span>
                     </div>
                   </div>
 

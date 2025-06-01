@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { supabase } from "../SupabaseClient"
 import SignupForm from "../components/auth/SignupForm"
 import type { User } from "@supabase/supabase-js"
-//import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 // import { Container, Row, Col, Card, Button } from "react-bootstrap"
 import { motion } from "framer-motion"
 import {
@@ -21,7 +21,7 @@ import '../css/userprofile.css'
 const AuthWrapper = () => {
     const [user, setUser] = useState<User | null>(null)
     const [activeTab, setActiveTab] = useState("profile")
-    //const navigate = useNavigate()
+    const navigate = useNavigate()
     const [role, setRole] = useState<string | null>(null)
 
 
@@ -65,11 +65,6 @@ const AuthWrapper = () => {
             </div>
         )
     }
-
-    // const handleCreateTree = () => {
-    //     navigate("/tree")
-    // }
-
 
     return (
         <div className="profile-container">
@@ -134,6 +129,7 @@ const AuthWrapper = () => {
                                         className="action-card create-tree"
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
+                                        onClick={() => navigate("/tree")}
                                     >
                                         <BsTree className="action-icon" />
                                         <span>Создать древо</span>
@@ -142,6 +138,7 @@ const AuthWrapper = () => {
                                         className="action-card write-article"
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
+                                        onClick={() => navigate("/createarticle")}
                                     >
                                         <BsPencilSquare className="action-icon" />
                                         <span>Написать статью</span>

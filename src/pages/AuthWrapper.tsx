@@ -15,6 +15,8 @@ import {
     BsPencilSquare,
     BsGear,
     BsShare,
+    BsCheck,
+    BsX,
 } from "react-icons/bs"
 import '../css/userprofile.css'
 
@@ -23,6 +25,14 @@ const AuthWrapper = () => {
     const [activeTab, setActiveTab] = useState("profile")
     const navigate = useNavigate()
     const [role, setRole] = useState<string | null>(null)
+
+
+    //модальное окно поддержки
+    const [showSupportModal, setShowSupportModal] = useState(false);
+    const [supportSubject, setSupportSubject] = useState("");
+    const [supportMessage, setSupportMessage] = useState("");
+
+
 
 
     useEffect(() => {
@@ -69,6 +79,34 @@ const AuthWrapper = () => {
             </div>
         )
     }
+
+    //отправка сообщений
+    const handleSendSupportMessage = async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+            alert("Вы должны быть авторизованы.");
+            return;
+        }
+
+        const { error } = await supabase.from("support_messages").insert({
+            user_id: user.id,
+            subject: supportSubject,
+            message: supportMessage,
+            status: "pending",
+        });
+
+        if (!error) {
+            alert("Письмо отправлено!");
+            setShowSupportModal(false);
+            setSupportSubject("");
+            setSupportMessage("");
+        } else {
+            console.error(error);
+            alert("Ошибка при отправке письма.");
+        }
+    };
+
 
     return (
         <div className="profile-container">
@@ -152,10 +190,12 @@ const AuthWrapper = () => {
                                         className="action-card find-friends"
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
+                                        onClick={() => setShowSupportModal(true)}
                                     >
                                         <BsPeople className="action-icon" />
-                                        <span>Найти друзей</span>
+                                        <span>Написать письмо в поддержку</span>
                                     </motion.button>
+
                                     <motion.button
                                         className="action-card share-tree"
                                         whileHover={{ scale: 1.05 }}
@@ -236,6 +276,38 @@ const AuthWrapper = () => {
                 </div>
             </section>
 
+            {showSupportModal && (
+                <div className="modal-backdrop-adm">
+                    <div className="modal-adm">
+                        <h2>Обратиться в поддержку</h2>
+
+                        <label htmlFor="support-subject" className="form-label-adm">Тема</label>
+                        <input
+                            id="support-subject"
+                            className="form-input-adm"
+                            placeholder="Введите тему письма"
+                            type="text"
+                            value={supportSubject}
+                            onChange={(e) => setSupportSubject(e.target.value)}
+                        />
+
+                        <label htmlFor="support-message" className="form-label-adm">Сообщение</label>
+                        <textarea
+                            id="support-message"
+                            className="form-textarea-adm"
+                            rows={6}
+                            placeholder="Опишите проблему"
+                            value={supportMessage}
+                            onChange={(e) => setSupportMessage(e.target.value)}
+                        />
+
+                        <div className="modal-actions-adm">
+                            <button onClick={handleSendSupportMessage}><BsCheck /> Отправить</button>
+                            <button onClick={() => setShowSupportModal(false)}><BsX /> Отмена</button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
 
         </div>

@@ -1,19 +1,28 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { BsDiamond, BsPlus, BsTrash, BsEye, BsPencil, BsCheck, BsX, BsPencilSquare, BsImage, BsCamera } from "react-icons/bs"
+import { BsPlus, BsTrash, BsEye, BsPencil, BsCheck, BsX, BsPencilSquare, BsImage, BsCamera } from "react-icons/bs"
 import { Button } from "react-bootstrap";
 
 import { supabase } from "../SupabaseClient";
 import '../css/admin.css';
 
 interface Article {
-  id: string
-  title: string
-  content: string
-  image: string | null
-  status: "draft" | "published" | "pending"
-  created_at: string // поля из Supabase обычно snake_case
+  id: string;
+  title: string;
+  content: string;
+  image: string | null;
+  status: "draft" | "published" | "pending";
+  created_at: string;
 }
+type SupportMessage = {
+  id: string;
+  user_id: string;
+  subject: string;
+  message: string;
+  created_at: string;
+  status: "pending" | "replied";
+};
+
 
 export default function AdminPage() {
   const [articles, setArticles] = useState<Article[]>([])
@@ -27,6 +36,74 @@ export default function AdminPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [currentArticle, setCurrentArticle] = useState<Article | null>(null)
+
+
+  const [supportMessages, setSupportMessages] = useState<SupportMessage[]>([]);
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      const { data, error } = await supabase
+        .from("support_messages")
+        .select(`id, subject, message, created_at, status, user_id`)
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Ошибка при загрузке сообщений:", error);
+      } else if (data) {
+        // Приведение поля status к нужному типу, если нужно
+        const normalized = data.map((msg) => ({
+          ...msg,
+          status: msg.status as "pending" | "replied",
+        }));
+        setSupportMessages(normalized);
+
+      }
+    };
+
+    fetchMessages();
+  }, []);
+
+
+
+  //состояния для ответа пользователю
+  // const [replyingMessage, setReplyingMessage] = useState<SupportMessage | null>(null);
+  // const [replyContent, setReplyContent] = useState("");
+
+  // const handleSendReply = async () => {
+  //   if (!replyingMessage || !replyContent.trim()) {
+  //     alert("Введите ответ.");
+  //     return;
+  //   }
+
+  //   const { error: replyError } = await supabase.from("support_replies").insert({
+  //     message_id: replyingMessage.id,
+  //     reply: replyContent.trim(),
+  //   });
+
+  //   const { error: statusError } = await supabase
+  //     .from("support_messages")
+  //     .update({ status: "replied" })
+  //     .eq("id", replyingMessage.id);
+
+  //   if (!replyError && !statusError) {
+  //     alert("Ответ отправлен.");
+  //     setReplyingMessage(null);
+  //     setReplyContent("");
+
+  //     // Обновить статус сообщения локально
+  //     const updated = supportMessages.map((msg) =>
+  //       msg.id === replyingMessage.id
+  //         ? { ...msg, status: "replied" as const }
+  //         : msg
+  //     );
+  //     setSupportMessages(updated);
+
+  //   } else {
+  //     console.error("Ошибка при отправке ответа:", replyError || statusError);
+  //     alert("Ошибка при отправке ответа.");
+  //   }
+  // };
+
 
 
   // Загрузка статей из Supabase
@@ -356,14 +433,62 @@ export default function AdminPage() {
               ))}
             </div>
           </div>
+          {/* Блок сообщений поддержки */}
+          <div className="support-section-adm">
+            <h2 className="section-title-adm">Сообщения в поддержку ({supportMessages.length})</h2>
+
+            {supportMessages.length === 0 ? (
+              <div className="empty-support-state-adm">
+                <BsPencilSquare className="empty-support-icon-adm" />
+                <h3>Нет сообщений</h3>
+                <p>Пока нет сообщений от пользователей</p>
+              </div>
+            ) : (
+              <div className="support-messages-grid-adm">
+                {supportMessages.map((msg, index) => (
+                  <motion.div
+                    key={msg.id}
+                    className={`support-message-card-adm ${msg.status}`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <div className="support-message-header-adm">
+                      <div className="support-message-info-adm">
+                        <h3 className="support-message-subject-adm">{msg.subject}</h3>
+                        <p className="support-message-from-adm">
+                          Уникальный номер пользователя: {msg.user_id || "Неизвестно"}
+                        </p>
+                      </div>
+                      <div className={`support-message-status-adm ${msg.status}`}>
+                        {msg.status === "replied" ? "Отвечено" : "Ожидает ответа"}
+                      </div>
+                    </div>
+
+                    <div className="support-message-content-adm">
+                      <p className="support-message-text-adm">{msg.message}</p>
+                      <div className="support-message-meta-adm">
+                        <span className="support-message-date-adm">
+                          {new Date(msg.created_at).toLocaleString("ru-RU")}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* {msg.status !== "replied" && (
+                      <div className="support-message-actions-adm">
+                        <button className="reply-button-adm" onClick={() => setReplyingMessage(msg)}>
+                          <BsPencilSquare className="reply-icon-adm" />
+                          Ответить
+                        </button>
+                      </div>
+                    )} */}
+                  </motion.div>
+                ))}
+
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-      {/* Декоративные элементы */}
-      <div className="admin-decoration admin-decoration-left">
-        <BsDiamond className="admin-decoration-diamond purple" />
-      </div>
-      <div className="admin-decoration admin-decoration-right">
-        <BsDiamond className="admin-decoration-diamond green" />
       </div>
 
       {showModal && currentArticle && (
@@ -513,6 +638,64 @@ export default function AdminPage() {
           </div>
         </div>
       )}
+
+      {/* {replyingMessage && (
+        <div className="modal-overlay" onClick={() => setReplyingMessage(null)}>
+          <div className="modal-content-adm reply-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <div className="modal-title-section">
+                <BsPencilSquare className="modal-icon" />
+                <h3>Ответ на сообщение</h3>
+              </div>
+              <Button className="close-btn" onClick={() => setReplyingMessage(null)}>
+                <BsX size={24} />
+              </Button>
+            </div>
+
+            <div className="modal-body">
+              <div className="original-message">
+                <h4>Исходное сообщение:</h4>
+                <div className="original-message-content">
+                  <p>
+                    <strong>Тема:</strong> {replyingMessage.subject}
+                  </p>
+                  <p>
+                    <strong>ID пользователя:</strong> {replyingMessage.user_id}
+                  </p>
+                  <p>
+                    <strong>Сообщение:</strong>
+                  </p>
+                  <div className="original-text">{replyingMessage.message}</div>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label-adm">Ваш ответ</label>
+                <textarea
+                  className="form-textarea"
+                  rows={6}
+                  placeholder="Введите ответ пользователю..."
+                  value={replyContent}
+                  onChange={(e) => setReplyContent(e.target.value)}
+                />
+                <div className="character-count">{replyContent.length} символов</div>
+              </div>
+            </div>
+
+            <div className="modal-footer">
+              <button className="btn-cancel" onClick={() => setReplyingMessage(null)}>
+                <BsX className="btn-icon" />
+                Отмена
+              </button>
+              <button className="btn-save" onClick={handleSendReply} disabled={!replyContent.trim()}>
+                <BsCheck className="btn-icon" />
+                Отправить ответ
+              </button>
+            </div>
+          </div>
+        </div>
+      )} */}
+
     </main>
 
 

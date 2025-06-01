@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import '../css/charaterlist.css'; // Подключим стили
 import { supabase } from '../SupabaseClient';
 import { Form, Container, Col, Row } from 'react-bootstrap'
@@ -28,7 +27,6 @@ export default function CharacterList() {
 
   //для изменения данны персонажей
   const [isEditing, setIsEditing] = useState(false);
-  const [editFormData, setEditFormData] = useState<Character | null>(null);
 
   //для обрезки аватара
   const [cropImage, setCropImage] = useState<string | null>(null);
@@ -50,31 +48,86 @@ export default function CharacterList() {
     setEditFormData({ ...editFormData, [name]: value });
   };
 
+  type EditCharacterData = Character & {
+    avatarFile?: File | null;
+  };
+
+  const [editFormData, setEditFormData] = useState<EditCharacterData | null>(null);
   //сохранение результатов
   const saveChanges = async () => {
     if (!editFormData) return;
 
     try {
-      const formData = new FormData();
-      for (const [key, value] of Object.entries(editFormData)) {
-        if (key === "avatarFile" && value instanceof File) {
-          formData.append("avatar", value); // сервер ожидает "avatar"
-        } else if (typeof value === "string") {
-          formData.append(key, value);
-        }
+      const {
+        id,
+        name,
+        surname,
+        gender,
+        avatarFile,
+        city,
+        kind,
+        state,
+        type,
+        biography,
+        death,
+      } = editFormData;
+
+      if (!id) {
+        console.error('Нет id для обновления');
+        return;
       }
 
-      const response = await axios.put(
-        `http://localhost:5000/api/characters/${editFormData.id}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      let avatarUrl = editFormData.avatar || null;
 
-      const updatedCharacter = response.data.character;
+      if (avatarFile) {
+        const fileExt = avatarFile.name.split('.').pop();
+        const fileName = `avatars/${id}_${Date.now()}.${fileExt}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('avatars')
+          .upload(fileName, avatarFile, {
+            cacheControl: '3600',
+            upsert: true,
+          });
+
+        if (uploadError) {
+          console.error('Ошибка загрузки аватара:', uploadError);
+          return;
+        }
+
+        const { data } = supabase.storage.from('avatars').getPublicUrl(fileName);
+        avatarUrl = data.publicUrl;
+      }
+
+      const updateData = {
+        name,
+        surname,
+        gender,
+        avatar: avatarUrl,
+        city,
+        kind,
+        state,
+        type,
+        biography,
+        death,
+      };
+
+      const { data: updatedCharacter, error } = await supabase
+        .from('characters')
+        .update(updateData)
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Ошибка при обновлении:', error);
+        return;
+      }
+
+      if (!updatedCharacter) {
+        console.warn('Обновление прошло, но данных нет в ответе');
+        return;
+      }
 
       setCharacters((prev) =>
         prev.map((char) => (char.id === updatedCharacter.id ? updatedCharacter : char))
@@ -83,52 +136,67 @@ export default function CharacterList() {
       setIsEditing(false);
       setEditFormData(null);
     } catch (error) {
-      console.error("Ошибка при сохранении изменений:", error);
+      console.error('Ошибка при сохранении изменений:', error);
     }
   };
 
-
-
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCharacters = async () => {
-      const { data, error } = await supabase.auth.getUser(); // Получаем текущего пользователя
+      setLoading(true);
+      setError(null);
 
-      if (error || !data.user) {
-        console.error('Пользователь не авторизован');
+      const {
+        data: userData,
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError || !userData.user) {
+        setError('Пользователь не авторизован');
+        setLoading(false);
         return;
       }
 
-      const userId = data.user.id; // Получаем user_id текущего пользователя
+      const userId = userData.user.id;
 
-      try {
-        // Логирование запроса
-        console.log("Запрос к серверу с userId:", userId);
-        const response = await axios.get(`http://localhost:5000/api/characters?userId=${userId}`);
-        console.log("Ответ от сервера:", response.data); // Логируем ответ от сервера
+      const { data, error: charactersError } = await supabase
+        .from('characters')
+        .select('*')
+        .eq('user_id', userId);
 
-        // Проверка структуры данных
-        if (Array.isArray(response.data)) {
-          setCharacters(response.data);
-        } else {
-          console.error("Данные не являются массивом:", response.data);
-        }
-      } catch (error) {
-        console.error('Ошибка при получении персонажей:', error);
+      if (charactersError) {
+        setError(charactersError.message);
+        setLoading(false);
+        return;
       }
+
+      setCharacters(data ?? []);
+      setLoading(false);
     };
 
     fetchCharacters();
   }, []);
 
+
   const handleDelete = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:5000/api/characters/${id}`);
+      const { error } = await supabase
+        .from('characters')
+        .delete()
+        .eq('id', id);
+
+      if (error) {
+        throw error;
+      }
+
       setCharacters(characters.filter((character) => character.id !== id));
     } catch (error) {
       console.error('Ошибка при удалении персонажа:', error);
     }
   };
+
   return (
     <div className="character-list-container">
       <h2>Список персонажей</h2>
@@ -406,14 +474,26 @@ export default function CharacterList() {
                 </div>
 
                 <div className="modal-footer-list ">
-                  <button onClick={(e) => {
-                    e.stopPropagation();
-                    cancelEditing();
-                  }}>Отмена</button>
-                  <button onClick={(e) => {
-                    e.stopPropagation();
-                    saveChanges();
-                  }}>Сохранить</button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      cancelEditing();
+                    }}
+                    disabled={loading}
+                  >
+                    Отмена
+                  </button>
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      saveChanges();
+                    }}
+                    disabled={loading}
+                  >
+                    {loading ? 'Сохраняем...' : 'Сохранить'}
+                  </button>
+                  {error && <div style={{ color: 'red' }}>{error}</div>}
                 </div>
               </>
             )}

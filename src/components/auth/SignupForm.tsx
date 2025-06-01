@@ -21,7 +21,7 @@ const SignupForm = () => {
     setMessageType('')
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data: signupData, error } = await supabase.auth.signUp({
         email,
         password,
       })
@@ -31,6 +31,17 @@ const SignupForm = () => {
         setMessageType('error')
         setShowLoginButton(false)
       } else {
+        const userId = signupData.user?.id
+        if (userId) {
+          // добавляем профиль с ролью "user"
+          await supabase.from('profiles').insert([
+            {
+              id: userId,
+              role: 'user',
+            },
+          ])
+        }
+
         setMessage('Письмо для подтверждения отправлено! Проверьте почту.')
         setMessageType('success')
         setShowLoginButton(true)
@@ -42,6 +53,7 @@ const SignupForm = () => {
       setIsLoading(false)
     }
   }
+
 
   const goToLogin = () => {
     navigate('/login')

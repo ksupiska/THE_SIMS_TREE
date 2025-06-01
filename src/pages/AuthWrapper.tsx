@@ -22,6 +22,27 @@ const AuthWrapper = () => {
     const [user, setUser] = useState<User | null>(null)
     const [activeTab, setActiveTab] = useState("profile")
     //const navigate = useNavigate()
+    const [role, setRole] = useState<string | null>(null)
+
+
+    useEffect(() => {
+        if (!user) return
+
+        const fetchProfile = async () => {
+            const { data: profile, error } = await supabase
+                .from('profiles')
+                .select('role')
+                .eq('id', user.id)
+                .single()
+
+            if (profile) {
+                setRole(profile.role) // создаёшь useState role
+            }
+        }
+
+        fetchProfile()
+    }, [user])
+
 
     useEffect(() => {
         supabase.auth.getUser().then(({ data: { user } }) => {
@@ -48,6 +69,7 @@ const AuthWrapper = () => {
     // const handleCreateTree = () => {
     //     navigate("/tree")
     // }
+
 
     return (
         <div className="profile-container">

@@ -1,8 +1,9 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { BsDiamond, BsPlus, BsTrash, BsEye, BsPencil, BsCheck, BsX } from "react-icons/bs"
 import { Button } from "react-bootstrap";
 
+import { supabase } from "../SupabaseClient";
 import '../css/admin.css';
 
 interface Article {
@@ -42,6 +43,7 @@ export default function AdminPage() {
     image: "",
   })
 
+
   const handleCreateArticle = () => {
     if (newArticle.title && newArticle.content) {
       const article: Article = {
@@ -69,6 +71,38 @@ export default function AdminPage() {
       ),
     )
   }
+
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+
+      if (user) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", user.id)
+          .single()
+
+        setIsAdmin(profile?.role === "admin")
+      }
+
+      setIsLoading(false)
+    }
+
+    fetchProfile()
+  }, [])
+
+  if (isLoading) {
+    return <div>Загрузка...</div>
+  }
+
+  if (!isAdmin) {
+    return <p>У вас нет доступа к этой странице.</p>
+  }
+
 
   return (
     <main className="admin-container">

@@ -275,5 +275,7 @@ app.get("/", (req, res) => {
 const port = process.env.PORT || 8080;
 console.log('PORT from env:', process.env.PORT);
 app.listen(port, '0.0.0.0', () => {
-  console.log(`Сервер работает на http://0.0.0.0:${port}`);
+  console.log(`Сервер запущен, слушает порт ${port}`);
+}).on('error', err => {
+  console.error('Ошибка при запуске сервера:', err);
 });

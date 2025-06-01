@@ -14,11 +14,14 @@ import {
     BsTree,
     BsPencilSquare,
     BsGear,
-    BsShare,
     BsCheck,
     BsX,
+    BsEnvelope,
+    BsBell,
 } from "react-icons/bs"
-import '../css/userprofile.css'
+import '../css/userprofile.css';
+import '../css/userprofilemodals.css';
+import { Button } from "react-bootstrap";
 
 const AuthWrapper = () => {
     const [user, setUser] = useState<User | null>(null)
@@ -31,6 +34,48 @@ const AuthWrapper = () => {
     const [showSupportModal, setShowSupportModal] = useState(false);
     const [supportSubject, setSupportSubject] = useState("");
     const [supportMessage, setSupportMessage] = useState("");
+
+    //модальное окно уведомлений
+    type SupportReply = {
+        id: number;
+        reply: string;
+        message_id: number;
+        created_at: string;
+        support_messages?: {
+            subject: string;
+        };
+    };
+
+    const [loadingNotifications, setLoadingNotifications] = useState(false)
+    const [notificationsOpen, setNotificationsOpen] = useState(false);
+    const [supportReplies, setSupportReplies] = useState<SupportReply[]>([]);
+    //загрузка уведомлений
+    const fetchSupportReplies = async () => {
+        setLoadingNotifications(true)
+        const user = await supabase.auth.getUser();
+        const userId = user.data.user?.id;
+        if (!userId) {
+            setLoadingNotifications(false)
+            return
+        };
+
+        const { data, error } = await supabase
+            .from("support_replies")
+            .select("*, support_messages(subject)")
+            .eq("support_messages.user_id", userId)
+            .order("created_at", { ascending: false });
+
+        if (!error && data) {
+            setSupportReplies(data);
+        }
+        setLoadingNotifications(false)  
+    };
+    //обработчик кнопки
+    const handleOpenNotifications = async () => {
+        await fetchSupportReplies();
+        setNotificationsOpen(true);
+    };
+
 
 
 
@@ -195,15 +240,16 @@ const AuthWrapper = () => {
                                         <BsPeople className="action-icon" />
                                         <span>Написать письмо в поддержку</span>
                                     </motion.button>
-
                                     <motion.button
                                         className="action-card share-tree"
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
+                                        onClick={handleOpenNotifications}
                                     >
-                                        <BsShare className="action-icon" />
-                                        <span>Поделиться</span>
+                                        <BsBell className="action-icon" />
+                                        <span>Уведомления</span>
                                     </motion.button>
+
                                 </div>
                             </div>
                         </motion.div>
@@ -276,40 +322,115 @@ const AuthWrapper = () => {
                 </div>
             </section>
 
+            {/* 🔥 МОДАЛЬНОЕ ОКНО ПОДДЕРЖКИ - ИСПОЛЬЗУЕТ СТИЛИ С СУФФИКСОМ -sup */}
             {showSupportModal && (
-                <div className="modal-backdrop-adm">
-                    <div className="modal-adm">
-                        <h2>Обратиться в поддержку</h2>
+                <div className="modal-overlay-sup" onClick={() => setShowSupportModal(false)}>
+                    <div className="modal-content-sup" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header-sup">
+                            <h2 className="modal-title-sup">
+                                <BsEnvelope className="modal-icon-sup" />
+                                Обратиться в поддержку
+                            </h2>
+                            <Button className="close-btn-sup" onClick={() => setShowSupportModal(false)}>
+                                <BsX size={20} />
+                            </Button>
+                        </div>
 
-                        <label htmlFor="support-subject" className="form-label-adm">Тема</label>
-                        <input
-                            id="support-subject"
-                            className="form-input-adm"
-                            placeholder="Введите тему письма"
-                            type="text"
-                            value={supportSubject}
-                            onChange={(e) => setSupportSubject(e.target.value)}
-                        />
+                        <div className="modal-body-sup">
+                            <div className="form-group-sup">
+                                <label htmlFor="support-subject" className="form-label-sup">
+                                    Тема сообщения
+                                </label>
+                                <input
+                                    id="support-subject"
+                                    className="form-input-sup"
+                                    placeholder="Введите тему письма..."
+                                    type="text"
+                                    value={supportSubject}
+                                    onChange={(e) => setSupportSubject(e.target.value)}
+                                />
+                            </div>
 
-                        <label htmlFor="support-message" className="form-label-adm">Сообщение</label>
-                        <textarea
-                            id="support-message"
-                            className="form-textarea-adm"
-                            rows={6}
-                            placeholder="Опишите проблему"
-                            value={supportMessage}
-                            onChange={(e) => setSupportMessage(e.target.value)}
-                        />
+                            <div className="form-group-sup">
+                                <label htmlFor="support-message" className="form-label-sup">
+                                    Сообщение
+                                </label>
+                                <textarea
+                                    id="support-message"
+                                    className="form-textarea-sup"
+                                    rows={6}
+                                    placeholder="Опишите вашу проблему или вопрос подробно..."
+                                    value={supportMessage}
+                                    onChange={(e) => setSupportMessage(e.target.value)}
+                                />
+                                <div className="character-count-sup">{supportMessage.length} символов</div>
+                            </div>
+                        </div>
 
-                        <div className="modal-actions-adm">
-                            <button onClick={handleSendSupportMessage}><BsCheck /> Отправить</button>
-                            <button onClick={() => setShowSupportModal(false)}><BsX /> Отмена</button>
+                        <div className="modal-footer-sup">
+                            <button className="btn-cancel-sup" onClick={() => setShowSupportModal(false)}>
+                                <BsX className="btn-icon-sup" />
+                                Отмена
+                            </button>
+                            <button
+                                className="btn-send-sup"
+                                onClick={handleSendSupportMessage}
+                                disabled={!supportSubject.trim() || !supportMessage.trim()}
+                            >
+                                <BsCheck className="btn-icon-sup" />
+                                Отправить
+                            </button>
                         </div>
                     </div>
                 </div>
             )}
 
+            {/* 🔔 МОДАЛЬНОЕ ОКНО УВЕДОМЛЕНИЙ - ИСПОЛЬЗУЕТ СТИЛИ С СУФФИКСОМ -notif */}
+            {notificationsOpen && (
+                <div className="modal-overlay-notif" onClick={() => setNotificationsOpen(false)}>
+                    <div className="modal-content-notif" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header-notif">
+                            <h3 className="modal-title-notif">
+                                <BsBell className="modal-icon-notif" />
+                                Уведомления
+                            </h3>
+                            <Button className="close-btn-notif" onClick={() => setNotificationsOpen(false)}>
+                                <BsX size={20} />
+                            </Button>
+                        </div>
 
+                        <div className="modal-body-notif">
+                            {loadingNotifications ? (
+                                <div className="loading-notifications-notif">
+                                    <div className="loading-spinner-notif"></div>
+                                    <p className="loading-text-notif">Загрузка уведомлений...</p>
+                                </div>
+                            ) : supportReplies.length === 0 ? (
+                                <div className="empty-notifications-notif">
+                                    <BsBell className="empty-icon-notif" />
+                                    <h3>Нет новых уведомлений</h3>
+                                    <p>Здесь будут отображаться ответы от службы поддержки</p>
+                                </div>
+                            ) : (
+                                supportReplies.map((reply, index) => (
+                                    <div key={reply.id} className={`notification-item-notif ${index === 0 ? "new" : ""}`}>
+                                        <div className="notification-header-notif">
+                                            <h4 className="notification-subject-notif">
+                                                Ответ на: {reply.support_messages?.subject || "Без темы"}
+                                            </h4>
+                                            <span className="notification-date-notif">
+                                                {new Date(reply.created_at).toLocaleString("ru-RU")}
+                                            </span>
+                                        </div>
+                                        <p className="notification-content-notif">{reply.reply}</p>
+                                        {index === 0 && <div className="notification-badge-notif">Новое</div>}
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

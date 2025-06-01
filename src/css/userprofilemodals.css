@@ -1,0 +1,543 @@
+/* Стили для модальных окон профиля пользователя */
+
+/* ========== МОДАЛЬНОЕ ОКНО ПОДДЕРЖКИ (-sup) ========== */
+
+.modal-overlay-sup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  backdrop-filter: blur(8px);
+  animation: fadeIn-sup 0.3s ease-out;
+}
+
+.modal-content-sup {
+  background: white;
+  border-radius: 1.5rem;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  animation: slideIn-sup 0.3s ease-out;
+}
+
+@keyframes fadeIn-sup {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn-sup {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Заголовок модального окна поддержки */
+.modal-header-sup {
+  background: linear-gradient(135deg, #10b981, #059669);
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+.modal-title-sup {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.modal-icon-sup {
+  font-size: 1.5rem;
+}
+
+.close-btn-sup {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.close-btn-sup:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* Тело модального окна поддержки */
+.modal-body-sup {
+  padding: 2rem;
+}
+
+.form-group-sup {
+  margin-bottom: 1.5rem;
+}
+
+.form-label-sup {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.form-input-sup,
+.form-textarea-sup {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.form-input-sup:focus,
+.form-textarea-sup:focus {
+  outline: none;
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+  transform: translateY(-1px);
+}
+
+.form-textarea-sup {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.6;
+}
+
+.character-count-sup {
+  text-align: right;
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+/* Подвал модального окна поддержки */
+.modal-footer-sup {
+  background: #f9fafb;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.btn-send-sup,
+.btn-cancel-sup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.875rem;
+}
+
+.btn-send-sup {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+
+.btn-send-sup:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+}
+
+.btn-send-sup:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.btn-cancel-sup {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.btn-cancel-sup:hover {
+  background: #e5e7eb;
+  transform: translateY(-2px);
+}
+
+.btn-icon-sup {
+  font-size: 1rem;
+}
+
+/* ========== МОДАЛЬНОЕ ОКНО УВЕДОМЛЕНИЙ (-notif) ========== */
+
+.modal-overlay-notif {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  backdrop-filter: blur(8px);
+  animation: fadeIn-notif 0.3s ease-out;
+}
+
+.modal-content-notif {
+  background: white;
+  border-radius: 1.5rem;
+  width: 100%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  animation: slideIn-notif 0.3s ease-out;
+}
+
+@keyframes fadeIn-notif {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn-notif {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Заголовок модального окна уведомлений */
+.modal-header-notif {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+.modal-title-notif {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.modal-icon-notif {
+  font-size: 1.5rem;
+}
+
+.close-btn-notif {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.close-btn-notif:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* Тело модального окна уведомлений */
+.modal-body-notif {
+  padding: 2rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+/* Пустое состояние уведомлений */
+.empty-notifications-notif {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #6b7280;
+}
+
+.empty-icon-notif {
+  font-size: 4rem;
+  color: #d1d5db;
+  margin-bottom: 1.5rem;
+}
+
+.empty-notifications-notif h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.empty-notifications-notif p {
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Элементы уведомлений */
+.notification-item-notif {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.notification-item-notif:last-child {
+  margin-bottom: 0;
+}
+
+.notification-item-notif:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-color: #3b82f6;
+}
+
+.notification-item-notif::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
+
+.notification-header-notif {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.notification-subject-notif {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #374151;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.notification-date-notif {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  font-weight: 500;
+  white-space: nowrap;
+  background: #e5e7eb;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+}
+
+.notification-content-notif {
+  color: #4b5563;
+  line-height: 1.6;
+  margin: 0;
+  background: white;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+}
+
+.notification-badge-notif {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Кастомный скроллбар для уведомлений */
+.modal-body-notif::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-body-notif::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.modal-body-notif::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #3b82f6, #1d4ed8);
+  border-radius: 3px;
+}
+
+.modal-body-notif::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #2563eb, #1e40af);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .modal-content-sup,
+  .modal-content-notif {
+    margin: 1rem;
+    max-height: 95vh;
+  }
+
+  .modal-header-sup,
+  .modal-header-notif {
+    padding: 1rem 1.5rem;
+  }
+
+  .modal-body-sup,
+  .modal-body-notif {
+    padding: 1.5rem;
+  }
+
+  .modal-footer-sup {
+    padding: 1rem 1.5rem;
+    flex-direction: column;
+  }
+
+  .btn-send-sup,
+  .btn-cancel-sup {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .notification-header-notif {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .notification-date-notif {
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-overlay-sup,
+  .modal-overlay-notif {
+    padding: 0.5rem;
+  }
+
+  .modal-header-sup,
+  .modal-header-notif {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .close-btn-sup,
+  .close-btn-notif {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+
+  .notification-item-notif {
+    padding: 1rem;
+  }
+
+  .empty-notifications-notif {
+    padding: 2rem 1rem;
+  }
+
+  .empty-icon-notif {
+    font-size: 3rem;
+  }
+}
+
+/* Анимации для уведомлений */
+@keyframes notificationPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+.notification-item-notif.new {
+  animation: notificationPulse 2s ease-in-out;
+  border-color: #10b981;
+  background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+}
+
+/* Состояния загрузки */
+.loading-notifications-notif {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  color: #6b7280;
+}
+
+.loading-spinner-notif {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(59, 130, 246, 0.3);
+  border-radius: 50%;
+  border-top-color: #3b82f6;
+  animation: spin-notif 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin-notif {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-text-notif {
+  font-weight: 500;
+}

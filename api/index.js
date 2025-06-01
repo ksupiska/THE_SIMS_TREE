@@ -272,6 +272,6 @@ app.get("/", (req, res) => {
   res.send("Сервер работает!");
 });
 
-app.listen(port, () => {
-  console.log(`Сервер работает на http://localhost:${port}`);
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Сервер работает на http://0.0.0.0:${port}`);
 });

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { supabase } from "../SupabaseClient"
-import { Link } from "react-router-dom" // если используешь React Router
 
 import { Button } from "react-bootstrap"
 
@@ -152,10 +151,10 @@ export default function BlogPage() {
                                     <div className="article-content-blog">
                                         <h2 className="article-title-blog">{article.title}</h2>
                                         <p className="article-excerpt-blog">{article.content.substring(0, 150)}...</p>
-                                        <Link href={`/blog/${article.id}`} className="read-more-blog">
+                                        <Button href={`/blog/${article.id}`} className="read-more-blog">
                                             <span>Читать далее</span>
                                             <BsArrowRight className="arrow-icon-blog" />
-                                        </Link>
+                                        </Button>
                                     </div>
                                 </motion.article>
                             ))}

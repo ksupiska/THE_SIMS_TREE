@@ -38,6 +38,10 @@ const AuthWrapper = () => {
             if (profile) {
                 setRole(profile.role) // создаёшь useState role
             }
+            if (error) {
+                console.error("Ошибка при получении роли пользователя:", error.message)
+            }
+
         }
 
         fetchProfile()
@@ -80,6 +84,7 @@ const AuthWrapper = () => {
                         <div className="user-details">
                             <h1 className="user-nickname">{user.email?.split("@")[0] || "Симс"}</h1>
                             <p className="user-email">{user.email}</p>
+                            <p className="user-email">{role}</p>
                         </div>
                         <button className="edit-profile-button" onClick={() => supabase.auth.signOut()}>
                             <LogOut size={18} className="me-2" />

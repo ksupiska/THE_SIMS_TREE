@@ -236,34 +236,34 @@ export default function CharacterList() {
       )}
 
       {selectedCharacter && (
-        <div className="modal-overlay" onClick={() => { setSelectedCharacter(null); setIsEditing(false); }}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-overlay-list" onClick={() => { setSelectedCharacter(null); setIsEditing(false); }}>
+          <div className="modal-content-list" onClick={(e) => e.stopPropagation()}>
             {!isEditing ? (
               <>
-                <div className="modal-header">
-                  <img src={selectedCharacter.avatar || '/default-avatar.png'} alt="Аватар" className="modal-avatar" />
+                <div className="modal-header-list">
+                  <img src={selectedCharacter.avatar || '/default-avatar.png'} alt="Аватар" className="modal-avatar-list" />
                   <h2>{selectedCharacter.name} {selectedCharacter.surname}</h2>
                 </div>
 
-                <div className="modal-body">
-                  <div className="info-section">
+                <div className="modal-body-list">
+                  <div className="info-section-list">
                     <h4>Основная информация</h4>
                     <p><strong>Пол:</strong> {selectedCharacter.gender}</p>
                     <p><strong>Город:</strong> {selectedCharacter.city}</p>
                   </div>
-                  <div className="info-section">
+                  <div className="info-section-list">
                     <h4>Дополнительно</h4>
                     <p><strong>Тип:</strong> {selectedCharacter.type}</p>
                     <p><strong>Состояние:</strong> {selectedCharacter.state}</p>
                     <p><strong>Черты характера:</strong> {selectedCharacter.kind}</p>
                   </div>
-                  <div className="info-section">
+                  <div className="info-section-list">
                     <h4>Биография</h4>
                     <p>{selectedCharacter.biography}</p>
                   </div>
                 </div>
 
-                <div className="modal-footer">
+                <div className="modal-footer-list">
                   <button onClick={() => setSelectedCharacter(null)}>Закрыть</button>
                   <button onClick={(e) => {
                     e.stopPropagation();
@@ -278,13 +278,13 @@ export default function CharacterList() {
               </>
             ) : (
               <>
-                <div className="modal-header">
+                <div className="modal-header-list">
                   <h2>Редактирование персонажа</h2>
                 </div>
-                <div className="modal-body">
+                <div className="modal-body-list">
                   <Form>
                     <Form.Group className="mb-2">
-                      <Form.Label>Avatar</Form.Label>
+                      <Form.Label>Аватар</Form.Label>
                       <Form.Control
                         type="file"
                         accept="image/*"
@@ -300,7 +300,6 @@ export default function CharacterList() {
                             reader.readAsDataURL(file);
                           }
                         }}
-
                       />
                     </Form.Group>
 
@@ -314,18 +313,76 @@ export default function CharacterList() {
                       />
                     )}
 
-                    {['name', 'surname', 'city', 'type', 'state', 'kind', 'death'].map((field) => (
-                      <Form.Group className="mb-2" key={field}>
-                        <Form.Label>{field === 'kind' ? 'Черты характера' : field[0].toUpperCase() + field.slice(1)}</Form.Label>
-                        <Form.Control
-                          type="text"
-                          name={field}
-                          value={(editFormData as Partial<Character>)[field as keyof Character] || ''}
-                          onChange={handleInputChange}
-                          disabled={field === 'death' && editFormData?.state?.toLowerCase() !== 'мертв'}
-                        />
-                      </Form.Group>
-                    ))}
+                    <Form.Group className="mb-2">
+                      <Form.Label>Имя</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="name"
+                        value={editFormData?.name || ''}
+                        onChange={handleInputChange}
+                      />
+                    </Form.Group>
+
+                    <Form.Group className="mb-2">
+                      <Form.Label>Фамилия</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="surname"
+                        value={editFormData?.surname || ''}
+                        onChange={handleInputChange}
+                      />
+                    </Form.Group>
+
+                    <Form.Group className="mb-2">
+                      <Form.Label>Город</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="city"
+                        value={editFormData?.city || ''}
+                        onChange={handleInputChange}
+                      />
+                    </Form.Group>
+
+                    <Form.Group className="mb-2">
+                      <Form.Label>Тип</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="type"
+                        value={editFormData?.type || ''}
+                        onChange={handleInputChange}
+                      />
+                    </Form.Group>
+
+                    <Form.Group className="mb-2">
+                      <Form.Label>Статус</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="state"
+                        value={editFormData?.state || ''}
+                        onChange={handleInputChange}
+                      />
+                    </Form.Group>
+
+                    <Form.Group className="mb-2">
+                      <Form.Label>Черты характера</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="kind"
+                        value={editFormData?.kind || ''}
+                        onChange={handleInputChange}
+                      />
+                    </Form.Group>
+
+                    <Form.Group className="mb-2">
+                      <Form.Label>Причина смерти (только если указано: мертв)</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="death"
+                        value={editFormData?.death || ''}
+                        onChange={handleInputChange}
+                        disabled={editFormData?.state?.toLowerCase() !== 'мертв'}
+                      />
+                    </Form.Group>
 
                     <Form.Group className="mb-2">
                       <Form.Label>Пол</Form.Label>
@@ -348,7 +405,7 @@ export default function CharacterList() {
                   </Form>
                 </div>
 
-                <div className="modal-footer">
+                <div className="modal-footer-list ">
                   <button onClick={(e) => {
                     e.stopPropagation();
                     cancelEditing();

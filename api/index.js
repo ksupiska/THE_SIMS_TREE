@@ -10,7 +10,7 @@ import save from "./save.js";
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 5000;
+
 
 console.log("Supabase URL:", process.env.SUPABASE_URL);
 console.log("Supabase Key:", process.env.SUPABASE_KEY);
@@ -272,6 +272,8 @@ app.get("/", (req, res) => {
   res.send("Сервер работает!");
 });
 
+const port = process.env.PORT || 8080;
+console.log('PORT from env:', process.env.PORT);
 app.listen(port, '0.0.0.0', () => {
   console.log(`Сервер работает на http://0.0.0.0:${port}`);
 });

@@ -51,10 +51,12 @@ export default function AdminPage() {
       setIsAdmin(true)
 
       // Получаем статьи с любым статусом, чтобы показать и "pending"
-      const { data: articlesData, error } = await supabase
-        .from<Article>("articles")
+      const { data, error } = await supabase
+        .from("articles")
         .select("*")
         .order("created_at", { ascending: false })
+
+      const articlesData = data as Article[]
 
       if (error) {
         console.error("Ошибка загрузки статей:", error)

@@ -1,6 +1,5 @@
 // SimCreateForm.tsx
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 
 import { supabase } from '../SupabaseClient';
 
@@ -17,12 +16,12 @@ import 'rc-slider/assets/index.css';
 
 import { useLocation } from "react-router-dom"
 
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 export default function SimCreateForm() {
   const location = useLocation()
-  // const treeId = location.state?.treeId || null
 
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
@@ -32,12 +31,7 @@ export default function SimCreateForm() {
   const [kind, setKind] = useState('');
   const [type, setType] = useState('');
   const [biography, setBiography] = useState('');
-  const [avatar, setAvatar] = useState<File | null>(null);
-
-  const [treeId, setTreeId] = useState('');
-
-
-  const [userId, setUserId] = useState<string | null>(null);//юз пользователя
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
   const [cropModalOpen, setCropModalOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -46,10 +40,14 @@ export default function SimCreateForm() {
   const [zoom, setZoom] = useState(1);
 
   //обязательные поля для заполнения
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [errors, setErrors] = useState<{ [key: string]: string | null }>({});
 
   //успешное добавление персонажа
   const [successMessage, setSuccessMessage] = useState("");
+
+  const [userId, setUserId] = useState<string | null>(null);
+  const [treeId, setTreeId] = useState<string | null>(null);
+
 
   //обработка аватара и открытие модального окна
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -113,7 +111,7 @@ export default function SimCreateForm() {
     if (!imageSrc || !croppedAreaPixels) return;
     const croppedImageFile = await getCroppedImg(imageSrc, croppedAreaPixels);
     if (croppedImageFile) {
-      setAvatar(croppedImageFile);
+      setAvatarFile(croppedImageFile);
     }
     setCropModalOpen(false);
   };
@@ -178,80 +176,128 @@ export default function SimCreateForm() {
     fetchData();
   }, [location.state]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+
+  type CharacterData = {
+    name: string;
+    surname: string;
+    gender: string;
+    city?: string | null;
+    death?: string | null;  // например дата смерти или статус
+    kind?: string | null;
+    type?: string | null;
+    biography?: string | null;
+    avatar?: string | null;  // URL аватара
+    tree_id: string;
+    user_id: string;
+  };
+
+  async function uploadAvatar(file: File, userId: string): Promise<string> {
+    const fileExt = file.name.split('.').pop() || 'jpg';
+    const fileName = `${userId}-${Date.now()}.${fileExt}`;
+    // попробуем без вложенной папки avatars
+    const filePath = fileName;
+
+    console.log('Uploading file to path:', filePath);
+
+    const { error } = await supabase.storage
+      .from('avatars')
+      .upload(filePath, file, {
+        cacheControl: '3600',
+        upsert: false,
+        contentType: file.type,
+      });
+
+    if (error) {
+      console.error('Upload error:', error);
+      throw error;
+    }
+
+    const { data } = supabase.storage
+      .from('avatars')
+      .getPublicUrl(filePath);
+
+    return data.publicUrl;
+  }
+
+
+  async function createCharacterWithAvatar(
+    characterData: Omit<CharacterData, 'avatar'>,
+    avatarFile: File | null,
+  ): Promise<CharacterData> {
+    let avatarUrl: string | null = null;
+
+    if (avatarFile) {
+      avatarUrl = await uploadAvatar(avatarFile, characterData.user_id);
+    }
+
+    const { data, error } = await supabase
+      .from('characters')
+      .insert([{ ...characterData, avatar: avatarUrl }])
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return data;
+  }
+
+
+  const [loading, setLoading] = useState(false);
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     if (!userId) {
-      alert("Вы должны быть авторизованы, чтобы создать персонажа.");
+      setErrors({ general: 'Пользователь не авторизован' });
       return;
     }
 
-    const newErrors: { [key: string]: string } = {};
-
-    if (!name.trim()) newErrors.name = "Имя обязательно";
-    if (!surname.trim()) newErrors.surname = "Фамилия обязательна";
-    if (!gender) newErrors.gender = "Пол обязателен";
-    if (!city.trim()) newErrors.city = "Город обязателен";
-    if (!kind.trim()) newErrors.kind = "Черты характера обязательны";
-    if (!state.trim()) newErrors.state = "Состояние обязательно";
-    if (!type.trim()) newErrors.type = "Форма жизни обязательна";
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return; // не отправляем форму, если есть ошибки
+    if (!treeId) {
+      setErrors({ general: 'Tree ID не задан' });
+      return;
     }
 
-    setErrors({}); // очистить ошибки перед отправкой
-
-    const formData = new FormData();
-    console.log(treeId);
-    formData.append('name', name);
-    formData.append('surname', surname);
-    formData.append('gender', gender);
-    formData.append('city', city);
-    formData.append('kind', kind);
-    formData.append('state', state);
-    formData.append('type', type);
-    formData.append('biography', biography);
-    formData.append('death', death);
-    formData.append('tree_id', treeId);
-
-
-    formData.append('user_id', userId);
-
-    if (avatar) formData.append('avatar', avatar);
+    setLoading(true);
+    setErrors({});
+    setSuccessMessage('');
 
     try {
-      const response = await axios.post('http://localhost:5000/api/characters', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-      console.log('Успешно!', response.data);
-      setSuccessMessage("Персонаж успешно добавлен!");
+      const newCharacter = await createCharacterWithAvatar(
+        {
+          name,
+          surname,
+          gender,
+          city: city || null,
+          death: death || null,
+          kind: kind || null,
+          type: type || null,
+          biography: biography || null,
+          tree_id: treeId,  // теперь точно string
+          user_id: userId,
+        },
+        avatarFile,
+      );
 
-      // Очистка формы — сброс всех стейтов
-      setName("");
-      setSurname("");
-      setGender("");
-      setCity("");
-      setKind("");
-      setState("");
-      setType("");
-      setBiography("");
-      setDeath("");
-      setAvatar(null);
-
-      setErrors({});
-
-      if (!treeId) {
-        alert("Не выбрано дерево для добавления персонажа.");
-        return;
+      setSuccessMessage(`Персонаж ${newCharacter.name} успешно создан!`);
+      // очистка формы
+      setName('');
+      setSurname('');
+      setGender('');
+      setCity('');
+      setDeath('');
+      setKind('');
+      setType('');
+      setBiography('');
+      setAvatarFile(null);
+    } catch (e) {
+      if (e instanceof Error) {
+        setErrors({ general: e.message });
+      } else {
+        setErrors({ general: 'Неизвестная ошибка' });
       }
-    } catch (error) {
-      console.error('Ошибка при добавлении персонажа:', error);
+    } finally {
+      setLoading(false);
     }
-  };
+  }
 
 
   return (
@@ -281,11 +327,12 @@ export default function SimCreateForm() {
                   className="sims-input"
                   required />
                 <div className="sims-file-preview">
-                  {avatar ? (
-                    <img src={URL.createObjectURL(avatar)} alt="Avatar preview" className="sims-avatar-preview" />
+                  {avatarFile ? (
+                    <img src={URL.createObjectURL(avatarFile)} alt="Avatar preview" className="sims-avatar-preview" />
                   ) : (
                     <div className="sims-avatar-placeholder">👤</div>
                   )}
+
                 </div>
               </div>
             </Form.Group>
@@ -495,7 +542,14 @@ export default function SimCreateForm() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setCropModalOpen(false)}>Отмена</Button>
-          <Button variant="primary" onClick={handleCropSave}>Сохранить</Button>
+          <Button
+            variant="primary"
+            onClick={handleCropSave}
+            disabled={loading}
+          >
+            {loading ? 'Сохраняется...' : 'Сохранить'}
+          </Button>
+
         </Modal.Footer>
       </Modal>
 

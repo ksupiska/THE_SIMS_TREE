@@ -8,6 +8,8 @@ import LoadingComponent from "../components/LoadingComponent";
 import { supabase } from "../SupabaseClient";
 import '../css/admin.css';
 import '../css/replymodal.css';
+import '../css/editarticle.css';
+
 import AccessDenied from "../components/AccessDenied";
 
 interface Article {
@@ -504,27 +506,27 @@ export default function AdminPage() {
       </div>
 
       {showModal && currentArticle && (
-        <div className="modal-overlay-adm" onClick={() => setShowModal(false)}>
-          <div className="modal-content-adm" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header-adm">
-              <div className="modal-title-section-adm">
-                <BsPencilSquare className="modal-icon-adm" />
+        <div className="modal-overlay-admin" onClick={() => setShowModal(false)}>
+          <div className="modal-content-admin" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header-admin">
+              <div className="modal-title-section-admin">
+                <BsPencilSquare className="modal-icon-admin" />
                 <h3>Редактировать статью</h3>
               </div>
-              <Button className="close-btn-adm" onClick={() => setShowModal(false)}>
+              <Button className="close-btn-admin" onClick={() => setShowModal(false)}>
                 <BsX size={24} />
               </Button>
             </div>
 
-            <div className="modal-body-adm">
-              <div className="form-group-adm">
-                <label htmlFor="edit-title" className="form-label-adm">
+            <div className="modal-body-admin">
+              <div className="form-group-admin">
+                <label htmlFor="edit-title" className="form-label-admin">
                   Заголовок статьи
                 </label>
                 <input
                   id="edit-title"
                   type="text"
-                  className="form-input-adm"
+                  className="form-input-admin"
                   placeholder="Введите заголовок статьи..."
                   value={currentArticle.title}
                   onChange={(e) =>
@@ -536,20 +538,20 @@ export default function AdminPage() {
                 />
               </div>
 
-              <div className="form-group-adm">
-                <label className="form-label-adm">Изображение статьи</label>
-                <div className="image-upload-container-adm">
+              <div className="form-group-admin">
+                <label className="form-label-admin">Изображение статьи</label>
+                <div className="image-upload-container-admin">
                   {currentArticle.image ? (
-                    <div className="image-preview-container-adm">
+                    <div className="image-preview-container-admin">
                       <img
                         src={currentArticle.image || "/placeholder.svg"}
                         alt="Предпросмотр"
-                        className="image-preview-adm"
+                        className="image-preview-admin"
                       />
-                      <div className="image-overlay-adm">
+                      <div className="image-overlay-admin">
                         <Button
                           type="button"
-                          className="remove-image-btn-adm"
+                          className="remove-image-btn-admin"
                           onClick={() =>
                             setCurrentArticle({
                               ...currentArticle,
@@ -562,15 +564,15 @@ export default function AdminPage() {
                       </div>
                     </div>
                   ) : (
-                    <div className="upload-placeholder-adm">
-                      <BsImage className="upload-icon-adm" />
+                    <div className="upload-placeholder-admin">
+                      <BsImage className="upload-icon-admin" />
                       <p>Добавьте изображение к статье</p>
                     </div>
                   )}
 
-                  <div className="upload-options-adm">
-                    <label className="upload-btn-adm">
-                      <BsCamera className="btn-icon-adm" />
+                  <div className="upload-options-admin">
+                    <label className="upload-btn-admin">
+                      <BsCamera className="btn-icon-admin" />
                       Загрузить файл
                       <input
                         type="file"
@@ -592,10 +594,10 @@ export default function AdminPage() {
                       />
                     </label>
 
-                    <div className="url-input-container-adm">
+                    <div className="url-input-container-admin">
                       <input
                         type="url"
-                        className="url-input-adm"
+                        className="url-input-admin"
                         placeholder="или вставьте ссылку на изображение"
                         value={currentArticle.image || ""}
                         onChange={(e) =>
@@ -610,13 +612,13 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              <div className="form-group-adm">
-                <label htmlFor="edit-content" className="form-label-adm">
+              <div className="form-group-admin">
+                <label htmlFor="edit-content" className="form-label-admin">
                   Содержание статьи
                 </label>
                 <textarea
                   id="edit-content"
-                  className="form-textarea-adm"
+                  className="form-textarea-admin"
                   rows={8}
                   placeholder="Напишите содержание статьи..."
                   value={currentArticle.content}
@@ -627,23 +629,23 @@ export default function AdminPage() {
                     })
                   }
                 />
-                <div className="character-count-adm">{currentArticle.content.length} символов</div>
+                <div className="character-count-admin">{currentArticle.content.length} символов</div>
               </div>
             </div>
 
-            <div className="modal-footer-adm">
-              <button className="btn-cancel-adm" onClick={() => setShowModal(false)}>
-                <BsX className="btn-icon-adm" />
+            <div className="modal-footer-admin">
+              <button className="btn-cancel-admin" onClick={() => setShowModal(false)}>
+                <BsX className="btn-icon-admin" />
                 Отмена
               </button>
               <button
-                className="btn-save-adm"
+                className="btn-save-admin"
                 onClick={async () => {
                   await handleUpdateArticle()
                   setShowModal(false)
                 }}
               >
-                <BsCheck className="btn-icon-adm" />
+                <BsCheck className="btn-icon-admin" />
                 Сохранить изменения
               </button>
             </div>

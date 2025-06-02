@@ -1,0 +1,535 @@
+
+/* Основа модального окна */
+.modal-overlay-admin {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  backdrop-filter: blur(8px);
+  animation: fadeIn-admin 0.3s ease-out;
+}
+
+.modal-content-admin {
+  background: white;
+  border-radius: 1.5rem;
+  width: 100%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  animation: slideIn-admin 0.3s ease-out;
+}
+
+@keyframes fadeIn-admin {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn-admin {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Заголовок модального окна */
+.modal-header-admin {
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+.modal-title-section-admin {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.modal-icon-admin {
+  font-size: 1.5rem;
+  color: white;
+}
+
+.modal-header-admin h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.close-btn-admin {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border: none !important;
+  color: white !important;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  padding: 0 !important;
+  min-width: auto !important;
+}
+
+.close-btn-admin:hover {
+  background: rgba(255, 255, 255, 0.3) !important;
+  transform: scale(1.1) !important;
+  color: white !important;
+}
+
+/* Тело модального окна */
+.modal-body-admin {
+  padding: 2rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+/* Группы форм */
+.form-group-admin {
+  margin-bottom: 1.5rem;
+}
+
+.form-label-admin {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.form-input-admin,
+.form-textarea-admin {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.form-input-admin:focus,
+.form-textarea-admin:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+  transform: translateY(-1px);
+}
+
+.form-textarea-admin {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.6;
+}
+
+.character-count-admin {
+  text-align: right;
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+/* Загрузка изображений */
+.image-upload-container-admin {
+  border: 2px dashed #d1d5db;
+  border-radius: 1rem;
+  padding: 1rem;
+  transition: all 0.3s ease;
+  background: #fafafa;
+}
+
+.image-upload-container-admin:hover {
+  border-color: #8b5cf6;
+  background: #faf5ff;
+}
+
+.image-preview-container-admin {
+  position: relative;
+  margin-bottom: 1rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.image-preview-admin {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.image-overlay-admin {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.image-preview-container-admin:hover .image-overlay-admin {
+  opacity: 1;
+}
+
+.remove-image-btn-admin {
+  background: #ef4444 !important;
+  color: white !important;
+  border: none !important;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  padding: 0 !important;
+  min-width: auto !important;
+}
+
+.remove-image-btn-admin:hover {
+  background: #dc2626 !important;
+  transform: scale(1.1) !important;
+  color: white !important;
+}
+
+.upload-placeholder-admin {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #9ca3af;
+}
+
+.upload-icon-admin {
+  font-size: 3rem;
+  color: #d1d5db;
+  margin-bottom: 0.75rem;
+}
+
+.upload-placeholder-admin p {
+  font-weight: 500;
+  margin: 0;
+}
+
+.upload-options-admin {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.upload-btn-admin {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  font-size: 0.875rem;
+}
+
+.upload-btn-admin:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+}
+
+.btn-icon-admin {
+  font-size: 1rem;
+}
+
+.url-input-container-admin {
+  width: 100%;
+  max-width: 400px;
+}
+
+.url-input-admin {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 2rem;
+  font-size: 0.875rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.url-input-admin:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.url-input-admin::placeholder {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* Подвал модального окна */
+.modal-footer-admin {
+  background: #f9fafb;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.btn-cancel-admin,
+.btn-save-admin {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.875rem;
+}
+
+.btn-cancel-admin {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.btn-cancel-admin:hover {
+  background: #e5e7eb;
+  transform: translateY(-2px);
+}
+
+.btn-save-admin {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+
+.btn-save-admin:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+}
+
+.btn-save-admin:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.btn-save-admin:disabled:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Кастомный скроллбар для модального окна */
+.modal-body-admin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-body-admin::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.modal-body-admin::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #8b5cf6, #ec4899);
+  border-radius: 3px;
+}
+
+.modal-body-admin::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #7c3aed, #db2777);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .modal-content-admin {
+    margin: 1rem;
+    max-height: 95vh;
+  }
+
+  .modal-header-admin {
+    padding: 1rem 1.5rem;
+  }
+
+  .modal-body-admin {
+    padding: 1.5rem;
+  }
+
+  .modal-footer-admin {
+    padding: 1rem 1.5rem;
+    flex-direction: column;
+  }
+
+  .btn-cancel-admin,
+  .btn-save-admin {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .upload-options-admin {
+    gap: 0.75rem;
+  }
+
+  .upload-btn-admin {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-overlay-admin {
+    padding: 0.5rem;
+  }
+
+  .modal-header-admin {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .modal-title-section-admin {
+    justify-content: center;
+  }
+
+  .close-btn-admin {
+    position: absolute !important;
+    top: 1rem !important;
+    right: 1rem !important;
+  }
+
+  .upload-placeholder-admin {
+    padding: 1.5rem 1rem;
+  }
+
+  .upload-icon-admin {
+    font-size: 2rem;
+  }
+}
+
+/* Анимации для элементов формы */
+@keyframes inputFocus-admin {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-1px);
+  }
+}
+
+.form-input-admin:focus,
+.form-textarea-admin:focus {
+  animation: inputFocus-admin 0.3s ease-out;
+}
+
+/* Состояния загрузки */
+.loading-admin {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.loading-admin::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid #8b5cf6;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin-admin 1s linear infinite;
+}
+
+@keyframes spin-admin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Эффекты наведения для интерактивных элементов */
+.upload-btn-admin:active {
+  transform: translateY(0);
+}
+
+.btn-cancel-admin:active,
+.btn-save-admin:active {
+  transform: translateY(0);
+}
+
+/* Стили для валидации */
+.form-input-admin.error,
+.form-textarea-admin.error {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.form-input-admin.success,
+.form-textarea-admin.success {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+/* Дополнительные стили для улучшения UX */
+.modal-content-admin {
+  transform-origin: center;
+}
+
+.modal-overlay-admin.closing {
+  animation: fadeOut-admin 0.3s ease-out;
+}
+
+.modal-content-admin.closing {
+  animation: slideOut-admin 0.3s ease-out;
+}
+
+@keyframes fadeOut-admin {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideOut-admin {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+}

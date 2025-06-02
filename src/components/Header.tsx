@@ -37,9 +37,6 @@ const Header = () => {
                             <Nav.Link href="/" className="fw-medium" style={{ color: "#4a8d56" }}>
                                 Главная
                             </Nav.Link>
-                            <Nav.Link href="/list" className="fw-medium text-secondary">
-                                Персонажи
-                            </Nav.Link>
                             <Nav.Link href="/tree" className="fw-medium text-secondary">
                                 Древо
                             </Nav.Link>

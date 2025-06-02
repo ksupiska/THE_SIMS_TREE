@@ -61,19 +61,21 @@ const Header = () => {
                                         </Link>
                                     </li>
                                     <li className="mb-2">
-                                        <Link to="/" className="text-decoration-none text-secondary">
-                                            Персонажи
+                                        <Link to="/tree" className="text-decoration-none text-secondary">
+                                            Древо
                                         </Link>
                                     </li>
                                     <li className="mb-2">
-                                        <Link to="/" className="text-decoration-none text-secondary">
-                                            Семьи
+                                        <Link to="/instruction" className="text-decoration-none text-secondary">
+                                            Инструкция
                                         </Link>
                                     </li>
                                     <li className="mb-2">
-                                        <Link to="/" className="text-decoration-none text-secondary">
-                                            Дома
+                                        <Link to="/admin" className="text-decoration-none text-secondary">
+                                            Админ
                                         </Link>
+                                    </li>
+                                    <li className="mb-2">
                                     </li>
                                 </ul>
                             </Col>
@@ -83,50 +85,10 @@ const Header = () => {
                                 </h5>
                                 <ul className="list-unstyled">
                                     <li className="mb-2">
-                                        <Link to="/" className="text-decoration-none text-secondary">
-                                            Форум
-                                        </Link>
                                     </li>
                                     <li className="mb-2">
-                                        <Link to="/" className="text-decoration-none text-secondary">
+                                        <Link to="/blog" className="text-decoration-none text-secondary">
                                             Блог
-                                        </Link>
-                                    </li>
-                                    <li className="mb-2">
-                                        <Link to="/" className="text-decoration-none text-secondary">
-                                            События
-                                        </Link>
-                                    </li>
-                                    <li className="mb-2">
-                                        <Link to="/" className="text-decoration-none text-secondary">
-                                            Галерея
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </Col>
-                            <Col sm={4}>
-                                <h5 className="fw-bold mb-3" style={{ color: "#4a8d56" }}>
-                                    Поддержка
-                                </h5>
-                                <ul className="list-unstyled">
-                                    <li className="mb-2">
-                                        <Link to="/" className="text-decoration-none text-secondary">
-                                            Помощь
-                                        </Link>
-                                    </li>
-                                    <li className="mb-2">
-                                        <Link to="/" className="text-decoration-none text-secondary">
-                                            FAQ
-                                        </Link>
-                                    </li>
-                                    <li className="mb-2">
-                                        <Link to="/" className="text-decoration-none text-secondary">
-                                            Контакты
-                                        </Link>
-                                    </li>
-                                    <li className="mb-2">
-                                        <Link to="/" className="text-decoration-none text-secondary">
-                                            Политика
                                         </Link>
                                     </li>
                                 </ul>

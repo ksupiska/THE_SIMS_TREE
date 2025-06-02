@@ -8,6 +8,7 @@ import { motion } from "framer-motion"
 import { BsDiamond, BsPencilSquare, BsCalendar, BsArrowRight, BsSearch } from "react-icons/bs";
 
 import '../css/blog.css';
+import LoadingComponent from "../components/LoadingComponent"
 
 interface Article {
     id: string
@@ -44,8 +45,7 @@ export default function BlogPage() {
         fetchPublishedArticles()
     }, [])
 
-    if (loading) return <p>Загрузка...</p>
-
+    if (loading) return <LoadingComponent />
 
     // Фильтрация статей по поисковому запросу
     const filteredArticles = articles.filter(

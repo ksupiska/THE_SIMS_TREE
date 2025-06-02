@@ -1,0 +1,368 @@
+/* Стили для страницы "Доступ запрещен" */
+
+.access-denied-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Фоновый градиент */
+.access-denied-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #fce7f3 0%, #f3e8ff 50%, #dbeafe 100%);
+  z-index: -2;
+}
+
+.access-denied-background::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+      circle at 20% 80%,
+      rgba(239, 68, 68, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(168, 85, 247, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 40% 40%,
+      rgba(59, 130, 246, 0.1) 0%,
+      transparent 50%
+    );
+  z-index: -1;
+}
+
+/* Основной контент */
+.access-denied-content {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 600px;
+}
+
+.access-denied-card {
+  background: white;
+  border-radius: 2rem;
+  padding: 3rem 2rem;
+  text-align: center;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.access-denied-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, #ef4444, #dc2626, #b91c1c);
+  border-radius: 2rem 2rem 0 0;
+}
+
+/* Иконка */
+.access-denied-icon-wrapper {
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.access-denied-icon {
+  font-size: 5rem;
+  color: #ef4444;
+  filter: drop-shadow(0 10px 20px rgba(239, 68, 68, 0.3));
+}
+
+/* Заголовок */
+.access-denied-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #374151;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.2;
+}
+
+/* Сообщение */
+.access-denied-message {
+  font-size: 1.25rem;
+  color: #6b7280;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+/* Дополнительная информация */
+.access-denied-info {
+  background: #f9fafb;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  text-align: left;
+  border: 1px solid #e5e7eb;
+}
+
+.access-denied-info p {
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.access-denied-info ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.access-denied-info li {
+  color: #6b7280;
+  margin-bottom: 0.75rem;
+  padding-left: 1.5rem;
+  position: relative;
+  line-height: 1.5;
+}
+
+.access-denied-info li:last-child {
+  margin-bottom: 0;
+}
+
+.access-denied-info li::before {
+  content: "•";
+  color: #ef4444;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+  font-size: 1.2rem;
+}
+
+/* Кнопки действий */
+.access-denied-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.access-denied-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  border: none;
+  border-radius: 2rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.back-button {
+  background: linear-gradient(135deg, #6b7280, #4b5563);
+  color: white;
+}
+
+.back-button:hover {
+  background: linear-gradient(135deg, #4b5563, #374151);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(107, 114, 128, 0.3);
+}
+
+.home-button {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+}
+
+.home-button:hover {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+}
+
+.button-icon {
+  font-size: 1.125rem;
+}
+
+/* Декоративные элементы */
+.access-denied-decoration {
+  position: fixed;
+  opacity: 0.1;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.decoration-1 {
+  top: 10%;
+  left: 10%;
+  transform: rotate(15deg);
+}
+
+.decoration-2 {
+  top: 60%;
+  right: 15%;
+  transform: rotate(-25deg);
+}
+
+.decoration-3 {
+  bottom: 20%;
+  left: 20%;
+  transform: rotate(45deg);
+}
+
+.decoration-icon {
+  font-size: 4rem;
+  color: #ef4444;
+  animation: float 6s ease-in-out infinite;
+}
+
+.decoration-1 .decoration-icon {
+  animation-delay: 0s;
+}
+
+.decoration-2 .decoration-icon {
+  animation-delay: 2s;
+}
+
+.decoration-3 .decoration-icon {
+  animation-delay: 4s;
+}
+
+/* Анимации */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(var(--rotation, 0deg));
+  }
+  50% {
+    transform: translateY(-20px) rotate(var(--rotation, 0deg));
+  }
+}
+
+.decoration-1 {
+  --rotation: 15deg;
+}
+
+.decoration-2 {
+  --rotation: -25deg;
+}
+
+.decoration-3 {
+  --rotation: 45deg;
+}
+
+/* Пульсация для иконки */
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.access-denied-icon {
+  animation: pulse 3s ease-in-out infinite;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .access-denied-container {
+    padding: 1rem;
+  }
+
+  .access-denied-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .access-denied-title {
+    font-size: 2rem;
+  }
+
+  .access-denied-message {
+    font-size: 1.125rem;
+  }
+
+  .access-denied-icon {
+    font-size: 4rem;
+  }
+
+  .access-denied-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .access-denied-button {
+    width: 100%;
+    max-width: 200px;
+  }
+
+  .access-denied-decoration {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .access-denied-card {
+    padding: 1.5rem 1rem;
+  }
+
+  .access-denied-title {
+    font-size: 1.75rem;
+  }
+
+  .access-denied-message {
+    font-size: 1rem;
+  }
+
+  .access-denied-icon {
+    font-size: 3.5rem;
+  }
+
+  .access-denied-info {
+    padding: 1rem;
+  }
+}
+
+/* Кастомный скроллбар */
+.access-denied-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.access-denied-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.access-denied-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #ef4444, #dc2626);
+  border-radius: 4px;
+}
+
+.access-denied-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #dc2626, #b91c1c);
+}

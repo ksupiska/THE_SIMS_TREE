@@ -12,6 +12,12 @@ const LoginForm = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [message, setMessage] = useState("")
+  const errorMessagesMap: Record<string, string> = {
+    'Invalid login credentials': 'Неверный email или пароль',
+    'Invalid email format': 'Неверный формат email',
+    'Password should be at least 6 characters': 'Пароль должен быть не менее 6 символов',
+    'User already registered': 'Пользователь с таким email уже зарегистрирован',
+  }
   const [messageType, setMessageType] = useState<"success" | "error" | "">("")
   const [loggedIn, setLoggedIn] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -31,8 +37,9 @@ const LoginForm = () => {
       })
 
       if (error) {
-        setMessage("Ошибка: " + error.message)
-        setMessageType("error")
+        const ruMessage = errorMessagesMap[error.message] || error.message // fallback на оригинал
+        setMessage('Ошибка: ' + ruMessage)
+        setMessageType('error')
         setLoggedIn(false)
       } else {
         setMessage("Вход выполнен успешно!")
@@ -40,6 +47,7 @@ const LoginForm = () => {
         setLoggedIn(true)
       }
     } catch (err) {
+      console.error(err)
       setMessage("Произошла непредвиденная ошибка")
       setMessageType("error")
     } finally {

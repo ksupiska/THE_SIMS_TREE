@@ -3,9 +3,12 @@ import { motion } from "framer-motion"
 import { BsPlus, BsTrash, BsEye, BsPencil, BsCheck, BsX, BsPencilSquare, BsImage, BsCamera } from "react-icons/bs"
 import { Button } from "react-bootstrap";
 
+import LoadingComponent from "../components/LoadingComponent";
+
 import { supabase } from "../SupabaseClient";
 import '../css/admin.css';
 import '../css/replymodal.css';
+import AccessDenied from "../components/AccessDenied";
 
 interface Article {
   id: string;
@@ -175,11 +178,19 @@ export default function AdminPage() {
 
 
   if (isLoading) {
-    return <div>Загрузка...</div>
+    return <LoadingComponent />
   }
 
+
+  // Если не админ, показываем красивую страницу отказа в доступе
   if (!isAdmin) {
-    return <p>У вас нет доступа к этой странице.</p>
+    return (
+      <AccessDenied
+        message="Эта страница доступна только администраторам системы"
+        showBackButton={true}
+        showHomeButton={true}
+      />
+    )
   }
 
   // Создание статьи — сохраняем в Supabase с статусом draft (или pending, если хочешь)

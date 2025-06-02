@@ -1,16 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { supabase } from '../../SupabaseClient';
-import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-
-//import { useNavigate } from 'react-router-dom';
 
 import { Pencil, Save } from "lucide-react";
 import { Button } from "react-bootstrap";
 import { Node } from "./Node/Node";
-// import Connectors from './Connectors';
+
 import { styles } from './Tree.Styles';
-import { NodeType, TreeProps, CharacterType, PartnerType, ServerNodeType } from './Tree.types';
+import { NodeType, TreeProps, CharacterType, PartnerType } from './Tree.types';
 import { useTreeDrag } from "./Tree.hooks";
 import { calculateTreePositions, handleDeleteNode as deleteNode } from "../../utils/treeUtils";
 
@@ -36,11 +33,23 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
         characterId: null,
     }]);
 
+    useEffect(() => {
+        console.log('Nodes data:', nodes);
+        console.log("treeId:", treeId);
+    }, [nodes, treeId]);
+
+    const navigate = useNavigate();
+    const handleCreateNewCharacter = () => {
+        navigate("/simcreateform", { state: { treeId } }); // Переход на страницу создания персонажа
+    };
+
     const [editMode, setEditMode] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const { offset, scale, handlers } = useTreeDrag();
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     // Текущий узел, для которого добавляем партнёра
     const [currentNodeId, setCurrentNodeId] = useState<string | null>(null);
@@ -65,89 +74,6 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
     const getRootNode = (nodes: NodeType[]): NodeType | undefined =>
         nodes.find(n => !n.parent1_id && !n.parent2_id);
 
-    const handleAddPartner = async (
-        targetNodeId: string,
-        partnerCharacter: CharacterType,
-        partner_type: PartnerType
-    ) => {
-        try {
-            const newPartnerId = uuidv4();
-
-            const partnerNode: NodeType = {
-                id: newPartnerId,
-                x: 0,
-                y: 0,
-                label: `${partnerCharacter.name} ${partnerCharacter.surname}`,
-                character: partnerCharacter,
-                characterId: partnerCharacter.id,
-                parent1_id: null,
-                parent2_id: null,
-                partner1_id: targetNodeId, // Устанавливаем связь с основным узлом
-                partner2_id: null,
-                partnerType: partner_type,
-            };
-
-            const updatedNodes = nodes.map((node) => {
-                if (node.id === targetNodeId) {
-                    return {
-                        ...node,
-                        partner2_id: newPartnerId, // Устанавливаем связь с партнёром
-                        partnerType: partner_type,
-                    };
-                }
-                return node;
-            }).concat(partnerNode);
-
-            const rootNode = getRootNode(updatedNodes);
-            if (!rootNode) {
-                console.error("Корень дерева не найден");
-                return;
-            }
-
-            const { nodes: positionedNodes } = calculateTreePositions(updatedNodes, rootNode.id, 0, 0);
-            setNodes(positionedNodes);
-
-            console.log('Партнёр успешно добавлен');
-        } catch (error) {
-            console.error('Ошибка при добавлении партнёра:', error);
-        }
-    };
-
-    const handleAddChildNode = (parentId: string, childCharacter?: CharacterType) => {
-        const parentNode = nodes.find(n => n.id === parentId);
-        if (!parentNode) return;
-
-        // Ищем партнёра через оба поля partner1_id и partner2_id
-        const partnerId = parentNode.partner1_id || parentNode.partner2_id;
-        const partnerNode = partnerId ? nodes.find(n => n.id === partnerId) : null;
-
-        const newChildNode: NodeType = {
-            id: uuidv4(),
-            x: 0,
-            y: 0,
-            label: childCharacter
-                ? `${childCharacter.name} ${childCharacter.surname}`
-                : "Новый ребенок",
-            character: childCharacter,
-            characterId: childCharacter?.id || null, // Исправлено: явно указываем null
-            parent1_id: parentNode.id,
-            parent2_id: partnerNode?.id || null,
-            partner1_id: null,
-            partner2_id: null,
-            partnerType: undefined,
-        };
-
-        const updatedNodes = [...nodes, newChildNode];
-        const rootNode = getRootNode(updatedNodes);
-        if (!rootNode) return;
-
-        const { nodes: positionedNodes } = calculateTreePositions(updatedNodes, rootNode.id, 0, 0);
-        setNodes(positionedNodes);
-    };
-
-
-
-
     const handleDeleteNode = (id: string) => {
         setNodes(prevNodes => {
             const filteredNodes = deleteNode(prevNodes, id);
@@ -155,6 +81,7 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
             if (!rootNode) return filteredNodes;
 
             const { nodes: repositionedNodes } = calculateTreePositions(filteredNodes, rootNode.id, 0, 0);
+            console.log("Filtered nodes:", filteredNodes);
             return repositionedNodes;
         });
     };
@@ -193,26 +120,32 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
 
     useEffect(() => {
         const fetchCharacters = async () => {
-            const { data, error } = await supabase.auth.getUser(); // Получаем текущего пользователя
+            const { data: userData, error: userError } = await supabase.auth.getUser();
 
-            if (error || !data.user) {
+            if (userError || !userData.user) {
                 console.error('Пользователь не авторизован');
                 return;
             }
 
-            const userId = data.user.id; // Получаем user_id текущего пользователя
+            const userId = userData.user.id;
 
             try {
-                // Логирование запроса
-                console.log("Запрос к серверу с userId:", userId);
-                const response = await axios.get(`http://localhost:5000/api/characters?userId=${userId}`);
-                console.log("Ответ от сервера:", response.data); // Логируем ответ от сервера
+                console.log("Запрос персонажей с userId:", userId);
 
-                // Проверка структуры данных
-                if (Array.isArray(response.data)) {
-                    setCharacters(response.data);
+                const { data: charactersData, error: charactersError } = await supabase
+                    .from("characters")
+                    .select("*")
+                    .eq("user_id", userId);
+
+                if (charactersError) {
+                    console.error("Ошибка при получении персонажей:", charactersError);
+                    return;
+                }
+
+                if (Array.isArray(charactersData)) {
+                    setCharacters(charactersData);
                 } else {
-                    console.error("Данные не являются массивом:", response.data);
+                    console.error("Данные не являются массивом:", charactersData);
                 }
             } catch (error) {
                 console.error('Ошибка при получении персонажей:', error);
@@ -222,11 +155,99 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
         fetchCharacters();
     }, []);
 
-    //сохранение древа
+
+    //сохранение древа + добавление
+    const handleAddPartner = (
+        targetNodeId: string,
+        partnerCharacter: CharacterType,
+        partner_type: PartnerType
+    ) => {
+        const newPartnerId = uuidv4();
+
+        const partnerNode: NodeType = {
+            id: newPartnerId,
+            x: 0,
+            y: 0,
+            label: `${partnerCharacter.name} ${partnerCharacter.surname}`,
+            character: partnerCharacter,
+            characterId: partnerCharacter.id,
+            parent1_id: null,
+            parent2_id: null,
+            partner1_id: targetNodeId,
+            partner2_id: null,
+            partnerType: partner_type,
+        };
+
+        const updatedNodes = nodes.map((node) => {
+            if (node.id === targetNodeId) {
+                return {
+                    ...node,
+                    partner2_id: newPartnerId,
+                    partnerType: partner_type,
+                };
+            }
+            return node;
+        }).concat(partnerNode);
+
+        const rootNode = getRootNode(updatedNodes);
+        if (!rootNode) {
+            console.error("Корень дерева не найден");
+            return;
+        }
+
+        const { nodes: positionedNodes } = calculateTreePositions(updatedNodes, rootNode.id, 0, 0);
+        setNodes(positionedNodes);
+        console.log("Positioned nodes:", positionedNodes);
+        setIsSaved(false); // помечаем, что есть несохранённые изменения
+    };
+
+    const handleAddChildNode = (parentId: string, childCharacter?: CharacterType) => {
+        const parentNode = nodes.find(n => n.id === parentId);
+        if (!parentNode) return;
+
+        const partnerId = parentNode.partner1_id || parentNode.partner2_id;
+        const partnerNode = partnerId ? nodes.find(n => n.id === partnerId) : null;
+
+        const newChildNode: NodeType = {
+            id: uuidv4(),
+            x: 0,
+            y: 0,
+            label: childCharacter ? `${childCharacter.name} ${childCharacter.surname}` : "Новый ребенок",
+            character: childCharacter,
+            characterId: childCharacter?.id || null,
+            parent1_id: parentNode.id,
+            parent2_id: partnerNode?.id || null,
+            partner1_id: null,
+            partner2_id: null,
+            partnerType: undefined,
+        };
+
+        const updatedNodes = [...nodes, newChildNode];
+        const rootNode = getRootNode(updatedNodes);
+        if (!rootNode) return;
+
+        const { nodes: positionedNodes } = calculateTreePositions(updatedNodes, rootNode.id, 0, 0);
+        setNodes(positionedNodes);
+        console.log("Positioned nodes:", positionedNodes);
+        setIsSaved(false); // помечаем, что есть несохранённые изменения
+    };
+
     const handleSaveTree = async () => {
+        setLoading(true);
+        setError(null);
         try {
-            const nodesToSave = nodes.map(node => ({
+            if (!treeId) throw new Error("treeId отсутствует");
+
+            const { error: deleteError } = await supabase
+                .from("tree_nodes")
+                .delete()
+                .eq("tree_id", treeId);
+
+            if (deleteError) throw deleteError;
+
+            const nodesToInsert = nodes.map(node => ({
                 id: node.id,
+                tree_id: treeId,
                 label: node.label,
                 x: node.x,
                 y: node.y,
@@ -235,25 +256,24 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
                 parent2_id: node.parent2_id || null,
                 partner1_id: node.partner1_id || null,
                 partner2_id: node.partner2_id || null,
-                partner_type: node.partnerType === undefined ? null : node.partnerType,
+                partner_type: node.partnerType ?? null,
             }));
-            console.log("Отправляем на сервер:", nodesToSave);
 
+            const { error: insertError } = await supabase
+                .from("tree_nodes")
+                .insert(nodesToInsert);
 
-            const response = await fetch("http://localhost:5000/api/save", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    treeId,
-                    nodes: nodesToSave,
-                }),
-            });
+            if (insertError) throw insertError;
 
-            if (!response.ok) throw new Error("Ошибка сохранения");
-            console.log("Дерево сохранено");
             setIsSaved(true);
-        } catch (error) {
-            console.error("Ошибка сохранения:", error);
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message);
+                console.error("Ошибка:", err.message);
+            } else {
+                setError("Неизвестная ошибка");
+                console.error("Неизвестная ошибка:", err);
+            }
         }
     };
 
@@ -261,74 +281,106 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
     useEffect(() => {
         const loadTree = async () => {
             try {
-                console.log("Начинаем загрузку дерева для treeId:", treeId);
+                console.log("Загрузка дерева напрямую из Supabase для treeId:", treeId);
 
-                const response = await fetch(`http://localhost:5000/api/tree?treeId=${treeId}`);
-                const data = await response.json();
+                const { data, error } = await supabase
+                    .from("tree_nodes")
+                    .select(`
+    id,
+    label,
+    x,
+    y,
+    character_id,
+    parent1_id,
+    parent2_id,
+    partner1_id,
+    partner2_id,
+    partner_type,
+    character:character_id (
+      id,
+      name,
+      surname,
+      kind,
+      city,
+      type,
+      avatar,
+      gender,
+      state,
+      biography,
+      death
+    )
+  `)
+                    .eq("tree_id", treeId);
 
-                console.log("Ответ сервера:", data);
 
-                if (response.ok && data?.nodes?.length > 0) {
-                    const transformedNodes = data.nodes.map((node: ServerNodeType) => ({
+                if (error) throw error;
+
+                if (data && data.length > 0) {
+                    const transformedNodes: NodeType[] = data.map((node) => ({
                         id: node.id,
                         label: node.label,
                         x: node.x,
                         y: node.y,
-                        character: node.character,
-                        characterId: node.characterId,
+                        characterId: node.character_id,
+                        character: Array.isArray(node.character) ? node.character[0] : node.character,
                         parent1_id: node.parent1_id,
                         parent2_id: node.parent2_id,
                         partner1_id: node.partner1_id,
                         partner2_id: node.partner2_id,
-                        partnerType: node.partnerType,
+                        partnerType: node.partner_type,
                     }));
 
-                    console.log("Получены и преобразованы узлы:", transformedNodes);
+                    console.log("Успешно получены узлы:", transformedNodes);
                     setNodes(transformedNodes);
                 } else {
-                    console.log("Дерево пустое, создаём стартовый узел");
-                    setNodes([{
+                    console.log("Пустое дерево. Создаём стартовый узел.");
+                    setNodes([
+                        {
+                            id: uuidv4(),
+                            x: 0,
+                            y: 0,
+                            label: "Начните здесь",
+                            characterId: null,
+                            parent1_id: null,
+                            parent2_id: null,
+                            partner1_id: null,
+                            partner2_id: null,
+                            partnerType: undefined,
+                        },
+                    ]);
+                }
+            } catch (err) {
+                console.error("Ошибка загрузки дерева:", err);
+                setNodes([
+                    {
                         id: uuidv4(),
                         x: 0,
                         y: 0,
-                        label: "Начните здесь",
+                        label: "Ошибка загрузки",
+                        characterId: null,
                         parent1_id: null,
                         parent2_id: null,
                         partner1_id: null,
                         partner2_id: null,
-                        characterId: null,
-                    }]);
-                }
-            } catch (error) {
-                console.error("Ошибка загрузки:", error);
-                setNodes([{
-                    id: uuidv4(),
-                    x: 0,
-                    y: 0,
-                    label: "Ошибка загрузки",
-                    parent1_id: null,
-                    parent2_id: null,
-                    partner1_id: null,
-                    partner2_id: null,
-                    characterId: null,
-                }]);
+                        partnerType: undefined,
+                    },
+                ]);
             }
         };
 
         if (treeId) {
             loadTree();
         } else {
-            console.error("treeId не определен!");
+            console.error("treeId не определён");
         }
     }, [treeId]);
 
-    const navigate = useNavigate();
-    const handleCreateNewCharacter = () => {
-        navigate("/simcreateform", { state: { treeId } }); // Переход на страницу создания персонажа
-    };
+    if (loading) return <div>Загрузка...</div>;
+    if (error) return <div>{error}</div>;
 
     return (
         <>
+
             <h2 style={{ textAlign: "center", marginBottom: "1rem", color: 'black' }}>{treeName}</h2>
             <div style={{
                 display: "flex",
@@ -378,11 +430,12 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
                         minWidth: "120px",
                         justifyContent: "center"
                     }}
-                    disabled={isSaved}
+                    disabled={loading || isSaved}
                 >
                     <Save size={18} />
-                    {isSaved ? "Сохранено!" : "Сохранить"}
+                    {loading ? "Сохраняю..." : isSaved ? "Сохранено!" : "Сохранить"}
                 </Button>
+
             </div>
 
 
@@ -394,18 +447,19 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
                         transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,
                     }}
                 >
-                    {nodes.map((node) => (
-                        <Node
-                            key={node.id}
-                            node={node}
-                            editMode={editMode}
-                            onNodeClick={handleNodeClick}
-                            onAddChild={handleAddChildNode}
-                            onAddPartner={() => openPartnerModal(node.id)}
-                            onDeleteNode={handleDeleteNode}
-                        />
-
-                    ))}
+                    {nodes.map((node) => {
+                        return (
+                            <Node
+                                key={node.id}
+                                node={node}
+                                editMode={editMode}
+                                onNodeClick={handleNodeClick}
+                                onAddChild={handleAddChildNode}
+                                onAddPartner={() => openPartnerModal(node.id)}
+                                onDeleteNode={handleDeleteNode}
+                            />
+                        );
+                    })}
                     <Connectors nodes={nodes} />
                 </div>
             </div>

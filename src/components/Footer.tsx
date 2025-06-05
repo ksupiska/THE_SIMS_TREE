@@ -17,11 +17,11 @@ const Footer = () => {
                                 <div className="position-relative" style={{ width: "32px", height: "32px" }}>
                                     <div
                                         style={{
-                                            width: "40px",  // ширина
-                                            height: "40px",  // высота
+                                            width: "40px",
+                                            height: "40px",
                                             backgroundColor: "#69d45b",
                                             opacity: 0.8,
-                                            clipPath: "polygon(50% 0%, 70% 50%, 50% 100%, 30% 50%)", // создаёт ромб
+                                            clipPath: "polygon(50% 0%, 70% 50%, 50% 100%, 30% 50%)",
                                         }}
                                     ></div>
                                 </div>
@@ -69,8 +69,6 @@ const Footer = () => {
                                         <Link to="/instruction" className="text-decoration-none text-secondary">
                                             Инструкция
                                         </Link>
-                                    </li>
-                                    <li className="mb-2">
                                     </li>
                                 </ul>
                             </Col>

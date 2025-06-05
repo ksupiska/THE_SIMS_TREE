@@ -68,17 +68,13 @@ const AuthWrapper = () => {
         if (!error && data) {
             setSupportReplies(data);
         }
-        setLoadingNotifications(false)  
+        setLoadingNotifications(false)
     };
     //обработчик кнопки
     const handleOpenNotifications = async () => {
         await fetchSupportReplies();
         setNotificationsOpen(true);
     };
-
-
-
-
 
     useEffect(() => {
         if (!user) return
@@ -96,7 +92,6 @@ const AuthWrapper = () => {
             if (error) {
                 console.error("Ошибка при получении роли пользователя:", error.message)
             }
-
         }
 
         fetchProfile()
@@ -169,10 +164,22 @@ const AuthWrapper = () => {
                             <p className="user-email">{user.email}</p>
                             <p className="user-email">{role}</p>
                         </div>
-                        <button className="edit-profile-button" onClick={() => supabase.auth.signOut()}>
-                            <LogOut size={18} className="me-2" />
-                            Выйти
-                        </button>
+                        <div className="profile-buttons">
+                            <button className="edit-profile-button" onClick={() => supabase.auth.signOut()}>
+                                <LogOut size={18} className="me-2" />
+                                Выйти
+                            </button>
+                            {role === "admin" && (
+                                <button
+                                    className="edit-profile-button admin-button"
+                                    onClick={() => navigate("/admin")}
+                                    style={{ marginTop: "0.5rem" }}
+                                >
+                                    <BsGear size={18} className="me-2" />
+                                    Админ панель
+                                </button>
+                            )}
+                        </div>
                     </motion.div>
                 </div>
             </section>

@@ -107,6 +107,7 @@
   box-shadow: 0 0 0 4px rgba(74, 141, 86, 0.15), 0 2px 8px rgba(74, 141, 86, 0.1);
   outline: none;
   background-color: white;
+  color:#000000;
 }
 
 .sims-form-input-upd:focus + .sims-input-icon-upd {
@@ -182,7 +183,7 @@
   content: "○";
   position: absolute;
   left: -16px;
-  color: #ccc;
+  color: #000000;
   transition: all 0.3s ease;
 }
 

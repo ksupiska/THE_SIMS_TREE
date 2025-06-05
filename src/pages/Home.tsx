@@ -3,7 +3,7 @@
 import { useEffect, type ReactNode } from "react"
 import { motion, useAnimation } from "framer-motion"
 import { useInView } from "react-intersection-observer"
-import { BsDiamond, BsTree, BsPeople, BsPencilSquare, BsShare, BsDownload, BsArrowRight, BsStars } from "react-icons/bs"
+import { BsDiamond, BsTree, BsPeople, BsPencilSquare, BsArrowRight } from "react-icons/bs"
 import "../css/home.css";
 
 import image from '../photo/Example-tree.png';

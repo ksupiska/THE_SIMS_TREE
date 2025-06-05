@@ -1,0 +1,508 @@
+@font-face {
+  font-family: "The Sims Sans SC";
+  src: url("/fonts/THE_SIMS_SANS-BOLD-SC.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Основные стили контейнера */
+.sims-auth-container-upd {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%);
+  position: relative;
+  overflow: hidden;
+  font-family: "The Sims Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Карточка формы */
+.sims-auth-card-upd {
+  width: 100%;
+  max-width: 450px;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15), 0 4px 20px rgba(74, 141, 86, 0.1);
+  overflow: hidden;
+  position: relative;
+  z-index: 10;
+  animation: slideUp-upd 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  border: 3px solid rgba(74, 141, 86, 0.1);
+}
+
+/* Заголовок */
+.sims-auth-header-upd {
+  background: linear-gradient(135deg, #4a8d56 0%, #3d7647 100%);
+  color: white;
+  padding: 25px 20px;
+  text-align: center;
+  position: relative;
+}
+
+.sims-auth-header-upd h2 {
+  margin: 0 0 8px 0;
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.sims-subtitle-upd {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+  font-weight: 400;
+}
+
+.sims-diamond-upd {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(45deg, #ffffff 0%, #f0f0f0 100%);
+  transform: rotate(45deg);
+  top: -16px;
+  left: calc(50% - 16px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Форма */
+.sims-auth-form-upd {
+  padding: 35px 30px 25px;
+}
+
+.sims-form-group-upd {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.sims-input-icon-upd {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #4a8d56;
+  z-index: 2;
+  transition: color 0.3s ease;
+}
+
+.sims-form-input-upd {
+  width: 100%;
+  padding: 14px 50px 14px 48px;
+  border: 2px solid #e8e8e8;
+  border-radius: 25px;
+  font-size: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: #fafafa;
+  box-sizing: border-box;
+  font-family: inherit;
+  color: #333;
+}
+
+.sims-form-input-upd:focus {
+  border-color: #4a8d56;
+  box-shadow: 0 0 0 4px rgba(74, 141, 86, 0.15), 0 2px 8px rgba(74, 141, 86, 0.1);
+  outline: none;
+  background-color: white;
+}
+
+.sims-form-input-upd:focus + .sims-input-icon-upd {
+  color: #3d7647;
+}
+
+.sims-form-input-upd::placeholder {
+  color: #888;
+  font-size: 15px;
+}
+
+.sims-form-input-upd:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.sims-password-toggle-upd {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #4a8d56;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  z-index: 2;
+}
+
+.sims-password-toggle-upd:hover:not(:disabled) {
+  background-color: rgba(74, 141, 86, 0.1);
+  color: #3d7647;
+}
+
+.sims-password-toggle-upd:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Требования к паролю */
+.sims-password-requirements-upd {
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+  border-left: 4px solid #4a8d56;
+}
+
+.sims-password-requirements-upd p {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #4a8d56;
+}
+
+.sims-password-requirements-upd ul {
+  margin: 0;
+  padding-left: 20px;
+  list-style: none;
+}
+
+.sims-password-requirements-upd li {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 4px;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.sims-password-requirements-upd li::before {
+  content: "○";
+  position: absolute;
+  left: -16px;
+  color: #ccc;
+  transition: all 0.3s ease;
+}
+
+.sims-requirement-met-upd {
+  color: #4a8d56 !important;
+  font-weight: 500;
+}
+
+.sims-requirement-met-upd::before {
+  content: "✓" !important;
+  color: #4a8d56 !important;
+  font-weight: bold;
+}
+
+/* Кнопки */
+.sims-button-upd {
+  width: 100%;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-bottom: 16px;
+  font-family: inherit;
+  position: relative;
+  overflow: hidden;
+}
+
+.sims-button-primary-upd {
+  background: linear-gradient(135deg, #4a8d56 0%, #3d7647 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(74, 141, 86, 0.3);
+}
+
+.sims-button-primary-upd:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(74, 141, 86, 0.4);
+  background: linear-gradient(135deg, #3d7647 0%, #2e5a35 100%);
+}
+
+.sims-button-primary-upd:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(74, 141, 86, 0.3);
+}
+
+.sims-button-loading-upd {
+  opacity: 0.8;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.sims-loading-spinner-upd {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin-upd 1s linear infinite;
+}
+
+/* Сообщения */
+.sims-message-upd {
+  display: flex;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border-radius: 12px;
+  margin: 20px 0;
+  animation: fadeIn-upd 0.4s ease-out forwards;
+  border-left: 4px solid;
+}
+
+.sims-message-upd p {
+  margin: 0 0 0 12px;
+  font-size: 14px;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.sims-message-success-upd {
+  background-color: rgba(74, 141, 86, 0.08);
+  color: #2e5a35;
+  border-left-color: #4a8d56;
+}
+
+.sims-message-error-upd {
+  background-color: rgba(231, 76, 60, 0.08);
+  color: #c0392b;
+  border-left-color: #e74c3c;
+}
+
+/* Футер */
+.sims-auth-footer-upd {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.sims-auth-footer-upd p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.sims-link-upd {
+  color: #4a8d56;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.sims-link-upd:hover {
+  color: #3d7647;
+  text-decoration: underline;
+}
+
+/* Декоративные элементы */
+.sims-auth-decoration-upd {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.sims-plumbob-upd {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 40px solid transparent;
+  border-right: 40px solid transparent;
+  border-bottom: 60px solid rgba(74, 141, 86, 0.15);
+  top: 15%;
+  right: 8%;
+  animation: float-upd 8s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+.sims-plumbob-upd::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-bottom: 40px solid rgba(74, 141, 86, 0.2);
+  top: 15px;
+  left: -25px;
+}
+
+.sims-plumbob-alt-upd {
+  top: 65%;
+  left: 5%;
+  border-bottom-color: rgba(74, 141, 86, 0.1);
+  transform: scale(0.7);
+  animation: float-upd 10s ease-in-out infinite reverse;
+}
+
+/* Анимации */
+@keyframes slideUp-upd {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeIn-upd {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin-upd {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes float-upd {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-15px) rotate(5deg);
+  }
+  66% {
+    transform: translateY(-8px) rotate(-3deg);
+  }
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+  .sims-auth-container-upd {
+    padding: 15px;
+  }
+
+  .sims-auth-card-upd {
+    max-width: 100%;
+    border-radius: 16px;
+  }
+
+  .sims-auth-header-upd {
+    padding: 20px 15px;
+  }
+
+  .sims-auth-header-upd h2 {
+    font-size: 1.6rem;
+  }
+
+  .sims-subtitle-upd {
+    font-size: 0.85rem;
+  }
+
+  .sims-auth-form-upd {
+    padding: 25px 20px 20px;
+  }
+
+  .sims-form-input-upd {
+    padding: 12px 42px 12px 42px;
+    font-size: 15px;
+  }
+
+  .sims-input-icon-upd {
+    left: 14px;
+  }
+
+  .sims-password-toggle-upd {
+    right: 14px;
+  }
+
+  .sims-button-upd {
+    padding: 12px 20px;
+    font-size: 15px;
+  }
+
+  .sims-plumbob-upd,
+  .sims-plumbob-alt-upd {
+    display: none;
+  }
+
+  .sims-message-upd {
+    padding: 12px 14px;
+  }
+
+  .sims-message-upd p {
+    font-size: 13px;
+  }
+
+  .sims-password-requirements-upd {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .sims-auth-header-upd h2 {
+    font-size: 1.4rem;
+  }
+
+  .sims-auth-form-upd {
+    padding: 20px 15px;
+  }
+}
+
+/* Улучшения для доступности */
+@media (prefers-reduced-motion: reduce) {
+  .sims-auth-card-upd,
+  .sims-message-upd,
+  .sims-plumbob-upd,
+  .sims-plumbob-alt-upd {
+    animation: none;
+  }
+
+  .sims-button-upd {
+    transition: none;
+  }
+}
+
+/* Темная тема (опционально) */
+@media (prefers-color-scheme: dark) {
+  .sims-auth-container-upd {
+    background: linear-gradient(135deg, #1a2e1a 0%, #2d4a2d 50%, #1f3a1f 100%);
+  }
+
+  .sims-auth-card-upd {
+    background-color: #2a2a2a;
+    border-color: rgba(74, 141, 86, 0.2);
+  }
+
+  .sims-form-input-upd {
+    background-color: #333;
+    border-color: #444;
+    color: white;
+  }
+
+  .sims-form-input-upd::placeholder {
+    color: #888;
+  }
+
+  .sims-password-requirements-upd {
+    background-color: #333;
+  }
+
+  .sims-auth-footer-upd p {
+    color: #ccc;
+  }
+}

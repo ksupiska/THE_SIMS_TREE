@@ -49,32 +49,41 @@ const AuthWrapper = () => {
     const [loadingNotifications, setLoadingNotifications] = useState(false)
     const [notificationsOpen, setNotificationsOpen] = useState(false);
     const [supportReplies, setSupportReplies] = useState<SupportReply[]>([]);
+
     //загрузка уведомлений
     const fetchSupportReplies = async () => {
-        setLoadingNotifications(true)
+        setLoadingNotifications(true);
+
         const user = await supabase.auth.getUser();
         const userId = user.data.user?.id;
+
         if (!userId) {
-            setLoadingNotifications(false)
-            return
-        };
+            setLoadingNotifications(false);
+            return;
+        }
 
         const { data, error } = await supabase
             .from("support_replies")
-            .select("*, support_messages(subject)")
-            .eq("support_messages.user_id", userId)
+            .select("*, support_messages(id, subject, user_id)")
             .order("created_at", { ascending: false });
 
         if (!error && data) {
-            setSupportReplies(data);
+            //фильтр только тех ответов, где user_id совпадает с текущим пользователем
+            const filteredReplies = data.filter(
+                reply => reply.support_messages?.user_id === userId
+            );
+            setSupportReplies(filteredReplies);
         }
-        setLoadingNotifications(false)
+
+        setLoadingNotifications(false);
     };
+
     //обработчик кнопки
     const handleOpenNotifications = async () => {
         await fetchSupportReplies();
         setNotificationsOpen(true);
     };
+
 
     useEffect(() => {
         if (!user) return
@@ -87,7 +96,7 @@ const AuthWrapper = () => {
                 .single()
 
             if (profile) {
-                setRole(profile.role) // создаёшь useState role
+                setRole(profile.role)
             }
             if (error) {
                 console.error("Ошибка при получении роли пользователя:", error.message)
@@ -329,7 +338,6 @@ const AuthWrapper = () => {
                 </div>
             </section>
 
-            {/* 🔥 МОДАЛЬНОЕ ОКНО ПОДДЕРЖКИ - ИСПОЛЬЗУЕТ СТИЛИ С СУФФИКСОМ -sup */}
             {showSupportModal && (
                 <div className="modal-overlay-sup" onClick={() => setShowSupportModal(false)}>
                     <div className="modal-content-sup" onClick={(e) => e.stopPropagation()}>

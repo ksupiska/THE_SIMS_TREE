@@ -6,7 +6,7 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 
 import '../css/header.css';
 
-const Header = () => {
+const Footer = () => {
     return <div className='header'>
         <footer className="py-5 bg-white border-top">
             <Container>
@@ -71,11 +71,6 @@ const Header = () => {
                                         </Link>
                                     </li>
                                     <li className="mb-2">
-                                        <Link to="/admin" className="text-decoration-none text-secondary">
-                                            Админ
-                                        </Link>
-                                    </li>
-                                    <li className="mb-2">
                                     </li>
                                 </ul>
                             </Col>
@@ -104,4 +99,4 @@ const Header = () => {
     </div>;
 };
 
-export default Header;
+export default Footer;

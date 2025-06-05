@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { supabase } from "../../SupabaseClient"; // путь подкорректируй
+import { supabase } from "../../SupabaseClient";
 import { Mail, CheckCircle, AlertCircle } from "lucide-react";
-import "../../css/loginform.css"; // если стили одинаковые
+import "../../css/loginform.css";
 
 const RequestResetPassword = () => {
     const [email, setEmail] = useState("");
@@ -10,7 +10,7 @@ const RequestResetPassword = () => {
 
     const handleResetPassword = async () => {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: "http://localhost:5173/update-password", // или твой домен
+            redirectTo: "https://the-sims-tree.vercel.app/update-password",
         });
 
         if (error) {

@@ -95,24 +95,6 @@ export default function HomePage() {
       description: "Публикуйте собственные статьи о ваших династиях, делитесь советами и историями с сообществом.",
       color: "green-emerald",
     },
-    {
-      icon: <BsShare />,
-      title: "Обмен династиями",
-      description: "Делитесь своими династиями с другими игроками и просматривайте чужие творения для вдохновения.",
-      color: "yellow-orange",
-    },
-    {
-      icon: <BsDownload />,
-      title: "Экспорт и печать",
-      description: "Сохраняйте ваши династии в различных форматах или распечатывайте их для личной коллекции.",
-      color: "purple-pink",
-    },
-    {
-      icon: <BsStars />,
-      title: "Настройка внешнего вида",
-      description: "Персонализируйте внешний вид вашего древа династий с помощью различных тем, цветов и стилей.",
-      color: "indigo-blue",
-    },
   ]
 
   return (
@@ -254,7 +236,7 @@ export default function HomePage() {
                 <div className="step-number">4</div>
                 <h3 className="step-title">Делитесь и развивайте</h3>
                 <p className="step-description">
-                  Публикуйте свою династию, пишите статьи о ней и получайте отзывы от сообщества.
+                  Пишите статьи о своих династиях, новостях и получайте удовольствие от прочтения.
                 </p>
               </div>
             </AnimatedSection>

@@ -11,7 +11,6 @@
   font-family: "The Sims Sans SC", sans-serif;
 }
 
-/* Загрузка */
 .loading-container-full-article {
   display: flex;
   flex-direction: column;
@@ -37,7 +36,6 @@
   }
 }
 
-/* Ошибка */
 .error-container-full-article {
   display: flex;
   flex-direction: column;
@@ -80,7 +78,6 @@
   color: white;
 }
 
-/* Навигация */
 .article-navigation-full-article {
   padding: 2rem 1rem 1rem;
   max-width: 800px;
@@ -116,14 +113,12 @@
   transform: translateX(-3px);
 }
 
-/* Основной контент статьи */
 .article-content-full-article {
   max-width: 800px;
   margin: 0 auto;
   padding: 0 1rem 3rem;
 }
 
-/* Заголовок статьи */
 .article-header-full-article {
   text-align: center;
   margin-bottom: 2rem;
@@ -166,7 +161,6 @@
   color: #8b5cf6;
 }
 
-/* Изображение статьи */
 .article-image-container-full-article {
   margin-bottom: 3rem;
   border-radius: 1.5rem;
@@ -181,7 +175,6 @@
   display: block;
 }
 
-/* Текст статьи */
 .article-text-full-article {
   margin-bottom: 2rem;
   padding: 0;
@@ -198,7 +191,6 @@
   margin-bottom: 0;
 }
 
-/* Действия с статьей */
 .article-actions-full-article {
   display: flex;
   justify-content: center;
@@ -246,7 +238,6 @@
   font-size: 1.125rem;
 }
 
-/* Рекомендуемые статьи */
 .related-articles-full-article {
   max-width: 800px;
   margin: 0 auto;
@@ -298,20 +289,15 @@
   margin: 0;
 }
 
-/* Адаптивность */
-
-/* Плавная прокрутка */
 html {
   scroll-behavior: smooth;
 }
 
-/* Выделение текста */
 ::selection {
   background: rgba(139, 92, 246, 0.2);
   color: #1f2937;
 }
 
-/* Кастомный скроллбар */
 ::-webkit-scrollbar {
   width: 8px;
 }

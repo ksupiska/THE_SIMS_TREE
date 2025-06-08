@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { supabase } from "../SupabaseClient"
-
 import { Button } from "react-bootstrap"
-
 import { motion } from "framer-motion"
 import { BsDiamond, BsPencilSquare, BsCalendar, BsArrowRight, BsSearch } from "react-icons/bs";
 
@@ -24,7 +22,6 @@ export default function BlogPage() {
     const [searchQuery, setSearchQuery] = useState("")
 
     const navigate = useNavigate();
-
     useEffect(() => {
         const fetchPublishedArticles = async () => {
             const { data, error } = await supabase
@@ -38,29 +35,24 @@ export default function BlogPage() {
             } else {
                 setArticles(data || [])
             }
-
             setLoading(false)
         }
-
         fetchPublishedArticles()
     }, [])
 
     if (loading) return <LoadingComponent />
 
-    // Фильтрация статей по поисковому запросу
     const filteredArticles = articles.filter(
         (article) =>
             article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
             article.content.toLowerCase().includes(searchQuery.toLowerCase()),
     )
-    // Форматирование даты
     const formatDate = (dateString: string) => {
         const options: Intl.DateTimeFormatOptions = { year: "numeric", month: "long", day: "numeric" }
         return new Date(dateString).toLocaleDateString("ru-RU", options)
     }
     return (
         <div className="blog-container">
-            {/* Заголовок блога */}
             <section className="blog-header">
                 <div className="blog-header-overlay"></div>
                 <div className="blog-header-content">
@@ -78,7 +70,6 @@ export default function BlogPage() {
                 </div>
             </section>
 
-            {/* Панель действий */}
             <section className="blog-actions">
                 <div className="blog-actions-container">
                     <div className="search-container-blog">
@@ -101,7 +92,6 @@ export default function BlogPage() {
                 </div>
             </section>
 
-            {/* Список статей */}
             <section className="blog-content">
                 <div className="blog-content-container">
                     {loading ? (
@@ -167,7 +157,6 @@ export default function BlogPage() {
                 </div>
             </section>
 
-            {/* Секция призыва к действию */}
             <section className="blog-cta-blog">
                 <div className="cta-overlay-blog"></div>
                 <div className="cta-container-blog">
@@ -191,7 +180,6 @@ export default function BlogPage() {
                 </div>
             </section>
 
-            {/* Декоративные элементы */}
             <div className="decoration decoration-top-left">
                 <BsDiamond className="decoration-diamond pink" />
             </div>

@@ -10,8 +10,6 @@ import '../css/admin.css';
 import '../css/replymodal.css';
 import '../css/editarticle.css';
 
-import AccessDenied from "../components/AccessDenied";
-
 interface Article {
   id: string;
   title: string;
@@ -38,7 +36,6 @@ export default function AdminPage() {
     content: "",
     image: "",
   })
-  const [isAdmin, setIsAdmin] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [currentArticle, setCurrentArticle] = useState<Article | null>(null)
@@ -56,7 +53,6 @@ export default function AdminPage() {
       if (error) {
         console.error("Ошибка при загрузке сообщений:", error);
       } else if (data) {
-        // Приведение поля status к нужному типу, если нужно
         const normalized = data.map((msg) => ({
           ...msg,
           status: msg.status as "pending" | "replied",
@@ -68,8 +64,6 @@ export default function AdminPage() {
 
     fetchMessages();
   }, []);
-
-
 
   //состояния для ответа пользователю
   const [replyingMessage, setReplyingMessage] = useState<SupportMessage | null>(null);
@@ -96,7 +90,6 @@ export default function AdminPage() {
       setReplyingMessage(null);
       setReplyContent("");
 
-      // Обновить статус сообщения локально
       const updated = supportMessages.map((msg) =>
         msg.id === replyingMessage.id
           ? { ...msg, status: "replied" as const }
@@ -110,9 +103,6 @@ export default function AdminPage() {
     }
   };
 
-
-
-  // Загрузка статей из Supabase
   useEffect(() => {
     const fetchProfileAndArticles = async () => {
       const { data: { user } } = await supabase.auth.getUser()
@@ -128,14 +118,10 @@ export default function AdminPage() {
         .single()
 
       if (profile?.role !== "admin") {
-        setIsAdmin(false)
         setIsLoading(false)
         return
       }
 
-      setIsAdmin(true)
-
-      // Получаем статьи с любым статусом, чтобы показать и "pending"
       const { data, error } = await supabase
         .from("articles")
         .select("*")
@@ -183,19 +169,6 @@ export default function AdminPage() {
     return <LoadingComponent />
   }
 
-
-  // Если не админ, показываем красивую страницу отказа в доступе
-  if (!isAdmin) {
-    return (
-      <AccessDenied
-        message="Эта страница доступна только администраторам системы"
-        showBackButton={true}
-        showHomeButton={true}
-      />
-    )
-  }
-
-  // Создание статьи — сохраняем в Supabase с статусом draft (или pending, если хочешь)
   const handleCreateArticle = async () => {
     if (!newArticle.title || !newArticle.content) return
 
@@ -205,7 +178,7 @@ export default function AdminPage() {
         title: newArticle.title,
         content: newArticle.content,
         image: newArticle.image || null,
-        status: "draft", // или "pending", если статья отправляется на проверку
+        status: "draft",
       })
       .select()
       .single()
@@ -220,7 +193,6 @@ export default function AdminPage() {
     setIsCreating(false)
   }
 
-  // Удаление статьи из Supabase и локально
   const handleDeleteArticle = async (id: string) => {
     const { error } = await supabase.from("articles").delete().eq("id", id)
     if (error) {
@@ -230,12 +202,10 @@ export default function AdminPage() {
     setArticles(articles.filter(article => article.id !== id))
   }
 
-  // Переключение статуса статьи в Supabase и локально
   const handleToggleStatus = async (id: string) => {
     const article = articles.find(a => a.id === id)
     if (!article) return
 
-    // меняем статус draft <-> published
     const newStatus = article.status === "draft" ? "published" : "draft"
 
     const { error } = await supabase
@@ -271,7 +241,6 @@ export default function AdminPage() {
 
   return (
     <main className="admin-container-adm">
-      {/* Заголовок админки */}
       <div className="admin-header-adm">
         <div className="admin-header-overlay-adm" />
         <div className="admin-header-content-adm">
@@ -289,10 +258,8 @@ export default function AdminPage() {
         </div>
       </div>
 
-      {/* Основной контент */}
       <div className="admin-content-adm">
         <div className="admin-wrapper-adm">
-          {/* Кнопка создания новой статьи */}
           <motion.div
             className="create-section-adm"
             initial={{ opacity: 0, y: 20 }}
@@ -403,7 +370,6 @@ export default function AdminPage() {
             )}
           </motion.div>
 
-          {/* Список статей */}
           <div className="articles-section-adm">
             <h2 className="section-title-adm">Все статьи ({articles.length})</h2>
             <div className="articles-grid-adm">
@@ -447,7 +413,6 @@ export default function AdminPage() {
               ))}
             </div>
           </div>
-          {/* Блок сообщений поддержки */}
           <div className="support-section">
             <h2 className="section-title">Сообщения в поддержку ({supportMessages.length})</h2>
 
@@ -709,9 +674,6 @@ export default function AdminPage() {
           </div>
         </div>
       )}
-
     </main>
-
-
   )
 }

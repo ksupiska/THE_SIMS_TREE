@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import '../css/charaterlist.css'; // Подключим стили
+import '../css/charaterlist.css';
 import { supabase } from '../SupabaseClient';
 import { Form, Container, Col, Row } from 'react-bootstrap'
 import { CropModal } from './Tree/Modals/CropModal';
@@ -25,7 +25,7 @@ export default function CharacterList() {
   const [genderFilter, setGenderFilter] = useState('');
   const [typeFilter, setTypeFilter] = useState('');
 
-  //для изменения данны персонажей
+  //для изменения данных персонажей
   const [isEditing, setIsEditing] = useState(false);
 
   //для обрезки аватара
@@ -207,7 +207,7 @@ export default function CharacterList() {
             <h4 className='d-flex justify-content-center p-4'>Поиск</h4>
             <div className="search-container">
               <span className="search-icon">
-                <i className="bi bi-search"></i> {/* Иконка лупы */}
+                <i className="bi bi-search"></i>
               </span>
               <Form.Group className='mb-4'>
                 <Form.Control
@@ -267,18 +267,13 @@ export default function CharacterList() {
         <div className="character-list">
           {characters
             .filter((character) => {
-              // Объединяем имя и фамилию для поиска
               const fullName = (character.name + " " + character.surname).toLowerCase();
-              // Убираем пробелы и приводим к нижнему регистру для корректного сравнения
               const gender = character.gender.toLowerCase().trim();
               const filterGender = genderFilter.toLowerCase().trim();
 
               return (
-                // Проверяем поиск по имени или фамилии
                 (!searchTerm || fullName.includes(searchTerm.toLowerCase())) &&
-                // Проверяем фильтр по полу
                 (!genderFilter || gender === filterGender) &&
-                // Проверяем фильтр по типу
                 (!typeFilter || character.type === typeFilter)
               );
             })
@@ -298,7 +293,6 @@ export default function CharacterList() {
                 <p>Тип: {character.type}</p>
               </div>
             ))}
-
 
         </div>
       )}
@@ -500,7 +494,6 @@ export default function CharacterList() {
           </div>
         </div>
       )}
-
 
     </div>
   );

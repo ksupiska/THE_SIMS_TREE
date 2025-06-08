@@ -1,4 +1,3 @@
-/* Стили для модального окна ответа на сообщения поддержки */
 
 .modal-overlay-mod {
   position: fixed;
@@ -37,7 +36,6 @@
   }
 }
 
-/* Заголовок модального окна */
 .modal-header-mod {
   background: linear-gradient(135deg, #8b5cf6, #ec4899);
   padding: 1.5rem 2rem;
@@ -83,14 +81,12 @@
   transform: scale(1.1);
 }
 
-/* Тело модального окна */
 .modal-body-mod {
   padding: 2rem;
   max-height: 60vh;
   overflow-y: auto;
 }
 
-/* Подвал модального окна */
 .modal-footer-mod {
   background: #f9fafb;
   padding: 1.5rem 2rem;
@@ -150,7 +146,6 @@
   font-size: 1rem;
 }
 
-/* Стили для формы в модальном окне ответа */
 .form-group-mod {
   margin-bottom: 1.5rem;
 }
@@ -198,7 +193,6 @@
   font-weight: 500;
 }
 
-/* Модальное окно ответа */
 .reply-modal-mod {
   max-width: 700px;
 }
@@ -241,7 +235,6 @@
   margin-top: 0.5rem;
 }
 
-/* Адаптивность */
 @media (max-width: 768px) {
   .modal-content-mod {
     margin: 1rem;
@@ -299,7 +292,6 @@
   }
 }
 
-/* Кастомный скроллбар для модального окна */
 .modal-body-mod::-webkit-scrollbar {
   width: 6px;
 }
@@ -318,7 +310,6 @@
   background: linear-gradient(to bottom, #7c3aed, #db2777);
 }
 
-/* Анимации */
 @keyframes fadeIn-mod {
   from {
     opacity: 0;

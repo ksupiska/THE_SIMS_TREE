@@ -37,7 +37,7 @@ const LoginForm = () => {
       })
 
       if (error) {
-        const ruMessage = errorMessagesMap[error.message] || error.message // fallback на оригинал
+        const ruMessage = errorMessagesMap[error.message] || error.message
         setMessage('Ошибка: ' + ruMessage)
         setMessageType('error')
         setLoggedIn(false)

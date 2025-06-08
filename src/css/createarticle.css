@@ -13,7 +13,6 @@
   font-family: "The Sims Sans SC", sans-serif;
 }
 
-/* Заголовок страницы */
 .article-header-art {
   position: relative;
   padding: 4rem 1rem 3rem;
@@ -59,7 +58,6 @@
   margin: 0 auto;
 }
 
-/* Основной контент */
 .article-content-art {
   padding: 3rem 1rem;
 }
@@ -76,7 +74,6 @@
   overflow: hidden;
 }
 
-/* Форма создания */
 .article-form-art {
   padding: 0;
 }
@@ -196,7 +193,6 @@
   margin-top: 0.5rem;
 }
 
-/* Загрузка изображения */
 .image-upload-section-art {
   border: 2px dashed #d1d5db;
   border-radius: 1rem;
@@ -304,7 +300,6 @@
   transform: scale(1.1);
 }
 
-/* Действия формы */
 .form-actions-art {
   display: flex;
   justify-content: flex-end;
@@ -348,7 +343,6 @@
   box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
 }
 
-/* Предпросмотр */
 .article-preview-art {
   padding: 0;
 }
@@ -433,7 +427,6 @@
   border-top: 1px solid #e5e7eb;
 }
 
-/* Декоративные элементы */
 .decoration-art {
   position: fixed;
   opacity: 0.15;

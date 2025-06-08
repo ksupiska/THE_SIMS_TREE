@@ -224,7 +224,6 @@
   left: -30px;
 }
 
-/* Анимации */
 @keyframes slideUp {
   from {
     opacity: 0;
@@ -261,7 +260,6 @@
   }
 }
 
-/* Адаптивность */
 @media (max-width: 480px) {
   .sims-auth-card {
     max-width: 100%;

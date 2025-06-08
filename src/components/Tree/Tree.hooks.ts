@@ -67,7 +67,7 @@ export const useTreeDrag = () => {
     return {
         offset,
         scale,
-        setOffset, // Добавляем setOffset в возвращаемый объект
+        setOffset,
         handlers: {
             onMouseDown: handleMouseDown,
             onMouseMove: handleMouseMove,

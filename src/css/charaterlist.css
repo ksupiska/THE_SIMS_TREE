@@ -6,7 +6,6 @@
   font-display: swap;
 }
 
-/* Общие стили */
 .character-list-container {
   font-family: "The Sims Sans SC", sans-serif;
   padding: 40px;
@@ -100,7 +99,6 @@ button:hover {
   font-size: 1.1rem;
 }
 
-/* Стили для модального окна */
 .modal-overlay-list {
   position: fixed;
   top: 0;
@@ -172,31 +170,29 @@ button:hover {
   background-color: #c9302c;
 }
 
-/*для фильтра и поиска*/
-/* Основной контейнер поиска */
 .search-container {
   position: relative;
   width: 100%;
-  max-width: 400px; /* Максимальная ширина для поиска */
+  max-width: 400px;
 }
 
 .search-icon {
   position: absolute;
   left: 10px;
   top: 50%;
-  transform: translateY(-50%); /* Центрируем иконку */
+  transform: translateY(-50%);
   font-size: 18px;
   color: #8c8c8c;
 }
 
 .search-input {
   width: 100%;
-  padding-left: 30px; /* Место для иконки */
+  padding-left: 30px;
   padding-right: 10px;
   font-size: 16px;
-  border-radius: 50px; /* Закругленные углы */
+  border-radius: 50px;
   border: 1px solid #ccc;
-  height: 40px; /* Высота инпута */
+  height: 40px;
   transition: all 0.3s ease;
 }
 
@@ -205,17 +201,16 @@ button:hover {
   outline: none;
 }
 
-/* Контейнер для фильтров */
 .filters-container {
   display: flex;
   justify-content: flex-end;
-  gap: 20px; /* Расстояние между фильтрами */
-  align-items: center; /* Выравнивание по центру */
+  gap: 20px;
+  align-items: center;
   margin-top: 20px;
 }
 
 .filter-group {
-  width: 200px; /* Ширина фильтров */
+  width: 200px;
   position: relative;
 }
 
@@ -223,7 +218,7 @@ button:hover {
   width: 100%;
   padding: 10px;
   font-size: 16px;
-  border-radius: 10px; /* Закругленные углы */
+  border-radius: 10px;
   border: 1px solid #ccc;
   height: 40px;
   background-color: #f9f9f9;
@@ -236,7 +231,6 @@ button:hover {
   background-color: #f0f9f0;
 }
 
-/* Общий стиль для всех фильтров */
 .filter-group select {
-  font-family: "The Sims Sans SC", sans-serif; /* Шрифт */
+  font-family: "The Sims Sans SC", sans-serif;
 }

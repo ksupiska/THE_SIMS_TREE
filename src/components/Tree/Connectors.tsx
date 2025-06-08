@@ -28,34 +28,24 @@ const Connectors: React.FC<ConnectorsProps> = ({
     const connectors: JSX.Element[] = [];
     //console.log('все узлы: ', nodes);
 
-    // Группировка детей по паре родителей
     const childrenByParentPair: Record<string, NodeType[]> = {};
     nodes.forEach((child) => {
         const { parent1_id, parent2_id } = child;
         if (parent1_id || parent2_id) {
-            // Используем полные ID и правильную сортировку
             const key = [parent1_id, parent2_id]
                 .sort((a, b) => (a || "").localeCompare(b || ""))
-                .join("|"); // Используем другой разделитель
+                .join("|");
             if (!childrenByParentPair[key]) childrenByParentPair[key] = [];
             childrenByParentPair[key].push(child);
         }
     });
 
     // console.log('группировка детей по родителям:', childrenByParentPair)
-    // Отрисовка связей родитель -> дети
     Object.entries(childrenByParentPair).forEach(([key, children]) => {
         const [p1_id, p2_id] = key.split("|"); // Используем тот же разделитель
 
         const parent1 = p1_id !== "null" ? nodes.find((n) => n.id === p1_id) : null;
         const parent2 = p2_id !== "null" ? nodes.find((n) => n.id === p2_id) : null;
-        // console.log("Найденные родители:", {
-        //     key,
-        //     p1_id,
-        //     p2_id,
-        //     parent1: parent1?.id,
-        //     parent2: parent2?.id
-        // });
         if (!parent1 && !parent2) return;
 
         const parentsCenterX = parent1 && parent2
@@ -63,24 +53,11 @@ const Connectors: React.FC<ConnectorsProps> = ({
             : (parent1 || parent2)!.x + nodeWidth / 2;
         const parentsBottomY = (parent1 || parent2)!.y + nodeHeight;
 
-        // console.log(`Координаты линии для родителей ${p1_id}-${p2_id}:`, { // 4. Проверяем координаты
-        //     parentsCenterX,
-        //     parentsBottomY,
-        //     childrenCount: children.length
-        // });
-
-
         if (children.length === 1) {
             const child = children[0];
             const childCenterX = child.x + nodeWidth / 2;
             const childTopY = child.y;
             const verticalStep = 20;
-
-            // console.log(`Рисуем линию к одному ребенку ${child.id}:`, { // 5. Координаты для одного ребенка
-            //     from: [parentsCenterX, parentsBottomY],
-            //     to: [childCenterX, childTopY],
-            //     intermediate: [parentsCenterX, parentsBottomY + verticalStep, childCenterX, parentsBottomY + verticalStep]
-            // });
 
             connectors.push(
                 <polyline
@@ -100,16 +77,7 @@ const Connectors: React.FC<ConnectorsProps> = ({
             const childLeftX = Math.min(...children.map((c) => c.x + nodeWidth / 2));
             const childRightX = Math.max(...children.map((c) => c.x + nodeWidth / 2));
             const childrenLineY = parentsBottomY + verticalGap / 2;
-            // console.log(`Рисуем линии к нескольким детям (${children.length}) для родителей ${p1_id}-${p2_id}:`, { // 6. Координаты для нескольких детей
-            //     verticalLine: [parentsCenterX, parentsBottomY, parentsCenterX, childrenLineY],
-            //     horizontalLine: [childLeftX, childrenLineY, childRightX, childrenLineY],
-            //     children: children.map(c => ({
-            //         id: c.id,
-            //         line: [c.x + nodeWidth / 2, childrenLineY, c.x + nodeWidth / 2, c.y]
-            //     }))
-            // });
 
-            // Вертикальная линия от родителей
             connectors.push(
                 <line
                     key={`vert-${key}`}
@@ -122,7 +90,6 @@ const Connectors: React.FC<ConnectorsProps> = ({
                 />
             );
 
-            // Горизонтальная линия между детьми
             connectors.push(
                 <line
                     key={`horiz-${key}`}
@@ -135,7 +102,6 @@ const Connectors: React.FC<ConnectorsProps> = ({
                 />
             );
 
-            // Вертикальные линии от горизонтальной к каждому ребенку
             children.forEach((child) => {
                 const childCenterX = child.x + nodeWidth / 2;
                 const childTopY = child.y;
@@ -155,7 +121,6 @@ const Connectors: React.FC<ConnectorsProps> = ({
         }
     });
 
-    // Иконки партнёрства (без линий)
     const partnerIcons: { n1: NodeType; n2: NodeType; partnerType?: string }[] = [];
     const renderedPartnerPairs = new Set<string>();
 
@@ -181,7 +146,6 @@ const Connectors: React.FC<ConnectorsProps> = ({
         });
     });
 
-    // Рисуем только иконки партнёрства
     partnerIcons.forEach(({ n1, n2, partnerType }) => {
         const x = (n1.x + nodeWidth / 2 + n2.x + nodeWidth / 2) / 2;
         const y = (n1.y + nodeHeight / 2 + n2.y + nodeHeight / 2) / 2;

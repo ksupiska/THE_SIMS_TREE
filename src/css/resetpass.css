@@ -6,7 +6,6 @@
   font-display: swap;
 }
 
-/* Основные стили контейнера */
 .sims-auth-container-res {
   display: flex;
   flex-direction: column;
@@ -20,7 +19,6 @@
   font-family: "The Sims Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-/* Карточка формы */
 .sims-auth-card-res {
   width: 100%;
   max-width: 420px;
@@ -34,7 +32,6 @@
   border: 3px solid rgba(74, 141, 86, 0.1);
 }
 
-/* Заголовок */
 .sims-auth-header-res {
   background: linear-gradient(135deg, #4a8d56 0%, #3d7647 100%);
   color: white;
@@ -69,7 +66,6 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Форма */
 .sims-auth-form-res {
   padding: 35px 30px 25px;
 }
@@ -125,7 +121,6 @@
   cursor: not-allowed;
 }
 
-/* Кнопки */
 .sims-button-res {
   width: 100%;
   padding: 14px 24px;
@@ -176,7 +171,6 @@
   animation: spin-res 1s linear infinite;
 }
 
-/* Сообщения */
 .sims-message-res {
   display: flex;
   align-items: flex-start;
@@ -206,7 +200,6 @@
   border-left-color: #e74c3c;
 }
 
-/* Футер */
 .sims-auth-footer-res {
   text-align: center;
   margin-top: 24px;
@@ -232,7 +225,6 @@
   text-decoration: underline;
 }
 
-/* Декоративные элементы */
 .sims-auth-decoration-res {
   position: absolute;
   width: 100%;
@@ -276,7 +268,6 @@
   animation: float-res 10s ease-in-out infinite reverse;
 }
 
-/* Анимации */
 @keyframes slideUp-res {
   from {
     opacity: 0;
@@ -318,7 +309,6 @@
   }
 }
 
-/* Адаптивность */
 @media (max-width: 480px) {
   .sims-auth-container-res {
     padding: 15px;
@@ -383,7 +373,6 @@
   }
 }
 
-/* Улучшения для доступности */
 @media (prefers-reduced-motion: reduce) {
   .sims-auth-card-res,
   .sims-message-res,
@@ -397,7 +386,6 @@
   }
 }
 
-/* Темная тема (опционально) */
 @media (prefers-color-scheme: dark) {
   .sims-auth-container-res {
     background: linear-gradient(135deg, #1a2e1a 0%, #2d4a2d 50%, #1f3a1f 100%);

@@ -33,7 +33,7 @@ const SignupForm = () => {
       })
 
       if (error) {
-        const ruMessage = errorMessagesMap[error.message] || error.message // fallback на оригинал
+        const ruMessage = errorMessagesMap[error.message] || error.message
         setMessage('Ошибка: ' + ruMessage)
         setMessageType('error')
         setShowLoginButton(false)
@@ -41,7 +41,6 @@ const SignupForm = () => {
       else {
         const userId = signupData.user?.id
         if (userId) {
-          // добавляем профиль с ролью "user"
           await supabase.from('profiles').insert([
             {
               id: userId,
@@ -49,7 +48,6 @@ const SignupForm = () => {
             },
           ])
         }
-
         setMessage('Письмо для подтверждения отправлено! Проверьте почту.')
         setMessageType('success')
         setShowLoginButton(true)
@@ -62,7 +60,6 @@ const SignupForm = () => {
       setIsLoading(false)
     }
   }
-
 
   const goToLogin = () => {
     navigate('/login')

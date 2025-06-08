@@ -11,7 +11,6 @@ const Header = () => {
             <Navbar expand="lg" className="sticky-top bg-white border-bottom py-2" style={{ backdropFilter: "blur(8px)" }}>
                 <Container>
                     <Navbar.Brand href="/" className="d-flex align-items-center me-4">
-                        {/* Логотип */}
                         <div className="position-relative" style={{ width: "40px", height: "40px" }}>
                             <div className="position-absolute" style={{ width: "40px", height: "40px" }}>
                                 <div

@@ -40,7 +40,7 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
 
     const navigate = useNavigate();
     const handleCreateNewCharacter = () => {
-        navigate("/simcreateform", { state: { treeId } }); // Переход на страницу создания персонажа
+        navigate("/simcreateform", { state: { treeId } });
     };
 
     const [editMode, setEditMode] = useState(false);
@@ -51,12 +51,10 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    // Текущий узел, для которого добавляем партнёра
     const [currentNodeId, setCurrentNodeId] = useState<string | null>(null);
     const [characters, setCharacters] = useState<CharacterType[]>([]);
     const [selectedPartnerType, setSelectedPartnerType] = useState<PartnerType>('married');
 
-    // Модалки
     const [showCharacterModal, setShowCharacterModal] = useState(false);
     const [showPartnerModal, setShowPartnerModal] = useState(false);
 
@@ -69,7 +67,6 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
             }
         }
     }, [nodes, rootId]);
-
 
     const getRootNode = (nodes: NodeType[]): NodeType | undefined =>
         nodes.find(n => !n.parent1_id && !n.parent2_id);
@@ -156,7 +153,6 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
     }, []);
 
 
-    //сохранение древа + добавление
     const handleAddPartner = (
         targetNodeId: string,
         partnerCharacter: CharacterType,
@@ -198,7 +194,7 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
         const { nodes: positionedNodes } = calculateTreePositions(updatedNodes, rootNode.id, 0, 0);
         setNodes(positionedNodes);
         console.log("Positioned nodes:", positionedNodes);
-        setIsSaved(false); // помечаем, что есть несохранённые изменения
+        setIsSaved(false);
     };
 
     const handleAddChildNode = (parentId: string, childCharacter?: CharacterType) => {
@@ -229,7 +225,7 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
         const { nodes: positionedNodes } = calculateTreePositions(updatedNodes, rootNode.id, 0, 0);
         setNodes(positionedNodes);
         console.log("Positioned nodes:", positionedNodes);
-        setIsSaved(false); // помечаем, что есть несохранённые изменения
+        setIsSaved(false);
     };
 
     const handleSaveTree = async () => {
@@ -375,7 +371,6 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
         }
     }, [treeId]);
 
-    if (loading) return <div>Загрузка...</div>;
     if (error) return <div>{error}</div>;
 
     return (
@@ -433,7 +428,7 @@ export const Tree: React.FC<TreeProps> = ({ treeId, treeName, initialNodes = [] 
                     disabled={loading || isSaved}
                 >
                     <Save size={18} />
-                    {loading ? "Сохраняю..." : isSaved ? "Сохранено!" : "Сохранить"}
+                    { isSaved ? "Сохранено!" : "Сохранить"}
                 </Button>
 
             </div>

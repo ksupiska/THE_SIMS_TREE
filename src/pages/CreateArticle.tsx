@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../SupabaseClient";
-
 import { motion } from "framer-motion";
 import { BsDiamond, BsPencilSquare, BsImage, BsCheck, BsX, BsEye } from "react-icons/bs";
-
 import { Button } from "react-bootstrap";
 
 import '../css/createarticle.css';
@@ -32,7 +30,7 @@ export default function CreateArticlePage() {
                 content,
                 image,
                 author_id: userId,
-                status: "pending", // статья на модерации
+                status: "pending",
             },
         ]);
 
@@ -58,7 +56,6 @@ export default function CreateArticlePage() {
     const [isPreview, setIsPreview] = useState(false)
     return (
         <div className="create-article-container-art">
-            {/* Заголовок страницы */}
             <section className="article-header-art">
                 <div className="article-header-overlay-art"></div>
                 <div className="article-header-content-art">
@@ -79,7 +76,6 @@ export default function CreateArticlePage() {
                 </div>
             </section>
 
-            {/* Основной контент */}
             <section className="article-content-art">
                 <div className="content-wrapper-art">
                     <div className="form-container-art">
@@ -222,7 +218,6 @@ export default function CreateArticlePage() {
                 </div>
             </section>
 
-            {/* Декоративные элементы */}
             <div className="decoration decoration-left-art">
                 <BsDiamond className="decoration-diamond purple" />
             </div>

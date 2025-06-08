@@ -1,6 +1,3 @@
-/* Стили для модальных окон профиля пользователя */
-
-/* ========== МОДАЛЬНОЕ ОКНО ПОДДЕРЖКИ (-sup) ========== */
 
 .modal-overlay-sup {
   position: fixed;
@@ -49,7 +46,6 @@
   }
 }
 
-/* Заголовок модального окна поддержки */
 .modal-header-sup {
   background: linear-gradient(135deg, #10b981, #059669);
   padding: 1.5rem 2rem;
@@ -91,7 +87,6 @@
   transform: scale(1.1);
 }
 
-/* Тело модального окна поддержки */
 .modal-body-sup {
   padding: 2rem;
 }
@@ -143,7 +138,6 @@
   font-weight: 500;
 }
 
-/* Подвал модального окна поддержки */
 .modal-footer-sup {
   background: #f9fafb;
   padding: 1.5rem 2rem;
@@ -198,8 +192,6 @@
   font-size: 1rem;
 }
 
-/* ========== МОДАЛЬНОЕ ОКНО УВЕДОМЛЕНИЙ (-notif) ========== */
-
 .modal-overlay-notif {
   position: fixed;
   top: 0;
@@ -247,7 +239,6 @@
   }
 }
 
-/* Заголовок модального окна уведомлений */
 .modal-header-notif {
   background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   padding: 1.5rem 2rem;
@@ -289,14 +280,12 @@
   transform: scale(1.1);
 }
 
-/* Тело модального окна уведомлений */
 .modal-body-notif {
   padding: 2rem;
   max-height: 60vh;
   overflow-y: auto;
 }
 
-/* Пустое состояние уведомлений */
 .empty-notifications-notif {
   text-align: center;
   padding: 3rem 2rem;
@@ -321,7 +310,6 @@
   margin: 0;
 }
 
-/* Элементы уведомлений */
 .notification-item-notif {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
@@ -403,7 +391,6 @@
   letter-spacing: 0.05em;
 }
 
-/* Кастомный скроллбар для уведомлений */
 .modal-body-notif::-webkit-scrollbar {
   width: 6px;
 }
@@ -422,7 +409,6 @@
   background: linear-gradient(to bottom, #2563eb, #1e40af);
 }
 
-/* Адаптивность */
 @media (max-width: 768px) {
   .modal-content-sup,
   .modal-content-notif {
@@ -495,7 +481,6 @@
   }
 }
 
-/* Анимации для уведомлений */
 @keyframes notificationPulse {
   0%,
   100% {
@@ -512,7 +497,6 @@
   background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
 }
 
-/* Состояния загрузки */
 .loading-notifications-notif {
   display: flex;
   flex-direction: column;

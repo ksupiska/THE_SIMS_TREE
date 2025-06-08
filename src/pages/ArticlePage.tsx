@@ -20,7 +20,6 @@ export default function ArticlePage() {
     const [article, setArticle] = useState<Article | null>(null);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-    //const [readingTime, setReadingTime] = useState(0)
 
     useEffect(() => {
         const fetchArticle = async () => {
@@ -71,7 +70,6 @@ export default function ArticlePage() {
 
     return (
         <div className="article-page-container-full-article">
-            {/* Навигация */}
             <motion.div
                 className="article-navigation-full-article"
                 initial={{ opacity: 0, y: -20 }}
@@ -84,14 +82,12 @@ export default function ArticlePage() {
                 </Button>
             </motion.div>
 
-            {/* Основной контент */}
             <motion.article
                 className="article-content-full-article"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
             >
-                {/* Заголовок статьи */}
                 <header className="article-header-full-article">
                     <h1 className="article-title-full-article">{article.title}</h1>
 
@@ -103,7 +99,6 @@ export default function ArticlePage() {
                     </div>
                 </header>
 
-                {/* Изображение статьи */}
                 {article.image && (
                     <motion.div
                         className="article-image-container-full-article"
@@ -115,7 +110,6 @@ export default function ArticlePage() {
                     </motion.div>
                 )}
 
-                {/* Текст статьи */}
                 <motion.div
                     className="article-text-full-article"
                     initial={{ opacity: 0 }}
@@ -128,8 +122,6 @@ export default function ArticlePage() {
                         </p>
                     ))}
                 </motion.div>
-
-                
             </motion.article>
         </div>
     );

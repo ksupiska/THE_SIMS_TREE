@@ -7,11 +7,11 @@ import { styles } from "../Tree.Styles";
 interface PartnerModalProps {
     show: boolean;
     characters: CharacterType[];
-    selectedPartnerType: PartnerType; // Изменили string на PartnerType
+    selectedPartnerType: PartnerType;
     onSelectPartner: (character: CharacterType) => void;
     onCreateNewCharacter: () => void;
     onClose: () => void;
-    onSelectPartnerType: (type: PartnerType) => void; // Изменили string на PartnerType
+    onSelectPartnerType: (type: PartnerType) => void;
 }
 
 export const PartnerModal: React.FC<PartnerModalProps> = ({

@@ -1,11 +1,11 @@
-/* Стили для админ панели */
+
 .admin-container-adm {
   min-height: 100vh;
   background: linear-gradient(135deg, #e0f2fe 0%, #f3e8ff 50%, #fce7f3 100%);
   position: relative;
 }
 
-/* Заголовок админки */
+
 .admin-header-adm {
   position: relative;
   overflow: hidden;
@@ -58,7 +58,6 @@
   opacity: 0.9;
 }
 
-/* Основной контент */
 .admin-content-adm {
   padding: 3rem 1rem;
 }
@@ -68,7 +67,6 @@
   margin: 0 auto;
 }
 
-/* Секция создания статьи */
 .create-section-adm {
   margin-bottom: 3rem;
 }
@@ -98,7 +96,6 @@
   font-size: 1.25rem;
 }
 
-/* Форма создания */
 .create-form-adm {
   background: white;
   border-radius: 1.5rem;
@@ -221,7 +218,6 @@
   font-weight: 500;
 }
 
-/* Загрузка изображений для формы создания */
 .image-upload-container-adm {
   border: 2px dashed #d1d5db;
   border-radius: 1rem;
@@ -363,7 +359,6 @@
   font-style: italic;
 }
 
-/* Секция статей */
 .articles-section-adm {
   margin-top: 3rem;
 }
@@ -382,7 +377,6 @@
   gap: 2rem;
 }
 
-/* Карточки статей */
 .article-card-adm {
   background: white;
   border-radius: 1.5rem;
@@ -501,7 +495,6 @@
   font-size: 1rem;
 }
 
-/* Декоративные элементы */
 .admin-decoration-adm {
   position: fixed;
   opacity: 0.15;
@@ -544,7 +537,6 @@
   }
 }
 
-/* Адаптивность */
 @media (max-width: 768px) {
   .admin-main-title-adm {
     font-size: 2rem;
@@ -622,7 +614,6 @@
   }
 }
 
-/* Блок сообщений поддержки */
 .support-section {
   margin-top: 4rem;
 }
@@ -633,7 +624,6 @@
   margin-top: 2rem;
 }
 
-/* Пустое состояние */
 .empty-support-state {
   text-align: center;
   padding: 4rem 2rem;
@@ -660,7 +650,6 @@
   margin: 0;
 }
 
-/* Карточка сообщения */
 .support-message-card {
   background: white;
   border-radius: 1.5rem;
@@ -683,7 +672,6 @@
   border-left-color: #10b981;
 }
 
-/* Заголовок сообщения */
 .support-message-header {
   display: flex;
   justify-content: space-between;
@@ -731,7 +719,6 @@
   color: #065f46;
 }
 
-/* Содержимое сообщения */
 .support-message-content {
   padding: 0 1.5rem 1rem;
 }
@@ -758,7 +745,6 @@
   font-weight: 500;
 }
 
-/* Действия с сообщением */
 .support-message-actions {
   padding: 1rem 1.5rem;
   background: #f9fafb;
@@ -789,7 +775,6 @@
   font-size: 1rem;
 }
 
-/* Декоративные элементы */
 .admin-decoration {
   position: fixed;
   opacity: 0.15;

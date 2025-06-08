@@ -63,7 +63,7 @@ export const Node: React.FC<NodeProps> = ({
                                     cursor: !editMode ? "pointer" : "default",
                                 }}
                                 onClick={(e) => {
-                                    e.stopPropagation(); // Предотвращаем всплытие клика
+                                    e.stopPropagation();
                                 }}
                             />
                         ) : (

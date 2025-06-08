@@ -6,7 +6,6 @@
   font-display: swap;
 }
 
-/* Стили для формы входа в стиле Симс 4 */
 .sims-auth-container {
   display: flex;
   flex-direction: column;
@@ -254,7 +253,6 @@
   animation: float 8s ease-in-out infinite reverse;
 }
 
-/* Анимации */
 @keyframes slideUp {
   from {
     opacity: 0;
@@ -291,7 +289,6 @@
   }
 }
 
-/* Адаптивность */
 @media (max-width: 480px) {
   .sims-auth-card {
     max-width: 100%;

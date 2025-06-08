@@ -11,7 +11,7 @@
   padding: 20px 40px;
   background-color: #fff;
   border-bottom: 1px solid #ddd;
-  z-index: 1; /* И это */
+  z-index: 1;
   position: relative;
 }
 

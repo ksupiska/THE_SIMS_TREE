@@ -1,4 +1,3 @@
-// src/components/LoadingComponent.tsx
 const LoadingComponent = () => {
     return (
       <div className="loading-container">

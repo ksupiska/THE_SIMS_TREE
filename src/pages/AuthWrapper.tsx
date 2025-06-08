@@ -1,10 +1,8 @@
-
 import { useEffect, useState } from "react"
 import { supabase } from "../SupabaseClient"
 import SignupForm from "../components/auth/SignupForm"
 import type { User } from "@supabase/supabase-js"
 import { useNavigate } from "react-router-dom"
-// import { Container, Row, Col, Card, Button } from "react-bootstrap"
 import { motion } from "framer-motion"
 import {
     LogOut,
@@ -28,7 +26,6 @@ const AuthWrapper = () => {
     const [activeTab, setActiveTab] = useState("profile")
     const navigate = useNavigate()
     const [role, setRole] = useState<string | null>(null)
-
 
     //модальное окно поддержки
     const [showSupportModal, setShowSupportModal] = useState(false);
@@ -68,7 +65,6 @@ const AuthWrapper = () => {
             .order("created_at", { ascending: false });
 
         if (!error && data) {
-            //фильтр только тех ответов, где user_id совпадает с текущим пользователем
             const filteredReplies = data.filter(
                 reply => reply.support_messages?.user_id === userId
             );
@@ -78,12 +74,10 @@ const AuthWrapper = () => {
         setLoadingNotifications(false);
     };
 
-    //обработчик кнопки
     const handleOpenNotifications = async () => {
         await fetchSupportReplies();
         setNotificationsOpen(true);
     };
-
 
     useEffect(() => {
         if (!user) return
@@ -129,7 +123,6 @@ const AuthWrapper = () => {
         )
     }
 
-    //отправка сообщений
     const handleSendSupportMessage = async () => {
         const { data: { user } } = await supabase.auth.getUser();
 
@@ -155,7 +148,6 @@ const AuthWrapper = () => {
             alert("Ошибка при отправке письма.");
         }
     };
-
 
     return (
         <div className="profile-container">
@@ -192,7 +184,6 @@ const AuthWrapper = () => {
                     </motion.div>
                 </div>
             </section>
-            {/* Навигация */}
             <section className="profile-navigation">
                 <div className="nav-container">
                     <div className="nav-tabs">
@@ -215,7 +206,6 @@ const AuthWrapper = () => {
                 </div>
             </section>
 
-            {/* Основной контент */}
             <section className="profile-content">
                 <div className="content-container">
                     {activeTab === "profile" && (
@@ -225,7 +215,7 @@ const AuthWrapper = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
                         >
-                            {/* Быстрые действия */}
+
                             <div className="actions-section">
                                 <h2 className="section-title">Быстрые действия</h2>
                                 <div className="actions-grid">
@@ -400,7 +390,6 @@ const AuthWrapper = () => {
                 </div>
             )}
 
-            {/* 🔔 МОДАЛЬНОЕ ОКНО УВЕДОМЛЕНИЙ - ИСПОЛЬЗУЕТ СТИЛИ С СУФФИКСОМ -notif */}
             {notificationsOpen && (
                 <div className="modal-overlay-notif" onClick={() => setNotificationsOpen(false)}>
                     <div className="modal-content-notif" onClick={(e) => e.stopPropagation()}>

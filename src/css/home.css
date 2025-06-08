@@ -5,9 +5,7 @@
   font-style: normal;
   font-display: swap;
 }
-/* Стили только для главной страницы */
 
-/* Основной контейнер */
 .home-container {
   position: relative;
   overflow-x: hidden;
@@ -18,7 +16,6 @@
   width: 100%;
 }
 
-/* Герой-секция */
 .hero-section {
   position: relative;
   padding: 6rem 1rem 8rem;
@@ -211,7 +208,6 @@
   height: auto;
 }
 
-/* Секция "О сервисе" */
 .about-section {
   padding: 5rem 1rem;
   background-color: #ffffff;
@@ -249,7 +245,6 @@
   margin: 0 auto;
 }
 
-/* Секция с функциями */
 .features-section {
   padding: 5rem 1rem;
   background-color: #f9fafb;
@@ -360,7 +355,6 @@
   color: #ffffff;
 }
 
-/* Секция "Как это работает" */
 .how-it-works-section {
   padding: 5rem 1rem;
   background-color: #ffffff;
@@ -416,7 +410,6 @@
   color: #6b7280;
 }
 
-/* Секция призыва к действию */
 .cta-section {
   padding: 5rem 1rem;
   position: relative;
@@ -472,7 +465,6 @@
   box-shadow: 0 15px 30px rgba(255, 255, 255, 0.4);
 }
 
-/* Декоративные элементы */
 .decoration {
   position: fixed;
   opacity: 0.15;
@@ -505,7 +497,6 @@
   animation: float 4s ease-in-out infinite reverse;
 }
 
-/* Анимации */
 @keyframes float {
   0%,
   100% {
@@ -516,7 +507,6 @@
   }
 }
 
-/* Адаптивность */
 @media (max-width: 768px) {
   .hero-title {
     font-size: 2.5rem;

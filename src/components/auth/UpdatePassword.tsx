@@ -13,7 +13,6 @@ const UpdatePassword = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const handleUpdatePassword = async () => {
-    // Валидация
     if (!password.trim()) {
       setMessage("Пожалуйста, введите новый пароль")
       setMessageType("error")
@@ -47,7 +46,6 @@ const UpdatePassword = () => {
     } else {
       setMessage("Пароль успешно обновлён! Теперь вы можете войти с новым паролем.")
       setMessageType("success")
-      // Очищаем поля после успешного обновления
       setPassword("")
       setConfirmPassword("")
     }
@@ -61,7 +59,6 @@ const UpdatePassword = () => {
 
   return (
     <div className="sims-auth-container-upd">
-      {/* Декоративные элементы */}
       <div className="sims-auth-decoration-upd">
         <div className="sims-plumbob-upd"></div>
         <div className="sims-plumbob-upd sims-plumbob-alt-upd"></div>

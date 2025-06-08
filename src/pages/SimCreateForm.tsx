@@ -1,12 +1,7 @@
-// SimCreateForm.tsx
 import { useState, useEffect } from 'react';
-
 import { supabase } from '../SupabaseClient';
-
 import '../css/simform.css'
-
 import { Button, Form } from 'react-bootstrap'
-
 import { motion, AnimatePresence } from 'framer-motion'
 
 import Cropper, { Area } from 'react-easy-crop';
@@ -16,13 +11,11 @@ import 'rc-slider/assets/index.css';
 
 import { useLocation } from "react-router-dom"
 
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 export default function SimCreateForm() {
   const location = useLocation()
-
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
   const [gender, setGender] = useState('');
@@ -71,7 +64,7 @@ export default function SimCreateForm() {
       const image = new Image();
       image.addEventListener('load', () => resolve(image));
       image.addEventListener('error', error => reject(error));
-      image.setAttribute('crossOrigin', 'anonymous'); // чтобы не было CORS проблем
+      image.setAttribute('crossOrigin', 'anonymous');
       image.src = url;
     });
 
@@ -138,19 +131,16 @@ export default function SimCreateForm() {
 
   useEffect(() => {
     const fetchData = async () => {
-      // 1. Получаем treeId из location.state (если перешли с TreePage)
       const locationTreeId = location.state?.treeId;
       if (locationTreeId) {
         setTreeId(locationTreeId);
       }
 
-      // 2. Получаем пользователя
       const { data: { user }, error } = await supabase.auth.getUser();
 
       if (user) {
         setUserId(user.id);
 
-        // 3. Если treeId не был передан, получаем последнее дерево пользователя
         if (!locationTreeId) {
           const { data: trees, error: treesError } = await supabase
             .from('trees')
@@ -182,11 +172,11 @@ export default function SimCreateForm() {
     surname: string;
     gender: string;
     city?: string | null;
-    death?: string | null;  // например дата смерти или статус
+    death?: string | null;
     kind?: string | null;
     type?: string | null;
     biography?: string | null;
-    avatar?: string | null;  // URL аватара
+    avatar?: string | null;
     tree_id: string;
     user_id: string;
   };
@@ -194,7 +184,6 @@ export default function SimCreateForm() {
   async function uploadAvatar(file: File, userId: string): Promise<string> {
     const fileExt = file.name.split('.').pop() || 'jpg';
     const fileName = `${userId}-${Date.now()}.${fileExt}`;
-    // попробуем без вложенной папки avatars
     const filePath = fileName;
 
     console.log('Uploading file to path:', filePath);
@@ -271,7 +260,7 @@ export default function SimCreateForm() {
           kind: kind || null,
           type: type || null,
           biography: biography || null,
-          tree_id: treeId,  // теперь точно string
+          tree_id: treeId,
           user_id: userId,
         },
         avatarFile,
@@ -315,7 +304,6 @@ export default function SimCreateForm() {
         </h2>
 
         <div className='form-grid'>
-          {/*левая колонка*/}
           <div className='form-column'>
             <Form.Group className='mb-4 sims-form-group'>
               <Form.Label className='sims-label'>Выберите аватар</Form.Label>
@@ -552,8 +540,6 @@ export default function SimCreateForm() {
 
         </Modal.Footer>
       </Modal>
-
-
     </div>
   );
 }

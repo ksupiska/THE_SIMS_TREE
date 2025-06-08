@@ -3,8 +3,6 @@ import { supabase } from "../../SupabaseClient";
 import { Mail, CheckCircle, AlertCircle } from "lucide-react";
 import "../../css/resetpass.css";
 
-
-
 const RequestResetPassword = () => {
   const [email, setEmail] = useState("")
   const [message, setMessage] = useState("")
@@ -44,7 +42,6 @@ const RequestResetPassword = () => {
 
   return (
     <div className="sims-auth-container-res">
-      {/* Декоративные элементы */}
       <div className="sims-auth-decoration-res">
         <div className="sims-plumbob-res"></div>
         <div className="sims-plumbob-res sims-plumbob-alt-res"></div>

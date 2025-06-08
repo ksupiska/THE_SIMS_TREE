@@ -1,5 +1,4 @@
 
-/* Основа модального окна */
 .modal-overlay-admin {
   position: fixed;
   top: 0;
@@ -47,7 +46,6 @@
   }
 }
 
-/* Заголовок модального окна */
 .modal-header-admin {
   background: linear-gradient(135deg, #8b5cf6, #ec4899);
   padding: 1.5rem 2rem;
@@ -96,14 +94,12 @@
   color: white !important;
 }
 
-/* Тело модального окна */
 .modal-body-admin {
   padding: 2rem;
   max-height: 60vh;
   overflow-y: auto;
 }
 
-/* Группы форм */
 .form-group-admin {
   margin-bottom: 1.5rem;
 }
@@ -151,7 +147,6 @@
   font-weight: 500;
 }
 
-/* Загрузка изображений */
 .image-upload-container-admin {
   border: 2px dashed #d1d5db;
   border-radius: 1rem;
@@ -296,7 +291,6 @@
   font-style: italic;
 }
 
-/* Подвал модального окна */
 .modal-footer-admin {
   background: #f9fafb;
   padding: 1.5rem 2rem;
@@ -352,7 +346,6 @@
   box-shadow: none !important;
 }
 
-/* Кастомный скроллбар для модального окна */
 .modal-body-admin::-webkit-scrollbar {
   width: 6px;
 }
@@ -371,7 +364,6 @@
   background: linear-gradient(to bottom, #7c3aed, #db2777);
 }
 
-/* Адаптивность */
 @media (max-width: 768px) {
   .modal-content-admin {
     margin: 1rem;
@@ -437,7 +429,6 @@
   }
 }
 
-/* Анимации для элементов формы */
 @keyframes inputFocus-admin {
   from {
     transform: translateY(0);
@@ -452,7 +443,6 @@
   animation: inputFocus-admin 0.3s ease-out;
 }
 
-/* Состояния загрузки */
 .loading-admin {
   opacity: 0.6;
   pointer-events: none;
@@ -478,7 +468,6 @@
   }
 }
 
-/* Эффекты наведения для интерактивных элементов */
 .upload-btn-admin:active {
   transform: translateY(0);
 }
@@ -488,7 +477,6 @@
   transform: translateY(0);
 }
 
-/* Стили для валидации */
 .form-input-admin.error,
 .form-textarea-admin.error {
   border-color: #ef4444;
@@ -501,7 +489,6 @@
   box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
 }
 
-/* Дополнительные стили для улучшения UX */
 .modal-content-admin {
   transform-origin: center;
 }

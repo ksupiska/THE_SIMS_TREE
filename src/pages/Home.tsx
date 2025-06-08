@@ -1,14 +1,10 @@
-"use client"
-
 import { useEffect, type ReactNode } from "react"
 import { motion, useAnimation } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 import { BsDiamond, BsTree, BsPeople, BsPencilSquare, BsArrowRight } from "react-icons/bs"
 import "../css/home.css";
-
 import image from '../photo/Example-tree.png';
 
-// Типы для пропсов компонентов
 interface AnimatedSectionProps {
   children: ReactNode
   delay?: number
@@ -21,7 +17,6 @@ interface FeatureCardProps {
   color: string
 }
 
-// Компонент для анимированных секций
 function AnimatedSection({ children, delay = 0 }: AnimatedSectionProps) {
   const controls = useAnimation()
   const [ref, inView] = useInView({
@@ -58,7 +53,6 @@ function AnimatedSection({ children, delay = 0 }: AnimatedSectionProps) {
   )
 }
 
-// Компонент для карточки функции
 function FeatureCard({ icon, title, description, color }: FeatureCardProps) {
   return (
     <motion.div
@@ -74,7 +68,6 @@ function FeatureCard({ icon, title, description, color }: FeatureCardProps) {
 }
 
 export default function HomePage() {
-  // Данные о функциях сайта
   const features = [
     {
       icon: <BsTree />,
@@ -99,7 +92,6 @@ export default function HomePage() {
 
   return (
     <div className="home-container">
-      {/* Герой-секция */}
       <section className="hero-section">
         <div className="hero-overlay"></div>
         <div className="hero-content">
@@ -153,7 +145,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Секция "О сервисе" */}
       <section className="about-section">
         <div className="section-container">
           <AnimatedSection>
@@ -169,7 +160,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Секция с функциями */}
       <section className="features-section">
         <div className="section-container">
           <AnimatedSection>
@@ -192,7 +182,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Секция "Как это работает" */}
       <section className="how-it-works-section">
         <div className="section-container">
           <AnimatedSection>
@@ -244,7 +233,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Секция призыва к действию */}
       <section className="cta-section">
         <div className="cta-overlay"></div>
         <div className="section-container">
@@ -261,7 +249,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Декоративные элементы */}
       <div className="decoration decoration-top-left">
         <BsDiamond className="decoration-diamond pink" />
       </div>

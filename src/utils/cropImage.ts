@@ -1,4 +1,3 @@
-
 import { Area } from 'react-easy-crop';
 export async function getCroppedImg(
   imageSrc: string,

@@ -25,7 +25,6 @@ export const CropModal: React.FC<Props> = ({ imageSrc, onClose, onCropComplete }
 
     const handleDone = async () => {
         if (!croppedAreaPixels) {
-            // Если нет данных о кропе — можно просто закрыть модалку или показать предупреждение
             console.warn("Область кропа не выбрана");
             return;
         }

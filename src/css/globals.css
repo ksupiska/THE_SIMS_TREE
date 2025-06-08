@@ -37,14 +37,12 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Основной контейнер */
 .main-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #fce7f3 0%, #f3e8ff 50%, #dbeafe 100%);
   position: relative;
 }
 
-/* Анимированный фон */
 .main-container::before {
   content: "";
   position: fixed;
@@ -71,7 +69,6 @@ html {
   z-index: -1;
 }
 
-/* Секция героя */
 .hero-section {
   position: relative;
   overflow: hidden;
@@ -131,7 +128,6 @@ html {
   margin: 0 auto;
 }
 
-/* Контент */
 .content-container {
   padding: 4rem 1rem;
 }
@@ -141,7 +137,6 @@ html {
   margin: 0 auto;
 }
 
-/* Карточки инструкций */
 .instruction-card {
   display: flex;
   gap: 2rem;
@@ -174,7 +169,6 @@ html {
   transform: scale(1.05);
 }
 
-/* Градиенты для карточек */
 .pink-purple {
   background: linear-gradient(135deg, #f472b6, #a855f7);
 }
@@ -233,7 +227,6 @@ html {
   opacity: 0.95;
 }
 
-/* Изображения */
 .image-wrapper {
   position: relative;
   height: 20rem;
@@ -259,7 +252,6 @@ html {
   background: linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent);
 }
 
-/* Декоративные элементы */
 .decoration {
   position: fixed;
   opacity: 0.2;
@@ -292,7 +284,6 @@ html {
   animation: pulse 3s infinite;
 }
 
-/* Анимации */
 @keyframes pulse {
   0%,
   100% {
@@ -323,7 +314,6 @@ html {
   }
 }
 
-/* Кастомный скроллбар */
 ::-webkit-scrollbar {
   width: 12px;
 }
@@ -341,7 +331,6 @@ html {
   background: linear-gradient(to bottom, #e11d48, #7c3aed);
 }
 
-/* Адаптивность */
 @media (max-width: 768px) {
   .main-title {
     font-size: 2rem;

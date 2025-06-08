@@ -1,4 +1,3 @@
-
 import '../css/globals.css';
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer";
@@ -155,7 +154,6 @@ function InstructionCard({ section, index }: { section: Section; index: number }
 export default function Home() {
   return (
     <main className="main-container">
-      {/* Заголовок страницы */}
       <div className="hero-section">
         <div className="hero-overlay" />
         <div className="hero-content">
@@ -175,7 +173,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Основной контент */}
       <div className="content-container">
         <div className="content-wrapper">
           {sections.map((section, index) => (
@@ -184,7 +181,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Декоративные элементы */}
       <div className="decoration decoration-left">
         <BsDiamond className="decoration-diamond pink" />
       </div>

@@ -14,7 +14,6 @@
     "Helvetica Neue", Arial, sans-serif;
 }
 
-/* Заголовок профиля */
 .profile-header {
   position: relative;
   padding: 3rem 1rem 2rem;
@@ -106,7 +105,6 @@
   transform: rotate(45deg);
 }
 
-/* Навигация */
 .profile-navigation {
   background: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -169,7 +167,6 @@
   }
 }
 
-/* Основной контент */
 .profile-content {
   padding: 2rem 1rem;
 }
@@ -187,7 +184,6 @@
   text-align: center;
 }
 
-/* Быстрые действия */
 .actions-section {
   margin-bottom: 3rem;
 }
@@ -242,7 +238,6 @@
   font-size: 1rem;
 }
 
-/* Пустые состояния */
 .empty-state-auth {
   text-align: center;
   padding: 4rem 2rem;
@@ -295,7 +290,6 @@
   font-size: 1.125rem;
 }
 
-/* Настройки */
 .settings-content {
   background: white;
   border-radius: 1.5rem;

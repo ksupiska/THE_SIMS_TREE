@@ -19,15 +19,13 @@ export const calculateTreePositions = (
 ): { nodes: PositionedNode[]; width: number } => {
   const positionedNodes: PositionedNode[] = [];
 
-  // Хранилище ширин поддеревьев (кеш)
   const subtreeWidths: Record<string, number> = {};
 
-  // Рекурсивно вычисляем ширину поддерева с учётом партнёров и потомков
   const calculateSubtreeWidth = (nodeId: string): number => {
     if (subtreeWidths[nodeId] !== undefined) return subtreeWidths[nodeId];
 
     const node = nodes.find((n) => n.id === nodeId);
-    if (!node) return NODE_WIDTH; // fallback: считаем ширину узла
+    if (!node) return NODE_WIDTH;
 
     const partners = nodes.filter(
       (n) => n.partner1_id === node.id || n.partner2_id === node.id
@@ -97,7 +95,6 @@ export const calculateTreePositions = (
         (n.parent2_id && parentIds.includes(n.parent2_id))
     );
 
-    // Располагаем детей на основе ширины поддеревьев
     const totalChildrenWidth =
       children.reduce((acc, child) => acc + subtreeWidths[child.id], 0) +
       HORIZONTAL_GAP * Math.max(0, children.length - 1);
@@ -137,7 +134,6 @@ export const handleDeleteNode = (nodes: NodeType[], id: string): NodeType[] => {
     nodeToDelete.partner2_id,
   ].filter(Boolean) as string[];
 
-  // Получаем детей, у которых оба родителя — nodeToDelete и кто-либо из его партнёров
   const childrenToDelete = nodes.filter((n) =>
     partnerIds.some(
       (pid) =>
@@ -146,7 +142,6 @@ export const handleDeleteNode = (nodes: NodeType[], id: string): NodeType[] => {
     )
   );
 
-  // Удаляем самого узла и его общих детей
   updatedNodes = updatedNodes.filter(
     (n) =>
       n.id !== nodeToDelete.id &&

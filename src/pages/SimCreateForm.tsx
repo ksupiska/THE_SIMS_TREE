@@ -186,6 +186,7 @@ export default function SimCreateForm() {
     death?: string | null;
     kind?: string | null;
     type?: string | null;
+    state?: string | null;
     biography?: string | null;
     avatar?: string | null;
     tree_id: string;
@@ -282,6 +283,7 @@ export default function SimCreateForm() {
           surname,
           gender,
           city: city || null,
+          state: state || null,
           death: death || null,
           kind: kind || null,
           type: type || null,

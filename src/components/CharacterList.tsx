@@ -256,9 +256,6 @@ export default function CharacterList() {
         </Row>
       </Container>
 
-
-
-
       {characters.length === 0 ? (
         <div className="no-characters">
           <p>Персонажи не найдены</p>
@@ -323,6 +320,13 @@ export default function CharacterList() {
                     <h4>Биография</h4>
                     <p>{selectedCharacter.biography}</p>
                   </div>
+                  {selectedCharacter.death && (
+                    <div className="info-section-list">
+                      <h4>Причина смерти</h4>
+                      <p>{selectedCharacter.death}</p>
+                    </div>
+                  )}
+
                 </div>
 
                 <div className="modal-footer-list">

@@ -33,7 +33,18 @@ export default function SimCreateForm() {
   const [zoom, setZoom] = useState(1);
 
   //обязательные поля для заполнения
-  const [errors, setErrors] = useState<{ [key: string]: string | null }>({});
+  const [errors, setErrors] = useState<{
+    name?: string;
+    surname?: string;
+    gender?: string;
+    avatarFile?: string;
+    general?: string;
+    type?: string;
+    city?: string;
+    state?: string;
+    kind?: string;
+  }>({});
+
 
   //успешное добавление персонажа
   const [successMessage, setSuccessMessage] = useState("");
@@ -242,6 +253,21 @@ export default function SimCreateForm() {
 
     if (!treeId) {
       setErrors({ general: 'Tree ID не задан' });
+      return;
+    }
+
+    const newErrors: typeof errors = {};
+    if (!name.trim()) newErrors.name = 'Введите имя';
+    if (!surname.trim()) newErrors.surname = 'Введите фамилию';
+    if (!gender) newErrors.gender = 'Выберите пол';
+    if (!avatarFile) newErrors.avatarFile = 'Загрузите аватар';
+    if (!type) newErrors.type = 'Выберите тип';
+    if (!kind) newErrors.kind = 'Укажите черты характера';
+    if (!city) newErrors.city = 'Выберите город проживания';
+    if (!state) newErrors.state = 'Выберите состояние персонажа';
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
 
@@ -470,9 +496,8 @@ export default function SimCreateForm() {
             as='textarea'
             rows={3}
             placeholder='Введите биографию персонажа, или его историю'
-            className={`sims-input auto-resize-textarea ${errors.biography ? "is-invalid" : ""}`}
+            className={`sims-input auto-resize-textarea`}
           />
-          {errors.biography && <div className="invalid-feedback">{errors.biography}</div>}
         </Form.Group>
         <AnimatePresence>
           {state === "Мертв" && (

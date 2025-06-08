@@ -19,7 +19,6 @@ export const PartnerModal: React.FC<PartnerModalProps> = ({
     characters,
     selectedPartnerType,
     onSelectPartner,
-    onCreateNewCharacter,
     onClose,
     onSelectPartnerType,
 }) => {
@@ -89,7 +88,6 @@ export const PartnerModal: React.FC<PartnerModalProps> = ({
                 </div>
 
                 <div style={{ display: "flex", justifyContent: "center", marginTop: "20px", gap: "10px" }}>
-                    <Button onClick={onCreateNewCharacter}>Добавить нового</Button>
                     <Button variant="secondary" onClick={onClose}>Отмена</Button>
                 </div>
             </div>

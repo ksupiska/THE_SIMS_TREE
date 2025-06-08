@@ -15,7 +15,6 @@ export const CharacterModal: React.FC<CharacterModalProps> = ({
   show,
   characters,
   onSelectCharacter,
-  onCreateNewCharacter,
   onClose,
 }) => {
   if (!show) return null;
@@ -51,7 +50,6 @@ export const CharacterModal: React.FC<CharacterModalProps> = ({
         </div>
 
         <div style={{ display: "flex", justifyContent: "center", marginTop: "20px", gap: "10px" }}>
-          <Button onClick={onCreateNewCharacter}>Добавить нового</Button>
           <Button variant="secondary" onClick={onClose}>Отмена</Button>
         </div>
       </div>

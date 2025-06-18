@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 
 import '../css/header.css';
 
@@ -32,20 +32,7 @@ const Footer = () => {
                                 Создавайте, исследуйте и делитесь генеалогическими древами ваших симов.
                             </p>
                         </div>
-                        <div className="d-flex gap-2 mb-4">
-                            <Button variant="light" className="p-2 rounded-circle" style={{ color: "#4a8d56" }}>
-                                <i className="bi bi-github"></i>
-                                <span className="visually-hidden">Facebook</span>
-                            </Button>
-                            <Button variant="light" className="p-2 rounded-circle" style={{ color: "#4a8d56" }}>
-                                <i className="bi bi-telegram"></i>
-                                <span className="visually-hidden">Twitter</span>
-                            </Button>
-                            <Button variant="light" className="p-2 rounded-circle" style={{ color: "#4a8d56" }}>
-                                <i className="bi bi-instagram"></i>
-                                <span className="visually-hidden">Instagram</span>
-                            </Button>
-                        </div>
+                        
                     </Col>
                     <Col lg={6}>
                         <Row>

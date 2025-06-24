@@ -270,6 +270,7 @@ const AuthWrapper = () => {
                         >
                             <div className="empty-state-auth">
                                 <BsTree className="empty-icon-auth" />
+                                <h3 className="section-title">ДАННЫЙ РАЗДЕЛ НАХОДИТСЯ В РАЗРАБОТКЕ</h3>
                                 <h3>У вас пока нет древ династий</h3>
                                 <p>Создайте свое первое древо и начните отслеживать историю семьи</p>
                                 <button className="create-button-auth">
@@ -289,6 +290,7 @@ const AuthWrapper = () => {
                         >
                             <div className="empty-state-auth">
                                 <BsPencilSquare className="empty-icon-auth" />
+                                <h3 className="section-title">ДАННЫЙ РАЗДЕЛ НАХОДИТСЯ В РАЗРАБОТКЕ</h3>
                                 <h3>У вас пока нет статей</h3>
                                 <p>Поделитесь своими историями и опытом с сообществом</p>
                                 <button className="create-button-auth">
@@ -308,6 +310,7 @@ const AuthWrapper = () => {
                         >
                             <div className="settings-content">
                                 <h2 className="section-title">Настройки профиля</h2>
+                                <h3 className="section-title">ДАННЫЙ РАЗДЕЛ НАХОДИТСЯ В РАЗРАБОТКЕ</h3>
                                 <div className="settings-grid">
                                     <div className="setting-item">
                                         <h3>Приватность</h3>

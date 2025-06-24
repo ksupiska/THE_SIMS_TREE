@@ -399,16 +399,17 @@ export default function AdminPage() {
                   </div>
 
                   <div className="article-actions-adm">
-                    <Button className="action-button edit-adm" onClick={() => handleOpenModal(article)}>
+                    <Button className="action-button-adm edit-adm" onClick={() => handleOpenModal(article)}>
                       <BsPencil className="action-icon-adm" />
                     </Button>
-                    <Button className="action-button view-adm" onClick={() => handleToggleStatus(article.id)}>
+                    <Button className="action-button-adm view-adm" onClick={() => handleToggleStatus(article.id)}>
                       <BsEye className="action-icon-adm" />
                     </Button>
                     <Button className="action-button-adm delete" onClick={() => handleDeleteArticle(article.id)}>
                       <BsTrash className="action-icon-adm" />
                     </Button>
                   </div>
+
                 </motion.div>
               ))}
             </div>
